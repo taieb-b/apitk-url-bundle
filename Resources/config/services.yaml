@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ByWulf\Rfc14Bundle\:
+        resource: '../../Service/*'
+
+    ByWulf\Rfc14Bundle\EventListener\AnnotationListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
