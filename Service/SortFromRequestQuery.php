@@ -23,7 +23,7 @@ class SortFromRequestQuery implements Sort {
     /**
      * @var Rfc14\Sort[]
      */
-    private $sorts;
+    private $sorts = [];
 
     /**
      * SortFromRequestQuery constructor.
@@ -50,7 +50,7 @@ class SortFromRequestQuery implements Sort {
                     sprintf(
                         'Sort "%s" with direction "%s" is not allowed in this request. Available sorts: %s',
                         $sortField->getName(),
-                        $sortField->getComparison(),
+                        $sortField->getDirection(),
                         implode(', ', array_map(function(Rfc14\Sort $sort) {
                             return $sort->name . ' (' . implode(', ', $sort->allowedDirections) . ')';
                         }, $sorts))
@@ -97,11 +97,19 @@ class SortFromRequestQuery implements Sort {
     private function loadSortsFromQuery(): void
     {
         $this->sortFields = [];
-        foreach ($this->requestStack->getMasterRequest()->query->get('sort') as $name => $direction) {
+
+        $requestSorts = $this->requestStack->getMasterRequest()->query->get('sort');
+        if (!is_array($requestSorts)) {
+            return;
+        }
+
+        foreach ($requestSorts as $name => $direction) {
             $sortField = new SortField();
             $sortField->setName($name)
                 ->setDirection($direction)
                 ->setSort($this->getSortByName($name));
+
+            $this->sortFields[] = $sortField;
         }
     }
 

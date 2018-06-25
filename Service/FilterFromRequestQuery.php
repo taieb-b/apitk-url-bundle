@@ -23,7 +23,7 @@ class FilterFromRequestQuery implements Filter {
     /**
      * @var Rfc14\Filter[]
      */
-    private $filters;
+    private $filters = [];
 
     /**
      * FilterFromRequestQuery constructor.
@@ -97,7 +97,13 @@ class FilterFromRequestQuery implements Filter {
     private function loadFiltersFromQuery(): void
     {
         $this->filterFields = [];
-        foreach ($this->requestStack->getMasterRequest()->query->get('filter') as $name => $limitations) {
+
+        $requestFilters = $this->requestStack->getMasterRequest()->query->get('filter');
+        if (!is_array($requestFilters)) {
+            return;
+        }
+
+        foreach ($requestFilters as $name => $limitations) {
             foreach ($limitations as $comparison => $value) {
                 $filterField = new FilterField();
                 $filterField->setName($name)

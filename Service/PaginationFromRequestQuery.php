@@ -79,7 +79,7 @@ class PaginationFromRequestQuery implements Pagination {
     {
         $this->parsePagination();
 
-        return $this->offset;
+        return $this->offset ?? 0;
     }
 
     /**

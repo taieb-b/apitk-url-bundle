@@ -17,7 +17,7 @@ class SortField implements ApplyableToQueryBuilder
     private $direction;
 
     /**
-     * @var Rfc14\Sort
+     * @var Rfc14\Sort|null
      */
     private $sort;
 
@@ -58,18 +58,18 @@ class SortField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Rfc14\Sort
+     * @return Rfc14\Sort|null
      */
-    public function getSort(): Rfc14\Sort
+    public function getSort(): ?Rfc14\Sort
     {
         return $this->sort;
     }
 
     /**
-     * @param Rfc14\Sort $sort
+     * @param Rfc14\Sort|null $sort
      * @return SortField
      */
-    public function setSort(Rfc14\Sort $sort): SortField
+    public function setSort(?Rfc14\Sort $sort): SortField
     {
         $this->sort = $sort;
         return $this;

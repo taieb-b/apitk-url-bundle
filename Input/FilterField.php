@@ -22,7 +22,7 @@ class FilterField implements ApplyableToQueryBuilder
     private $comparison;
 
     /**
-     * @var Rfc14\Filter
+     * @var Rfc14\Filter|null
      */
     private $filter;
 
@@ -85,18 +85,18 @@ class FilterField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Rfc14\Filter
+     * @return Rfc14\Filter|null
      */
-    public function getFilter(): Rfc14\Filter
+    public function getFilter(): ?Rfc14\Filter
     {
         return $this->filter;
     }
 
     /**
-     * @param Rfc14\Filter $filter
+     * @param Rfc14\Filter|null $filter
      * @return FilterField
      */
-    public function setFilter(Rfc14\Filter $filter): FilterField
+    public function setFilter(?Rfc14\Filter $filter): FilterField
     {
         $this->filter = $filter;
         return $this;
