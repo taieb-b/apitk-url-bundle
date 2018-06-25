@@ -25,3 +25,10 @@ services:
         public: false
         tags:
             - { name: kernel.event_listener, event: kernel.response }
+
+    App\Service\AnnotationDescriber:
+        arguments:
+            - '@nelmio_api_doc.routes.default'
+            - '@nelmio_api_doc.controller_reflector'
+        tags:
+            - {name: 'nelmio_api_doc.route_describer', priority: -2000 }
