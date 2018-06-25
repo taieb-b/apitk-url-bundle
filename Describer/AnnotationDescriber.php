@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace Ofeige\Rfc14Bundle\Service;
 
 use Doctrine\Common\Annotations\Reader;
 use EXSyst\Component\Swagger\Operation;
