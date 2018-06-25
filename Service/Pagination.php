@@ -25,6 +25,11 @@ interface Pagination
     public function getLimit(): ?int;
 
     /**
+     * @return int|null
+     */
+    public function getTotal(): ?int;
+
+    /**
      * @param QueryBuilder $queryBuilder
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void;

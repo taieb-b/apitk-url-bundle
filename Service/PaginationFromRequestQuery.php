@@ -29,6 +29,11 @@ class PaginationFromRequestQuery implements Pagination {
     private $limit;
 
     /**
+     * @var int
+     */
+    private $total;
+
+    /**
      * PaginationFromRequestQuery constructor.
      * @param RequestStack $requestStack
      */
@@ -94,11 +99,35 @@ class PaginationFromRequestQuery implements Pagination {
     }
 
     /**
+     * Only has to be set if applyToQueryBuilder() is not used.
+     *
+     * @param int $total
+     */
+    public function setTotal(int $total): void
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTotal(): ?int
+    {
+        return $this->total;
+    }
+
+    /**
+     * Will apply the limit/offset to the querybuilder and automatically determines the total rows count for pagination.
+     *
      * @param QueryBuilder $queryBuilder
      * @throws PaginationException
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        $totalQueryBuilder = clone $queryBuilder;
+        $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
+        $this->total = (int) $totalQueryBuilder->getQuery()->getSingleScalarResult();
+
         $queryBuilder->setMaxResults($this->getLimit());
         $queryBuilder->setFirstResult($this->getOffset());
     }

@@ -19,3 +19,9 @@ services:
         public: false
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
+
+    Ofeige\Rfc14Bundle\EventListener\PaginationResponseListener:
+        autowire: true
+        public: false
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
