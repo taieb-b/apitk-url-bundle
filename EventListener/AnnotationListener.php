@@ -1,11 +1,11 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\EventListener;
+namespace Ofeige\Rfc14Bundle\EventListener;
 
-use Bywulf\Rfc14Bundle\Annotation AS Rfc14;
-use Bywulf\Rfc14Bundle\Service\Filter;
-use Bywulf\Rfc14Bundle\Service\Pagination;
-use Bywulf\Rfc14Bundle\Service\Sort;
+use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
+use Ofeige\Rfc14Bundle\Service\Filter;
+use Ofeige\Rfc14Bundle\Service\Pagination;
+use Ofeige\Rfc14Bundle\Service\Sort;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;

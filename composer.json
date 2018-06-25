@@ -1,5 +1,5 @@
 {
-  "name": "bywulf/rfc14-bundle",
+  "name": "ofeige/rfc14-bundle",
   "version": "0.1.0",
   "type": "symfony-bundle",
   "description": "This bundle provides filter, sorting and pagination for RESTful API's",
@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Bywulf\\Rfc14Bundle\\": ""
+      "Ofeige\\Rfc14Bundle\\": ""
     },
     "exclude-from-classmap": [
       "Tests/"

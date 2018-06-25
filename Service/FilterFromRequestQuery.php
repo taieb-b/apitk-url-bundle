@@ -1,10 +1,10 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\Service;
+namespace Ofeige\Rfc14Bundle\Service;
 
-use Bywulf\Rfc14Bundle\Annotation AS Rfc14;
-use Bywulf\Rfc14Bundle\Input\FilterField;
-use Bywulf\Rfc14Bundle\Exception\FilterException;
+use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
+use Ofeige\Rfc14Bundle\Input\FilterField;
+use Ofeige\Rfc14Bundle\Exception\FilterException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 

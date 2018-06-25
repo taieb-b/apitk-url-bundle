@@ -1,20 +1,20 @@
 services:
-    ByWulf\Rfc14Bundle\Service\FilterFromRequestQuery:
+    Ofeige\Rfc14Bundle\Service\FilterFromRequestQuery:
         autowire: true
         public: true
-    ByWulf\Rfc14Bundle\Service\Filter: '@ByWulf\Rfc14Bundle\Service\FilterFromRequestQuery'
+    Ofeige\Rfc14Bundle\Service\Filter: '@Ofeige\Rfc14Bundle\Service\FilterFromRequestQuery'
 
-    ByWulf\Rfc14Bundle\Service\SortFromRequestQuery:
+    Ofeige\Rfc14Bundle\Service\SortFromRequestQuery:
         autowire: true
         public: true
-    ByWulf\Rfc14Bundle\Service\Sort: '@ByWulf\Rfc14Bundle\Service\SortFromRequestQuery'
+    Ofeige\Rfc14Bundle\Service\Sort: '@Ofeige\Rfc14Bundle\Service\SortFromRequestQuery'
 
-    ByWulf\Rfc14Bundle\Service\PaginationFromRequestQuery:
+    Ofeige\Rfc14Bundle\Service\PaginationFromRequestQuery:
         autowire: true
         public: true
-    ByWulf\Rfc14Bundle\Service\Pagination: '@ByWulf\Rfc14Bundle\Service\PaginationFromRequestQuery'
+    Ofeige\Rfc14Bundle\Service\Pagination: '@Ofeige\Rfc14Bundle\Service\PaginationFromRequestQuery'
 
-    ByWulf\Rfc14Bundle\EventListener\AnnotationListener:
+    Ofeige\Rfc14Bundle\EventListener\AnnotationListener:
         autowire: true
         public: false
         tags:

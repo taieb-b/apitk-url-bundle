@@ -1,13 +1,13 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\DependencyInjection;
+namespace Ofeige\Rfc14Bundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ByWulfRfc14Extension extends Extension
+class OfeigeRfc14Extension extends Extension
 {
     /**
      * Loads a specific configuration.

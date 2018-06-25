@@ -6,11 +6,11 @@
  * Time: 02:17
  */
 
-namespace Bywulf\Rfc14Bundle\Service;
+namespace Ofeige\Rfc14Bundle\Service;
 
 
 use Doctrine\ORM\QueryBuilder;
-use Bywulf\Rfc14Bundle\Annotation AS Rfc14;
+use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
 
 interface Pagination
 {

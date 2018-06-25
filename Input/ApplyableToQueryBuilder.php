@@ -1,6 +1,6 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\Input;
+namespace Ofeige\Rfc14Bundle\Input;
 
 use Doctrine\ORM\QueryBuilder;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\Service;
+namespace Ofeige\Rfc14Bundle\Service;
 
-use Bywulf\Rfc14Bundle\Input\FilterField;
+use Ofeige\Rfc14Bundle\Input\FilterField;
 use Doctrine\ORM\QueryBuilder;
-use Bywulf\Rfc14Bundle\Annotation AS Rfc14;
+use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
 
 interface Filter {
     /**

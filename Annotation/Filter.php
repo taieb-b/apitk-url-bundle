@@ -1,5 +1,5 @@
 <?php
-namespace Bywulf\Rfc14Bundle\Annotation;
+namespace Ofeige\Rfc14Bundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 

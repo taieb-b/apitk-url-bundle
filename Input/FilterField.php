@@ -1,7 +1,7 @@
 <?php
-namespace Bywulf\Rfc14Bundle\Input;
+namespace Ofeige\Rfc14Bundle\Input;
 
-use Bywulf\Rfc14Bundle\Annotation as Rfc14;
+use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 use Doctrine\ORM\QueryBuilder;
 
 class FilterField implements ApplyableToQueryBuilder

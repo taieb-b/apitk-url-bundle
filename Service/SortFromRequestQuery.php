@@ -1,10 +1,10 @@
 <?php
 
-namespace Bywulf\Rfc14Bundle\Service;
+namespace Ofeige\Rfc14Bundle\Service;
 
-use Bywulf\Rfc14Bundle\Annotation AS Rfc14;
-use Bywulf\Rfc14Bundle\Input\SortField;
-use Bywulf\Rfc14Bundle\Exception\SortException;
+use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
+use Ofeige\Rfc14Bundle\Input\SortField;
+use Ofeige\Rfc14Bundle\Exception\SortException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 
