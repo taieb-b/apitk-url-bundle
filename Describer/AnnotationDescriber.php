@@ -61,12 +61,6 @@ class AnnotationDescriber implements DescriberInterface
                         $this->addPaginationsToOperation($operation, $paginations);
                     }
                 }
-
-                // Default Response
-                if (0 === iterator_count($operation->getResponses())) {
-                    $defaultResponse = $operation->getResponses()->get('default');
-                    $defaultResponse->setDescription('foobar');
-                }
             }
         }
     }
