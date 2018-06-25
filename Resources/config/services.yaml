@@ -27,6 +27,8 @@ services:
             - { name: kernel.event_listener, event: kernel.response }
 
     Ofeige\Rfc14Bundle\Describer\AnnotationDescriber:
+        autowire: true
+        public: false
         arguments:
             - '@nelmio_api_doc.routes.default'
             - '@nelmio_api_doc.controller_reflector'
