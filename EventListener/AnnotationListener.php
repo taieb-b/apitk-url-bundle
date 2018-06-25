@@ -87,7 +87,7 @@ class AnnotationListener
         /** @var Rfc14\Pagination[] $paginations */
         $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Pagination; });
         if (count($paginations) > 0) {
-            $this->pagination->handleIsPaginatable($paginations[0]);
+            $this->pagination->handleIsPaginatable(reset($paginations));
         }
     }
 
