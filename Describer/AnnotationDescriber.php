@@ -42,9 +42,9 @@ class AnnotationDescriber implements DescriberInterface
                 /** @var Operation $operation */
                 $operation = $path->getOperation($method);
 
-                foreach ($this->getMethodsToParse() as $method => list($methodPath, $httpMethods)) {
-                    if ($methodPath === $uri) {
-                        $methodAnnotations = $this->reader->getMethodAnnotations($method);
+                foreach ($this->getMethodsToParse() as $classMethod => list($methodPath, $httpMethods)) {
+                    if ($methodPath === $uri && in_array($method, $httpMethods)) {
+                        $methodAnnotations = $this->reader->getMethodAnnotations($classMethod);
 
                         /** @var Rfc14\Filter[] $filters */
                         $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Filter; });
