@@ -17,17 +17,17 @@ interface Pagination
     /**
      * @return int
      */
-    public function getOffset(): int;
+    public function getPaginationOffset(): int;
 
     /**
      * @return int|null
      */
-    public function getLimit(): ?int;
+    public function getPaginationLimit(): ?int;
 
     /**
      * @return int|null
      */
-    public function getTotal(): ?int;
+    public function getPaginationTotal(): ?int;
 
     /**
      * @param QueryBuilder $queryBuilder

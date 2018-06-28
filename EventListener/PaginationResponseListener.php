@@ -1,31 +1,24 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: michael.wolf
- * Date: 25.06.2018
- * Time: 12:44
- */
 
 namespace Ofeige\Rfc14Bundle\EventListener;
 
-
-use Ofeige\Rfc14Bundle\Service\Pagination;
+use Ofeige\Rfc14Bundle\Service\Rfc14Service;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class PaginationResponseListener
 {
     /**
-     * @var Pagination
+     * @var Rfc14Service
      */
-    private $pagination;
+    private $rfc14Service;
 
     /**
      * PaginationResponseListener constructor.
-     * @param Pagination $pagination
+     * @param Rfc14Service $rfc14Service
      */
-    public function __construct(Pagination $pagination)
+    public function __construct(Rfc14Service $rfc14Service)
     {
-        $this->pagination = $pagination;
+        $this->rfc14Service = $rfc14Service;
     }
 
     /**
@@ -33,8 +26,8 @@ class PaginationResponseListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if ($this->pagination->getTotal() !== null) {
-            $event->getResponse()->headers->set('x-rfc14-pagination-total', $this->pagination->getTotal());
+        if ($this->rfc14Service->getPaginationTotal() !== null) {
+            $event->getResponse()->headers->set('x-rfc14-pagination-total', $this->rfc14Service->getPaginationTotal());
         }
     }
 }

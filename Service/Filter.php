@@ -12,7 +12,7 @@ interface Filter {
      * 
      * @return FilterField[]
      */
-    public function getAll(): array;
+    public function getFilteredFields(): array;
 
     /**
      * Returns true if this filter field was given.
@@ -20,7 +20,7 @@ interface Filter {
      * @param string $name
      * @return bool
      */
-    public function has(string $name): bool;
+    public function hasFilteredField(string $name): bool;
 
     /**
      * Returns the filter field for the given name.
@@ -28,14 +28,14 @@ interface Filter {
      * @param string $name
      * @return FilterField|null
      */
-    public function get(string $name): ?FilterField;
+    public function getFilteredField(string $name): ?FilterField;
 
     /**
      * Checks if only allowed filter fields were given in the request;
      * 
      * @param Rfc14\Filter[] $filters
      */
-    public function handleAllowed(array $filters): void;
+    public function handleAllowedFilters(array $filters): void;
 
     /**
      * @param QueryBuilder $queryBuilder

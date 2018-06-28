@@ -12,7 +12,7 @@ interface Sort {
      * 
      * @return SortField[]
      */
-    public function getAll(): array;
+    public function getSortedFields(): array;
 
     /**
      * Returns true if this sort field was given.
@@ -20,7 +20,7 @@ interface Sort {
      * @param string $name
      * @return bool
      */
-    public function has(string $name): bool;
+    public function hasSortedField(string $name): bool;
 
     /**
      * Returns the sort field for the given name.
@@ -28,14 +28,14 @@ interface Sort {
      * @param string $name
      * @return SortField|null
      */
-    public function get(string $name): ?SortField;
+    public function getSortedField(string $name): ?SortField;
 
     /**
      * Checks if only allowed sort fields were given in the request;
      * 
      * @param Rfc14\Sort[] $sorts
      */
-    public function handleAllowed(array $sorts): void;
+    public function handleAllowedSorts(array $sorts): void;
 
     /**
      * @param QueryBuilder $queryBuilder

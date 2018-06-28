@@ -1,18 +1,8 @@
 services:
-    Ofeige\Rfc14Bundle\Service\FilterFromRequestQuery:
-        autowire: true
-        public: true
-    Ofeige\Rfc14Bundle\Service\Filter: '@Ofeige\Rfc14Bundle\Service\FilterFromRequestQuery'
 
-    Ofeige\Rfc14Bundle\Service\SortFromRequestQuery:
+    Ofeige\Rfc14Bundle\Service\Rfc14Service:
         autowire: true
         public: true
-    Ofeige\Rfc14Bundle\Service\Sort: '@Ofeige\Rfc14Bundle\Service\SortFromRequestQuery'
-
-    Ofeige\Rfc14Bundle\Service\PaginationFromRequestQuery:
-        autowire: true
-        public: true
-    Ofeige\Rfc14Bundle\Service\Pagination: '@Ofeige\Rfc14Bundle\Service\PaginationFromRequestQuery'
 
     Ofeige\Rfc14Bundle\EventListener\AnnotationListener:
         autowire: true

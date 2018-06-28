@@ -3,9 +3,9 @@
 namespace Ofeige\Rfc14Bundle\EventListener;
 
 use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
-use Ofeige\Rfc14Bundle\Service\Filter;
-use Ofeige\Rfc14Bundle\Service\Pagination;
-use Ofeige\Rfc14Bundle\Service\Sort;
+use Ofeige\Rfc14Bundle\Exception\FilterException;
+use Ofeige\Rfc14Bundle\Exception\SortException;
+use Ofeige\Rfc14Bundle\Service\Rfc14Service;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,22 +17,11 @@ class AnnotationListener
      * @var RequestStack
      */
     private $requestStack;
-    /**
-     * @var Filter
-     */
-    private $filter;
+
     /**
      * @var Reader
      */
     private $reader;
-    /**
-     * @var Sort
-     */
-    private $sort;
-    /**
-     * @var Pagination
-     */
-    private $pagination;
 
     /**
      * @var bool
@@ -40,24 +29,27 @@ class AnnotationListener
     private $masterRequest = true;
 
     /**
+     * @var Rfc14Service
+     */
+    private $rfc14Service;
+
+    /**
      * AllowedFilterAnnotationListener constructor.
      * @param Reader $reader
      * @param RequestStack $requestStack
-     * @param Filter $filter
-     * @param Sort $sort
-     * @param Pagination $pagination
+     * @param Rfc14Service $rfc14Service
      */
-    public function __construct(Reader $reader, RequestStack $requestStack, Filter $filter, Sort $sort, Pagination $pagination)
+    public function __construct(Reader $reader, RequestStack $requestStack, Rfc14Service $rfc14Service)
     {
         $this->requestStack = $requestStack;
-        $this->filter = $filter;
         $this->reader = $reader;
-        $this->sort = $sort;
-        $this->pagination = $pagination;
+        $this->rfc14Service = $rfc14Service;
     }
 
     /**
      * @param FilterControllerEvent $event
+     * @throws FilterException
+     * @throws SortException
      */
     public function onKernelController(FilterControllerEvent $event)
     {
@@ -77,17 +69,17 @@ class AnnotationListener
 
         //Filters
         $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Filter; });
-        $this->filter->handleAllowed($filters);
+        $this->rfc14Service->handleAllowedFilters($filters);
 
         //Sorts
         $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Sort; });
-        $this->sort->handleAllowed($sorts);
+        $this->rfc14Service->handleAllowedSorts($sorts);
 
         //Pagination
         /** @var Rfc14\Pagination[] $paginations */
         $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Pagination; });
         if (count($paginations) > 0) {
-            $this->pagination->handleIsPaginatable(reset($paginations));
+            $this->rfc14Service->handleIsPaginatable(reset($paginations));
         }
     }
 
