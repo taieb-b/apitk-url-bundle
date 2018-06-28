@@ -263,12 +263,14 @@ class Rfc14Service implements Filter, Pagination, Sort
         }
 
         //Pagination
-        $totalQueryBuilder = clone $queryBuilder;
-        $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
-        $this->paginationTotal = (int) $totalQueryBuilder->getQuery()->getSingleScalarResult();
+        if ($this->pagination !== null) {
+            $totalQueryBuilder = clone $queryBuilder;
+            $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
+            $this->paginationTotal = (int)$totalQueryBuilder->getQuery()->getSingleScalarResult();
 
-        $queryBuilder->setMaxResults($this->getPaginationLimit());
-        $queryBuilder->setFirstResult($this->getPaginationOffset());
+            $queryBuilder->setMaxResults($this->getPaginationLimit());
+            $queryBuilder->setFirstResult($this->getPaginationOffset());
+        }
     }
 
 
