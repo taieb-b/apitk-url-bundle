@@ -247,7 +247,8 @@ class Rfc14Service implements Filter, Pagination, Sort
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @throws \Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws PaginationException
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
