@@ -152,6 +152,7 @@ public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $
     }
     
     //Pagination
+    $rfc14Service->setPaginationTotal(count($users));
     $users = array_slice($users, $rfc14Service->getPaginationOffset(), $rfc14Service->getPaginationLimit());
 
     return $users;
