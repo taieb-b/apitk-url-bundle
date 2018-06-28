@@ -137,6 +137,7 @@ public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $
             return false;
         });
     }
+    /*...*/
     
     //Sorting
     foreach (array_reverse($rfc14Service->getSortedFields()) as $sortField) {
@@ -149,6 +150,7 @@ public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $
                 }
             });
         }
+        /*...*/
     }
     
     //Pagination
