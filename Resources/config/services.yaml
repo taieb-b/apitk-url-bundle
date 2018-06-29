@@ -29,3 +29,8 @@ services:
         autowire: true
         tags:
             - { name: request.param_converter }
+
+    rfc14.result:
+        autowire: true
+        public: true
+        class: App\ParamConverter\ResultConverter
