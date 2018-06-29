@@ -91,33 +91,39 @@ The client can now call your API endpoint with the limit option like `GET /v1/us
 Also a new header `x-rfc14-pagination-total` is sent in the response containing the total amount of entries, so the client can adjust his pagination buttons.
 
 ### Accessing client input
-#### All-in-one query builder extender
-If you have a default case, you can just inject the `Rfc14Service` and use its `applyToQueryBuilder()` method to your query builder. It will automatically apply the given filters, sortings and pagination.
+#### Autoloading array through param converter
+If you have a default case, just implement Rfc14RepositoryInterface to your repository and add a `@Rfc14\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
+```
+//UserRepository.php
+use Ofeige\Rfc14Bundle\Repository\Rfc14RepositoryInterface;
+class UserRepository extends EntityRepository implements Rfc14RepositoryInterface
+{
+    public function findByRfc14(Rfc14Service $rfc14Service): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->leftJoin('u.addresses', 'a')->distinct();
+
+        $rfc14Service->applyToQueryBuilder($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+}
+```
 ```
 //UserController.php
-public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $rfc14Service)
+/**
+ * @Rfc14\Filter(name="username")
+ * @Rfc14\Sort(name="username")
+ * @Rfc14\Pagination
+ *
+ * @Rfc14\Result("users", entity="App\Entity\User")
+ */
+public function getUsers(array $users)
 {
-    /** @var UserRepository $userRepository */
-    $userRepository = $entityManager->getRepository(User::class);
-
-    $users = $userRepository->findByRfc14($rfc14Service);
-
     return $users;
 }
 ```
-```
-//UserRepository.php
-public function findByRfc14(Rfc14Service $rfc14Service): array
-{
-    $qb = $this->createQueryBuilder('u');
-    $qb->leftJoin('u.addresses', 'a')->distinct();
-
-    $rfc14Service->applyToQueryBuilder($qb);
-
-    return $qb->getQuery()->getResult();
-}
-```
-Note: if the paginator was enabled in your annotations, the query will get executed by the `applyToQueryBuilder()` method to determine the total count. Be sure to execute the method at the end, after building the rest of your query.
+Note: if the paginator was enabled in your annotations, the query will get executed by the `applyToQueryBuilder()` method in your repository to determine the total count. Be sure to execute the method at the end, after building the rest of your query.
 
 #### Manually accessing
 If you have to implement custom logic with filtering, sorting and pagination, you can also inject the `Rfc14Service` and use its methods:
