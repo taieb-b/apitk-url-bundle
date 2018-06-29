@@ -25,9 +25,7 @@
     "symfony/framework-bundle": "^4.1",
     "doctrine/annotations": "^1.6",
     "doctrine/orm": "^2.6",
-    "nelmio/api-doc-bundle": "^3.2"
-  },
-  "suggest": {
-    "friendsofsymfony/rest-bundle": "Automatically renders errors and transform paginations into a {\"total\": 123, \"data\": [..]} array"
+    "nelmio/api-doc-bundle": "^3.2",
+    "sensio/framework-extra-bundle": "^5.1"
   }
 }

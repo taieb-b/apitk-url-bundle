@@ -24,3 +24,8 @@ services:
             - '@nelmio_api_doc.controller_reflector'
         tags:
             - {name: 'nelmio_api_doc.route_describer', priority: -2000 }
+
+    Ofeige\Rfc14Bundle\ParamConverter\ResultConverter:
+        autowire: true
+        tags:
+            - { name: request.param_converter }
