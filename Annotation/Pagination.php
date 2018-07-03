@@ -14,7 +14,7 @@ class Pagination
     /**
      * Maximum entries per page the client can request.
      *
-     * @var int|null
+     * @var integer|null
      */
     public $maxEntries = null;
 }
