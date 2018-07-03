@@ -60,6 +60,11 @@ class Rfc14Service implements Filter, Pagination, Sort
     private $paginationTotal;
 
     /**
+     * @var array
+     */
+    private $headerInformation = [];
+
+    /**
      * FilterFromRequestQuery constructor.
      * @param RequestStack $requestStack
      */
@@ -266,7 +271,7 @@ class Rfc14Service implements Filter, Pagination, Sort
         if ($this->pagination !== null) {
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
-            $this->paginationTotal = (int)$totalQueryBuilder->getQuery()->getSingleScalarResult();
+            $this->addHeaderInformation('pagination-total', (int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
@@ -410,5 +415,22 @@ class Rfc14Service implements Filter, Pagination, Sort
         }
 
         return null;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function addHeaderInformation(string $key, $value): void
+    {
+        $this->headerInformation[$key] = $value;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getHeaderInformation(): array
+    {
+        return $this->headerInformation;
     }
 }
