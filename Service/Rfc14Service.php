@@ -190,23 +190,38 @@ class Rfc14Service implements Filter, Pagination, Sort
 
     private function loadFiltersFromQuery(): void
     {
-        $this->filterFields = [];
+        $masterRequest = $this->requestStack->getMasterRequest();
+        $requestFilters = $masterRequest->query->get('filter');
+        if (is_array($requestFilters)) {
+            foreach ($requestFilters as $name => $limitations) {
+                foreach ($limitations as $comparison => $value) {
+                    $filterField = new FilterField();
+                    $filterField->setName($name)
+                        ->setValue($value)
+                        ->setComparison($comparison)
+                        ->setFilter($this->getFilterByName($name));
 
-        $requestFilters = $this->requestStack->getMasterRequest()->query->get('filter');
-        if (!is_array($requestFilters)) {
-            return;
-        }
-
-        foreach ($requestFilters as $name => $limitations) {
-            foreach ($limitations as $comparison => $value) {
-                $filterField = new FilterField();
-                $filterField->setName($name)
-                    ->setValue($value)
-                    ->setComparison($comparison)
-                    ->setFilter($this->getFilterByName($name));
-
-                $this->filterFields[] = $filterField;
+                    $this->filterFields[] = $filterField;
+                }
             }
+        }
+    }
+
+    private function loadFiltersFromAttributes(): void
+    {
+        $masterRequest = $this->requestStack->getMasterRequest();
+        foreach ($masterRequest->attributes->getIterator() as $key => $value) {
+            if ($this->getFilterByName($key) === null) {
+                continue;
+            }
+
+            $filterField = new FilterField();
+            $filterField->setName($key)
+                ->setValue($value)
+                ->setComparison(Rfc14\Filter::COMPARISON_EQUALS)
+                ->setFilter($this->getFilterByName($key));
+
+            $this->filterFields[] = $filterField;
         }
     }
 
@@ -216,7 +231,9 @@ class Rfc14Service implements Filter, Pagination, Sort
     public function getFilteredFields(): array
     {
         if ($this->filterFields === null) {
+            $this->filterFields = [];
             $this->loadFiltersFromQuery();
+            $this->loadFiltersFromAttributes();
         }
 
         return $this->filterFields;
@@ -252,22 +269,31 @@ class Rfc14Service implements Filter, Pagination, Sort
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws PaginationException
      */
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
+    public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        //Filter
         foreach ($this->getFilteredFields() as $filterField) {
             $filterField->applyToQueryBuilder($queryBuilder);
         }
+    }
 
-        //Sort
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
+    {
         foreach ($this->getSortedFields() as $sortField) {
             $sortField->applyToQueryBuilder($queryBuilder);
         }
+    }
 
-        //Pagination
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @throws PaginationException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void
+    {
         if ($this->pagination !== null) {
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
@@ -276,6 +302,18 @@ class Rfc14Service implements Filter, Pagination, Sort
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
         }
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws PaginationException
+     */
+    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
+    {
+        $this->applyFilteredFieldsToQueryBuilder($queryBuilder);
+        $this->applySortedFieldsToQueryBuilder($queryBuilder);
+        $this->applyPaginationToQueryBuilder($queryBuilder);
     }
 
 
@@ -300,6 +338,8 @@ class Rfc14Service implements Filter, Pagination, Sort
             } else {
                 throw new PaginationException('Invalid limit parameter. Allowed formats: limit=[limit], limit=[offset],[limit]');
             }
+        } else if ($this->pagination !== null) {
+            $this->paginationLimit = $this->pagination->maxEntries;
         }
     }
 
@@ -322,7 +362,7 @@ class Rfc14Service implements Filter, Pagination, Sort
     {
         $this->parsePagination();
 
-        return $this->paginationLimit;
+        return $this->paginationLimit ?? $this->pagination->maxEntries;
     }
 
     /**

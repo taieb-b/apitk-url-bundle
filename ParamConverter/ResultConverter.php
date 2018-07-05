@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ResultConverter implements ParamConverterInterface
 {
-
     /**
      * @var ManagerRegistry
      */
@@ -49,7 +48,7 @@ class ResultConverter implements ParamConverterInterface
             throw new \InvalidArgumentException('You have to specify "entity" option for the Rfc14ParamConverter.');
         }
 
-        $result = $this->findByRfc14($options['entity'], $options['entity_manager'] ?? null);
+        $result = $this->findByRfc14($options['entity'], $options['entityManager'] ?? null);
 
         $request->attributes->set($configuration->getName(), $result);
 

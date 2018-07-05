@@ -28,7 +28,7 @@ class Result extends ParamConverter
     public function setEntityManager($manager)
     {
         $options = $this->getOptions();
-        $options['entity_manager'] = $manager;
+        $options['entityManager'] = $manager;
 
         $this->setOptions($options);
     }

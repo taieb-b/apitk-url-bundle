@@ -43,6 +43,20 @@ If you want to use the built in query builder applier and the entity field name 
 
 The client can now call your API endpoint with filter options like `GET /v1/users?filter[created][gt]=2018-01-01&filter[country][in]=DE,AT`. If the client specified invalid filters (fields or comparisons you didn't configure/allow), the client will get a 400 response.
 
+You can also use route parameters for filtering input. Just declare the filter with the same name the placeholder in the route is named:
+```
+/**
+ * Returns the addresses for the given user.
+ *
+ * @Rest\Get("/v1/users/{id}/addresses")
+ * @Rest\View()
+ *
+ * @Rfc14\Filter(name="id", queryBuilderName="u.id")
+ *
+ * @return Address[]
+ */
+```
+
 #### Sorting
 You can specify in the annotations of the action, which fields should be sortable by the client:
 ```

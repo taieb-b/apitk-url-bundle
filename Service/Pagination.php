@@ -32,7 +32,7 @@ interface Pagination
     /**
      * @param QueryBuilder $queryBuilder
      */
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void;
+    public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void;
 
     /**
      * Checks if only allowed sort fields were given in the request;

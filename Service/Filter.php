@@ -40,5 +40,5 @@ interface Filter {
     /**
      * @param QueryBuilder $queryBuilder
      */
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void;
+    public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
 }

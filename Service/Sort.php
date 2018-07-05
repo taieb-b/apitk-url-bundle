@@ -40,5 +40,5 @@ interface Sort {
     /**
      * @param QueryBuilder $queryBuilder
      */
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void;
+    public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
 }
