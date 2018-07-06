@@ -41,4 +41,12 @@ interface Filter {
      * @param QueryBuilder $queryBuilder
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
+
+    /**
+     * Returns true if the given value matches this filter.
+     *
+     * @param $value
+     * @return bool
+     */
+    public function matches($value): bool;
 }
