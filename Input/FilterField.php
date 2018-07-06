@@ -3,6 +3,7 @@ namespace Ofeige\Rfc14Bundle\Input;
 
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 use Doctrine\ORM\QueryBuilder;
+use Ofeige\Rfc14Bundle\Exception\FilterException;
 
 class FilterField implements ApplyableToQueryBuilder
 {
@@ -162,5 +163,44 @@ class FilterField implements ApplyableToQueryBuilder
 
         }
         $queryBuilder->setParameter($parameter, $this->getValue());
+    }
+
+    /**
+     * Returns true if the given value matches this filter.
+     *
+     * @param $value
+     * @return bool
+     * @throws FilterException
+     */
+    public function matches($value): bool
+    {
+        switch ($this->getComparison()) {
+            case Rfc14\Filter::COMPARISON_EQUALS:
+                return $value === $this->getValue();
+
+            case Rfc14\Filter::COMPARISON_NOTEQUALS:
+                return $value !== $this->getValue();
+
+            case Rfc14\Filter::COMPARISON_IN:
+                return in_array($value, $this->getValue());
+
+            case Rfc14\Filter::COMPARISON_NOTIN:
+                return !in_array($value, $this->getValue());
+
+            case Rfc14\Filter::COMPARISON_GREATERTHAN:
+                return $value > $this->getValue();
+
+            case Rfc14\Filter::COMPARISON_GREATERTHANEQUALS:
+                return $value >= $this->getValue();
+
+            case Rfc14\Filter::COMPARISON_LESSTHAN:
+                return $value < $this->getValue();
+
+            case Rfc14\Filter::COMPARISON_LESSTHANEQUALS:
+                return $value <= $this->getValue();
+
+            default:
+                throw new FilterException('Unknown comparison');
+        }
     }
 }
