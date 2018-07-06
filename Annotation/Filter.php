@@ -31,6 +31,11 @@ class Filter
     public $allowedComparisons = ['eq','neq','gt','gteq','lt','lteq','in','nin'];
 
     /**
+     * @var array
+     */
+    public $enum = [];
+
+    /**
      * @var string
      */
     public $queryBuilderName = null;

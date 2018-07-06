@@ -54,7 +54,6 @@ class AnnotationDescriber implements DescriberInterface
                         $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Sort; });
                         $this->addSortsToOperation($operation, $sorts);
 
-
                         //Pagination
                         /** @var Rfc14\Pagination[] $paginations */
                         $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Pagination; });
@@ -111,6 +110,10 @@ class AnnotationDescriber implements DescriberInterface
                 'required' => false,
                 'description' => 'Only show entries, which match this ' . $filter->name . '.' . (count($filter->allowedComparisons) > 1 ? ' Available comparisons: ' . implode(', ', $filter->allowedComparisons) : '')
             ]);
+            if (count($filter->enum) > 0) {
+                $parameter->setEnum($filter->enum);
+            }
+
             $operation->getParameters()->add($parameter);
         }
     }

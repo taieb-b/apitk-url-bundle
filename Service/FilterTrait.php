@@ -41,11 +41,18 @@ trait FilterTrait
             if (!$this->isAllowedFilterField($filterField)) {
                 throw new FilterException(
                     sprintf(
-                        'Filter "%s" with comparison "%s" is not allowed in this request. Available filters: %s',
+                        'Filter "%s" with comparison "%s" and value "%s" is not allowed in this request. Available filters: %s',
                         $filterField->getName(),
                         $filterField->getComparison(),
+                        $filterField->getValue(),
                         implode(', ', array_map(function(Rfc14\Filter $filter) {
-                            return $filter->name . ' (' . implode(', ', $filter->allowedComparisons) . ')';
+                            $hints = [];
+                            $hints[] = 'comparisons: ' . implode(', ', $filter->allowedComparisons);
+                            if (count($filter->enum) > 0) {
+                                $hints[] = 'values: ' . implode(', ', $filter->enum);
+                            }
+
+                            return $filter->name . ' (' . implode(' // ', $hints) . ')';
                         }, $filters))
                     )
                 );
@@ -64,7 +71,10 @@ trait FilterTrait
                 continue;
             }
 
-            if (in_array($filterField->getComparison(), $filter->allowedComparisons)) {
+            if (
+                in_array($filterField->getComparison(), $filter->allowedComparisons) &&
+                (count($filter->enum) === 0 || in_array($filterField->getValue(), $filter->enum))
+            ) {
                 return true;
             }
         }
