@@ -107,11 +107,32 @@ Also a new header `x-rfc14-pagination-total` is sent in the response containing 
 
 ### Accessing client input
 #### Autoloading array through param converter
-If you have a default case, just implement Rfc14RepositoryInterface to your repository and add a `@Rfc14\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
+If you have a default case, just implement Rfc14RepositoryInterface to your repository. You can do this automatically so you even don't have to create a repository for your entity. Just add this line to your `doctrine.yaml`:
+```
+doctrine:
+    orm:
+        default_repository_class: Ofeige\Rfc14Bundle\Repository\Rfc14Repository
+```
+After that, add a `@Rfc14\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
+```
+//ItemController.php
+/**
+ * @Rfc14\Filter(name="name")
+ * @Rfc14\Sort(name="name")
+ * @Rfc14\Pagination
+ *
+ * @Rfc14\Result("items", entity="App\Entity\Item")
+ */
+public function getItems(array $items)
+{
+    return $items;
+}
+```
+If you need to filter/sort for fields in a joined entity, just define your own `findByRfc14()` method in the custom entity's repository:
 ```
 //UserRepository.php
-use Ofeige\Rfc14Bundle\Repository\Rfc14RepositoryInterface;
-class UserRepository extends EntityRepository implements Rfc14RepositoryInterface
+use Ofeige\Rfc14Bundle\Repository\Rfc14Repository;
+class UserRepository extends Rfc14Repository
 {
     public function findByRfc14(Rfc14Service $rfc14Service): array
     {
@@ -128,7 +149,7 @@ class UserRepository extends EntityRepository implements Rfc14RepositoryInterfac
 //UserController.php
 /**
  * @Rfc14\Filter(name="username")
- * @Rfc14\Sort(name="username")
+ * @Rfc14\Filter(name="country", queryBuilderName="a.country")
  * @Rfc14\Pagination
  *
  * @Rfc14\Result("users", entity="App\Entity\User")
