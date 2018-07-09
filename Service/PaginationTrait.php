@@ -64,7 +64,10 @@ trait PaginationTrait
         if ($this->pagination !== null) {
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
-            $this->setPaginationTotal((int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
+
+            try {
+                $this->setPaginationTotal((int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
+            } catch (\Exception $e) {} //F.e. for TableNotFoundExceptions
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
