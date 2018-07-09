@@ -8,6 +8,7 @@ use EXSyst\Component\Swagger\Parameter;
 use EXSyst\Component\Swagger\Swagger;
 use Nelmio\ApiDocBundle\Describer\DescriberInterface;
 use Nelmio\ApiDocBundle\Util\ControllerReflector;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
 
@@ -64,7 +65,9 @@ class AnnotationDescriber implements DescriberInterface
 
                         /** @var Rfc14\Filter[] $filters */
                         $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Filter; });
-                        $this->addFiltersToOperation($operation, $filters);
+                        /** @var Route[] $routes */
+                        $routes = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Route; });
+                        $this->addFiltersToOperation($operation, $filters, $routes);
 
                         /** @var Rfc14\Sort[] $sorts */
                         $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Sort; });
@@ -122,17 +125,35 @@ class AnnotationDescriber implements DescriberInterface
     /**
      * @param Operation $operation
      * @param Rfc14\Filter[] $filters
+     * @param Route[] $routes
      */
-    private function addFiltersToOperation(Operation $operation, array $filters): void
+    private function addFiltersToOperation(Operation $operation, array $filters, array $routes): void
     {
+        $routePlaceholders = [];
+        foreach ($routes as $route) {
+            $matches = [];
+            preg_match_all('/{([^}]+)}/', $route->getPath(), $matches);
+            $routePlaceholders = array_merge($routePlaceholders, $matches[1]);
+        }
+
         foreach ($filters as $filter) {
-            $parameter = new Parameter([
-                'name' => 'filter[' . $filter->name . '][' . $filter->allowedComparisons[0] . ']',
-                'in' => 'query',
-                'type' => 'string',
-                'required' => false,
-                'description' => 'Only show entries, which match this ' . $filter->name . '.' . (count($filter->allowedComparisons) > 1 ? ' Available comparisons: ' . implode(', ', $filter->allowedComparisons) : '')
-            ]);
+            if (in_array($filter->name, $routePlaceholders)) {
+                $parameter = new Parameter([
+                    'name' => $filter->name,
+                    'in' => 'path',
+                    'type' => 'string',
+                    'required' => true,
+                    'description' => 'Only show entries, which match this ' . $filter->name . '.'
+                ]);
+            } else {
+                $parameter = new Parameter([
+                    'name' => 'filter[' . $filter->name . '][' . $filter->allowedComparisons[0] . ']',
+                    'in' => 'query',
+                    'type' => 'string',
+                    'required' => false,
+                    'description' => 'Only show entries, which match this ' . $filter->name . '.' . (count($filter->allowedComparisons) > 1 ? ' Available comparisons: ' . implode(', ', $filter->allowedComparisons) : '')
+                ]);
+            }
             if (count($filter->enum) > 0) {
                 $parameter->setEnum($filter->enum);
             }
