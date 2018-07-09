@@ -32,12 +32,13 @@ use Ofeige\Rfc14Bundle\Annotation as Rfc14;
  *
  * @Rfc14\Filter(name="username")
  * @Rfc14\Filter(name="created", allowedComparisons={"gt","lt"})
+ * @Rfc14\Filter(name="active", enum={"true","false"})
  * @Rfc14\Filter(name="country", queryBuilderName="a.country")
  *
  * @return User[]
  */
 ```
-Limit the possibilities for the user with the `allowedComparisons` option.
+Limit the possibilities for the user with the `allowedComparisons` and `enum` option.
 
 If you want to use the built in query builder applier and the entity field name differs from the filter field name (f.e. because it's a field from a joined tabled with an alias) use the `queryBuilderName` option.
 
@@ -137,7 +138,7 @@ public function getUsers(array $users)
     return $users;
 }
 ```
-Note: if the paginator was enabled in your annotations, the query will get executed by the `applyToQueryBuilder()` method in your repository to determine the total count. Be sure to execute the method at the end, after building the rest of your query.
+Note: if the paginator was enabled in your annotations, the query will get executed by the `applyToQueryBuilder()` method in your repository to determine the total count. Be sure to call the method at the end, after building the rest of your query.
 
 #### Manually accessing
 If you have to implement custom logic with filtering, sorting and pagination, you can also inject the `Rfc14Service` and use its methods:
