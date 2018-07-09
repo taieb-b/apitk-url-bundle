@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Ofeige\Rfc14Bundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Ofeige\ApiBundle\Service\HeaderInformation;
 use Ofeige\Rfc14Bundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
@@ -21,6 +22,11 @@ trait PaginationTrait
      * @var RequestStack
      */
     private $requestStack;
+
+    /**
+     * @var HeaderInformation
+     */
+    private $headerInformation;
 
     /**
      * @var Rfc14\Pagination
@@ -139,7 +145,7 @@ trait PaginationTrait
     {
         $this->paginationTotal = $paginationTotal;
 
-        $this->addHeaderInformation('pagination-total', $this->paginationTotal);
+        $this->headerInformation->add('rfc14-pagination-total', $this->paginationTotal);
     }
 
     /**

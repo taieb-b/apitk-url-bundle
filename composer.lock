@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db38e9c495437ba7cb7a1321def5ff0b",
+    "content-hash": "05cf9d7e62bc483462a2818b6f7dadb1",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -740,6 +740,53 @@
                 "rest"
             ],
             "time": "2018-04-27T17:36:50+00:00"
+        },
+        {
+            "name": "ofeige/api-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/byWulf/api-bundle.git",
+                "reference": "a79d5b1de87724c2073f511536525da6a4d878eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/byWulf/api-bundle/zipball/a79d5b1de87724c2073f511536525da6a4d878eb",
+                "reference": "a79d5b1de87724c2073f511536525da6a4d878eb",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/annotations": "^1.6",
+                "doctrine/orm": "^2.6",
+                "nelmio/api-doc-bundle": "^3.2",
+                "php": "^7.1.3",
+                "sensio/framework-extra-bundle": "^5.1",
+                "symfony/config": "^4.1",
+                "symfony/dependency-injection": "^4.1",
+                "symfony/framework-bundle": "^4.1",
+                "symfony/http-kernel": "^4.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Ofeige\\ApiBundle\\": ""
+                },
+                "exclude-from-classmap": [
+                    "Tests/"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Michael Wolf",
+                    "email": "wulf1337@gmail.com"
+                }
+            ],
+            "description": "This bundle provides helpful api helpers for RESTful API's",
+            "support": {
+                "source": "https://github.com/byWulf/api-bundle/tree/master",
+                "issues": "https://github.com/byWulf/api-bundle/issues"
+            },
+            "time": "2018-07-09T14:38:02+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2393,7 +2440,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "ofeige/api-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

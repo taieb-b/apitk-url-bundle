@@ -26,6 +26,13 @@
     "doctrine/annotations": "^1.6",
     "doctrine/orm": "^2.6",
     "nelmio/api-doc-bundle": "^3.2",
-    "sensio/framework-extra-bundle": "^5.1"
-  }
+    "sensio/framework-extra-bundle": "^5.1",
+    "ofeige/api-bundle": "dev-master"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:bywulf/api-bundle.git"
+    }
+  ]
 }

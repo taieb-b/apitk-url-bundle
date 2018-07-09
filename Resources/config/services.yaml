@@ -10,12 +10,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
-    Ofeige\Rfc14Bundle\EventListener\HeaderResponseListener:
-        autowire: true
-        public: false
-        tags:
-            - { name: kernel.event_listener, event: kernel.response }
-
     Ofeige\Rfc14Bundle\Describer\AnnotationDescriber:
         autowire: true
         public: false
