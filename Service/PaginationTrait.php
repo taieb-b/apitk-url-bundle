@@ -8,6 +8,13 @@ use Ofeige\Rfc14Bundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 
+/**
+ * Trait PaginationTrait
+ *
+ * Pagination specific methods for the Rfc14Service.
+ *
+ * @package Ofeige\Rfc14Bundle\Service
+ */
 trait PaginationTrait
 {
     /**
@@ -36,7 +43,7 @@ trait PaginationTrait
     private $paginationTotal;
 
     /**
-     * Checks if only allowed sort fields were given in the request;
+     * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
      * @param Rfc14\Pagination $pagination
      */
@@ -46,6 +53,8 @@ trait PaginationTrait
     }
 
     /**
+     * Applies the requested pagination to the query builder.
+     *
      * @param QueryBuilder $queryBuilder
      * @throws PaginationException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -55,7 +64,7 @@ trait PaginationTrait
         if ($this->pagination !== null) {
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
-            $this->addHeaderInformation('pagination-total', (int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
+            $this->setPaginationTotal((int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
@@ -63,6 +72,8 @@ trait PaginationTrait
     }
 
     /**
+     * Reads the requested pagination from the query part of the url and stores it for later use.
+     *
      * @throws PaginationException
      */
     private function parsePagination(): void
@@ -89,6 +100,8 @@ trait PaginationTrait
     }
 
     /**
+     * Gets the pagination offset.
+     *
      * @return int
      * @throws PaginationException
      */
@@ -100,6 +113,8 @@ trait PaginationTrait
     }
 
     /**
+     * Gets the pagination limit (max results).
+     *
      * @return int|null
      * @throws PaginationException
      */
@@ -111,6 +126,8 @@ trait PaginationTrait
     }
 
     /**
+     * Sets the total amount of rows for the given filters/sorts.
+     *
      * Only has to be set if applyToQueryBuilder() is not used.
      *
      * @param int $paginationTotal
@@ -118,9 +135,13 @@ trait PaginationTrait
     public function setPaginationTotal(int $paginationTotal): void
     {
         $this->paginationTotal = $paginationTotal;
+
+        $this->addHeaderInformation('pagination-total', $this->paginationTotal);
     }
 
     /**
+     * Returns the total amount of rows for the given filters/sorts.
+     *
      * @return int|null
      */
     public function getPaginationTotal(): ?int

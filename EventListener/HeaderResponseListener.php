@@ -5,6 +5,13 @@ namespace Ofeige\Rfc14Bundle\EventListener;
 use Ofeige\Rfc14Bundle\Service\Rfc14Service;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
+/**
+ * Class HeaderResponseListener
+ *
+ * Adds the added header values (through rfc14Service) to the response (f.e. the x-rfc14-pagination-total header).
+ *
+ * @package Ofeige\Rfc14Bundle\EventListener
+ */
 class HeaderResponseListener
 {
     /**

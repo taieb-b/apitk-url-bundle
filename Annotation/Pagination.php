@@ -5,8 +5,8 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * Class Pagination
- * @package App\Dto
  *
+ * @package App\Dto
  * @Annotation
  */
 class Pagination

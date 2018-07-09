@@ -9,6 +9,13 @@ use Ofeige\Rfc14Bundle\Input\SortField;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 
+/**
+ * Trait SortTrait
+ *
+ * Sort specific methods for the Rfc14Service.
+ *
+ * @package Ofeige\Rfc14Bundle\Service
+ */
 trait SortTrait
 {
     /**
@@ -26,7 +33,7 @@ trait SortTrait
     private $sorts = [];
 
     /**
-     * Checks if only allowed sort fields were given in the request;
+     * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
      * @param Rfc14\Sort[] $sorts
      * @throws SortException
@@ -52,6 +59,8 @@ trait SortTrait
     }
 
     /**
+     * Validates a requested sort field against the annotated allowed sorts.
+     *
      * @param SortField $sortField
      * @return bool
      */
@@ -71,6 +80,8 @@ trait SortTrait
     }
 
     /**
+     * Returns the annotated sort by name.
+     *
      * @param string $name
      * @return Rfc14\Sort|null
      */
@@ -85,6 +96,9 @@ trait SortTrait
         return null;
     }
 
+    /**
+     * Reads the requested sort fields by the query party of the url.
+     */
     private function loadSortsFromQuery(): void
     {
         $this->sortFields = [];
@@ -105,6 +119,8 @@ trait SortTrait
     }
 
     /**
+     *  Returns all requested sort fields from the client.
+     *
      * @return SortField[]
      */
     public function getSortedFields(): array
@@ -145,6 +161,8 @@ trait SortTrait
     }
 
     /**
+     * Applies all requested sort fields to the query builder.
+     *
      * @param QueryBuilder $queryBuilder
      */
     public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void

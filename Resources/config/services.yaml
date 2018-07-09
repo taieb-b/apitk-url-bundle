@@ -10,7 +10,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
-    Ofeige\Rfc14Bundle\EventListener\PaginationResponseListener:
+    Ofeige\Rfc14Bundle\EventListener\HeaderResponseListener:
         autowire: true
         public: false
         tags:

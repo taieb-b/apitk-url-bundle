@@ -5,6 +5,13 @@ use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 use Doctrine\ORM\QueryBuilder;
 use Ofeige\Rfc14Bundle\Exception\FilterException;
 
+/**
+ * Class FilterField
+ *
+ * Represents a given filter from the user.
+ *
+ * @package Ofeige\Rfc14Bundle\Input
+ */
 class FilterField implements ApplyableToQueryBuilder
 {
     /**
@@ -116,6 +123,9 @@ class FilterField implements ApplyableToQueryBuilder
         return $queryBuilderName;
     }
 
+    /**
+     * @return string
+     */
     private function getUniquePlaceholder(): string
     {
         return 'filter_' . $this->getName() . '_' . uniqid();

@@ -11,6 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
+/**
+ * Class AnnotationListener
+ *
+ * Reads the filter/sort/pagination annotations and stores them in the Rfc14Service.
+ *
+ * @package Ofeige\Rfc14Bundle\EventListener
+ */
 class AnnotationListener
 {
     /**
@@ -83,6 +90,10 @@ class AnnotationListener
         }
     }
 
+    /**
+     * @param array $controller
+     * @return array
+     */
     private function getAnnotationsByController(array $controller): array
     {
         /** @var Controller $controllerObject */

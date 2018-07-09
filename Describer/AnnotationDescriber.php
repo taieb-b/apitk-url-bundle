@@ -11,6 +11,13 @@ use Nelmio\ApiDocBundle\Util\ControllerReflector;
 use Symfony\Component\Routing\RouteCollection;
 use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
 
+/**
+ * Class AnnotationDescriber
+ *
+ * Will auto generate documentation for the filters, sorts and pagination annotated in the called controller action.
+ *
+ * @package Ofeige\Rfc14Bundle\Describer
+ */
 class AnnotationDescriber implements DescriberInterface
 {
     /**
@@ -27,6 +34,12 @@ class AnnotationDescriber implements DescriberInterface
     private $reader;
 
     //TODO: Replace ControllerReflector with something we can depend on
+
+    /**
+     * @param RouteCollection $routeCollection
+     * @param ControllerReflector $controllerReflector
+     * @param Reader $reader
+     */
     public function __construct(RouteCollection $routeCollection, ControllerReflector $controllerReflector, Reader $reader)
     {
         $this->routeCollection = $routeCollection;
@@ -34,6 +47,9 @@ class AnnotationDescriber implements DescriberInterface
         $this->reader = $reader;
     }
 
+    /**
+     * @param Swagger $api
+     */
     public function describe(Swagger $api)
     {
         $paths = $api->getPaths();
@@ -64,6 +80,9 @@ class AnnotationDescriber implements DescriberInterface
         }
     }
 
+    /**
+     * @return \Generator
+     */
     private function getMethodsToParse(): \Generator
     {
         foreach ($this->routeCollection->all() as $route) {
@@ -87,6 +106,10 @@ class AnnotationDescriber implements DescriberInterface
         }
     }
 
+    /**
+     * @param string $path
+     * @return string
+     */
     private function normalizePath(string $path): string
     {
         if ('.{_format}' === substr($path, -10)) {

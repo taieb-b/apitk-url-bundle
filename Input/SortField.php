@@ -4,6 +4,13 @@ namespace Ofeige\Rfc14Bundle\Input;
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * Class SortField
+ *
+ * Represents a requested sort from the user.
+ *
+ * @package Ofeige\Rfc14Bundle\Input
+ */
 class SortField implements ApplyableToQueryBuilder
 {
     /**

@@ -10,6 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class ResultConverter
+ *
+ * Fetches the filtered, sorted and paginated result from the configured repository and hands it over to the controller
+ * action.
+ *
+ * @package Ofeige\Rfc14Bundle\ParamConverter
+ */
 class ResultConverter implements ParamConverterInterface
 {
     /**

@@ -9,9 +9,15 @@ use Ofeige\Rfc14Bundle\Input\FilterField;
 use Ofeige\Rfc14Bundle\Annotation as Rfc14;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Trait FilterTrait
+ *
+ * Filter specific methods for the Rfc14Service.
+ *
+ * @package Ofeige\Rfc14Bundle\Service
+ */
 trait FilterTrait
 {
-
     /**
      * @var FilterField[]
      */
@@ -28,7 +34,7 @@ trait FilterTrait
     private $requestStack;
 
     /**
-     * Checks if only allowed filter fields were given in the request;
+     * Checks if only allowed filter fields were given in the request. Will be called by the event listener.
      *
      * @param Rfc14\Filter[] $filters
      * @throws FilterException
@@ -61,6 +67,8 @@ trait FilterTrait
     }
 
     /**
+     * Validates a requested filter field against the annotated allowed filters.
+     *
      * @param FilterField $filterField
      * @return bool
      */
@@ -83,6 +91,8 @@ trait FilterTrait
     }
 
     /**
+     * Returns the annotated filter by filter name.
+     *
      * @param string $name
      * @return Rfc14\Filter|null
      */
@@ -97,6 +107,9 @@ trait FilterTrait
         return null;
     }
 
+    /**
+     * Reads the requested filter fields by the query party of the url.
+     */
     private function loadFiltersFromQuery(): void
     {
         $masterRequest = $this->requestStack->getMasterRequest();
@@ -116,6 +129,9 @@ trait FilterTrait
         }
     }
 
+    /**
+     * Reads the requested filter fields by the placeholder parts of the route.
+     */
     private function loadFiltersFromAttributes(): void
     {
         $masterRequest = $this->requestStack->getMasterRequest();
@@ -135,6 +151,8 @@ trait FilterTrait
     }
 
     /**
+     * Returns all requested filter fields from the client.
+     *
      * @return FilterField[]
      */
     public function getFilteredFields(): array
@@ -149,7 +167,7 @@ trait FilterTrait
     }
 
     /**
-     * Returns true if this filter field was given.
+     * Returns true if this filtering for this filter was requested by the user.
      *
      * @param string $name
      * @return bool
@@ -177,6 +195,8 @@ trait FilterTrait
     }
 
     /**
+     * Applies all requested filter fields to the query builder.
+     *
      * @param QueryBuilder $queryBuilder
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
