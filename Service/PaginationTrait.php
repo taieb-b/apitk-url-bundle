@@ -68,6 +68,8 @@ trait PaginationTrait
     public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void
     {
         if ($this->pagination !== null) {
+            $queryBuilder->distinct();
+
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
 
