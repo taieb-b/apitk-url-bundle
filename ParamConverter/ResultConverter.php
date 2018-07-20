@@ -1,11 +1,11 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\ParamConverter;
+namespace Shopping\ApiFilterBundle\ParamConverter;
 
-use Ofeige\Rfc14Bundle\Annotation\Result;
-use Ofeige\Rfc14Bundle\Repository\Rfc14RepositoryInterface;
+use Shopping\ApiFilterBundle\Annotation\Result;
+use Shopping\ApiFilterBundle\Repository\Rfc14RepositoryInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Ofeige\Rfc14Bundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Service\Rfc14Service;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Fetches the filtered, sorted and paginated result from the configured repository and hands it over to the controller
  * action.
  *
- * @package Ofeige\Rfc14Bundle\ParamConverter
+ * @package Shopping\ApiFilterBundle\ParamConverter
  */
 class ResultConverter implements ParamConverterInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Annotation;
+namespace Shopping\ApiFilterBundle\Annotation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**

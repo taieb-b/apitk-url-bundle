@@ -1,16 +1,16 @@
 services:
 
-    Ofeige\Rfc14Bundle\Service\Rfc14Service:
+    Shopping\ApiFilterBundle\Service\Rfc14Service:
         autowire: true
         public: true
 
-    Ofeige\Rfc14Bundle\EventListener\AnnotationListener:
+    Shopping\ApiFilterBundle\EventListener\AnnotationListener:
         autowire: true
         public: false
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
-    Ofeige\Rfc14Bundle\Describer\AnnotationDescriber:
+    Shopping\ApiFilterBundle\Describer\AnnotationDescriber:
         autowire: true
         public: false
         arguments:
@@ -19,7 +19,7 @@ services:
         tags:
             - {name: 'nelmio_api_doc.route_describer', priority: -2000 }
 
-    Ofeige\Rfc14Bundle\ParamConverter\ResultConverter:
+    Shopping\ApiFilterBundle\ParamConverter\ResultConverter:
         autowire: true
         tags:
             - { name: request.param_converter }

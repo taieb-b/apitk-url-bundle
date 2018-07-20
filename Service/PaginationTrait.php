@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Ofeige\Rfc14Bundle\Service;
+namespace Shopping\ApiFilterBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Ofeige\ApiBundle\Service\HeaderInformation;
-use Ofeige\Rfc14Bundle\Exception\PaginationException;
+use Shopping\ApiHelperBundle\Service\HeaderInformation;
+use Shopping\ApiFilterBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 
 /**
  * Trait PaginationTrait
  *
  * Pagination specific methods for the Rfc14Service.
  *
- * @package Ofeige\Rfc14Bundle\Service
+ * @package Shopping\ApiFilterBundle\Service
  */
 trait PaginationTrait
 {

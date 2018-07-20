@@ -1,11 +1,11 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\EventListener;
+namespace Shopping\ApiFilterBundle\EventListener;
 
-use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
-use Ofeige\Rfc14Bundle\Exception\FilterException;
-use Ofeige\Rfc14Bundle\Exception\SortException;
-use Ofeige\Rfc14Bundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Exception\FilterException;
+use Shopping\ApiFilterBundle\Exception\SortException;
+use Shopping\ApiFilterBundle\Service\Rfc14Service;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  *
  * Reads the filter/sort/pagination annotations and stores them in the Rfc14Service.
  *
- * @package Ofeige\Rfc14Bundle\EventListener
+ * @package Shopping\ApiFilterBundle\EventListener
  */
 class AnnotationListener
 {

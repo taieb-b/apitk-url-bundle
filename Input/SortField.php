@@ -1,7 +1,7 @@
 <?php
-namespace Ofeige\Rfc14Bundle\Input;
+namespace Shopping\ApiFilterBundle\Input;
 
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * Represents a requested sort from the user.
  *
- * @package Ofeige\Rfc14Bundle\Input
+ * @package Shopping\ApiFilterBundle\Input
  */
 class SortField implements ApplyableToQueryBuilder
 {

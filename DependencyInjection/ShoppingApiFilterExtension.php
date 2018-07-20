@@ -1,13 +1,13 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\DependencyInjection;
+namespace Shopping\ApiFilterBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class OfeigeRfc14Extension extends Extension
+class ShoppingApiFilterExtension extends Extension
 {
     /**
      * Loads a specific configuration.

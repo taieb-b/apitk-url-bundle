@@ -1,6 +1,6 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Input;
+namespace Shopping\ApiFilterBundle\Input;
 
 use Doctrine\ORM\QueryBuilder;
 

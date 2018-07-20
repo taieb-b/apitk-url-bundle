@@ -1,12 +1,12 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Repository;
+namespace Shopping\ApiFilterBundle\Repository;
 
-use Ofeige\Rfc14Bundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Service\Rfc14Service;
 
 /**
  * Interface Rfc14RepositoryInterface
- * @package Ofeige\Rfc14Bundle\Repository
+ * @package Shopping\ApiFilterBundle\Repository
  */
 interface Rfc14RepositoryInterface
 {

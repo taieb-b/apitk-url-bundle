@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Ofeige\Rfc14Bundle\Repository;
+namespace Shopping\ApiFilterBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Ofeige\Rfc14Bundle\Exception\PaginationException;
-use Ofeige\Rfc14Bundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Exception\PaginationException;
+use Shopping\ApiFilterBundle\Service\Rfc14Service;
 
 /**
  * Class Rfc14Repository
- * @package Ofeige\Rfc14Bundle\Repository
+ * @package Shopping\ApiFilterBundle\Repository
  */
 class Rfc14Repository extends EntityRepository implements Rfc14RepositoryInterface
 {

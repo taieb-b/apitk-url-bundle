@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Ofeige\Rfc14Bundle\Service;
+namespace Shopping\ApiFilterBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Ofeige\Rfc14Bundle\Exception\SortException;
-use Ofeige\Rfc14Bundle\Input\SortField;
+use Shopping\ApiFilterBundle\Exception\SortException;
+use Shopping\ApiFilterBundle\Input\SortField;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 
 /**
  * Trait SortTrait
  *
  * Sort specific methods for the Rfc14Service.
  *
- * @package Ofeige\Rfc14Bundle\Service
+ * @package Shopping\ApiFilterBundle\Service
  */
 trait SortTrait
 {

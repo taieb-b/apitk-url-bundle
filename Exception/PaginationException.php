@@ -1,6 +1,6 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Exception;
+namespace Shopping\ApiFilterBundle\Exception;
 
 class PaginationException extends \Exception {
     

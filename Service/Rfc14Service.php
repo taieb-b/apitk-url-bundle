@@ -1,10 +1,10 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Service;
+namespace Shopping\ApiFilterBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Ofeige\ApiBundle\Service\HeaderInformation;
-use Ofeige\Rfc14Bundle\Exception\PaginationException;
+use Shopping\ApiHelperBundle\Service\HeaderInformation;
+use Shopping\ApiFilterBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Rfc14Service implements Filter, Pagination, Sort

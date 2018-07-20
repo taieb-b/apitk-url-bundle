@@ -14,7 +14,7 @@ Add this repository to your `composer.json` until it is available at packagist:
 
 After that, install the package via composer:
 ```
-composer install ofeige/rfc14-bundle:dev-master
+composer install shopping/api-filter-bundle:dev-master
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ composer install ofeige/rfc14-bundle:dev-master
 #### Filtering
 You can specify in the annotations of the action, which fields should be filterable by the client:
 ```
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 
 /**
  * Returns the users in the system.
@@ -61,7 +61,7 @@ You can also use route parameters for filtering input. Just declare the filter w
 #### Sorting
 You can specify in the annotations of the action, which fields should be sortable by the client:
 ```
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 
 /**
  * Returns the users in the system.
@@ -84,7 +84,7 @@ The client can now call your API endpoint with sort options like `GET /v1/users?
 #### Pagination
 You can specify in the annotations of the action, if the result should be paginatable by the client:
 ```
-use Ofeige\Rfc14Bundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Rfc14;
 
 /**
  * Returns the users in the system.
@@ -111,7 +111,7 @@ If you have a default case, just implement Rfc14RepositoryInterface to your repo
 ```
 doctrine:
     orm:
-        default_repository_class: Ofeige\Rfc14Bundle\Repository\Rfc14Repository
+        default_repository_class: Shopping\ApiFilterBundle\Repository\Rfc14Repository
 ```
 After that, add a `@Rfc14\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
 ```
@@ -131,7 +131,7 @@ public function getItems(array $items)
 If you need to filter/sort for fields in a joined entity, just define your own `findByRfc14()` method in the custom entity's repository:
 ```
 //UserRepository.php
-use Ofeige\Rfc14Bundle\Repository\Rfc14Repository;
+use Shopping\ApiFilterBundle\Repository\Rfc14Repository;
 class UserRepository extends Rfc14Repository
 {
     public function findByRfc14(Rfc14Service $rfc14Service): array

@@ -1,5 +1,5 @@
 <?php
-namespace Ofeige\Rfc14Bundle\Annotation;
+namespace Shopping\ApiFilterBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 

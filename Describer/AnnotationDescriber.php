@@ -1,6 +1,6 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Describer;
+namespace Shopping\ApiFilterBundle\Describer;
 
 use Doctrine\Common\Annotations\Reader;
 use EXSyst\Component\Swagger\Operation;
@@ -10,14 +10,14 @@ use Nelmio\ApiDocBundle\Describer\DescriberInterface;
 use Nelmio\ApiDocBundle\Util\ControllerReflector;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Rfc14;
 
 /**
  * Class AnnotationDescriber
  *
  * Will auto generate documentation for the filters, sorts and pagination annotated in the called controller action.
  *
- * @package Ofeige\Rfc14Bundle\Describer
+ * @package Shopping\ApiFilterBundle\Describer
  */
 class AnnotationDescriber implements DescriberInterface
 {

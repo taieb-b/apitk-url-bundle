@@ -1,10 +1,10 @@
 <?php
 
-namespace Ofeige\Rfc14Bundle\Service;
+namespace Shopping\ApiFilterBundle\Service;
 
-use Ofeige\Rfc14Bundle\Input\SortField;
+use Shopping\ApiFilterBundle\Input\SortField;
 use Doctrine\ORM\QueryBuilder;
-use Ofeige\Rfc14Bundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Rfc14;
 
 interface Sort {
     /**
