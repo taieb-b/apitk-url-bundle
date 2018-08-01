@@ -6,13 +6,13 @@ namespace Shopping\ApiFilterBundle\Service;
 use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiFilterBundle\Exception\FilterException;
 use Shopping\ApiFilterBundle\Input\FilterField;
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Trait FilterTrait
  *
- * Filter specific methods for the Rfc14Service.
+ * Filter specific methods for the ApiService.
  *
  * @package Shopping\ApiFilterBundle\Service
  */
@@ -24,7 +24,7 @@ trait FilterTrait
     private $filterFields;
 
     /**
-     * @var Rfc14\Filter[]
+     * @var Api\Filter[]
      */
     private $filters = [];
 
@@ -36,7 +36,7 @@ trait FilterTrait
     /**
      * Checks if only allowed filter fields were given in the request. Will be called by the event listener.
      *
-     * @param Rfc14\Filter[] $filters
+     * @param Api\Filter[] $filters
      * @throws FilterException
      */
     public function handleAllowedFilters(array $filters): void
@@ -51,7 +51,7 @@ trait FilterTrait
                         $filterField->getName(),
                         $filterField->getComparison(),
                         $filterField->getValue(),
-                        implode(', ', array_map(function(Rfc14\Filter $filter) {
+                        implode(', ', array_map(function(Api\Filter $filter) {
                             $hints = [];
                             $hints[] = 'comparisons: ' . implode(', ', $filter->allowedComparisons);
                             if (count($filter->enum) > 0) {
@@ -94,9 +94,9 @@ trait FilterTrait
      * Returns the annotated filter by filter name.
      *
      * @param string $name
-     * @return Rfc14\Filter|null
+     * @return Api\Filter|null
      */
-    private function getFilterByName(string $name): ?Rfc14\Filter
+    private function getFilterByName(string $name): ?Api\Filter
     {
         foreach ($this->filters as $filter) {
             if ($filter->name === $name) {
@@ -143,7 +143,7 @@ trait FilterTrait
             $filterField = new FilterField();
             $filterField->setName($key)
                 ->setValue($value)
-                ->setComparison(Rfc14\Filter::COMPARISON_EQUALS)
+                ->setComparison(Api\Filter::COMPARISON_EQUALS)
                 ->setFilter($this->getFilterByName($key));
 
             $this->filterFields[] = $filterField;

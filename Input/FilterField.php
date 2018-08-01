@@ -1,7 +1,7 @@
 <?php
 namespace Shopping\ApiFilterBundle\Input;
 
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiFilterBundle\Exception\FilterException;
 
@@ -30,7 +30,7 @@ class FilterField implements ApplyableToQueryBuilder
     private $comparison;
 
     /**
-     * @var Rfc14\Filter|null
+     * @var Api\Filter|null
      */
     private $filter;
 
@@ -57,7 +57,7 @@ class FilterField implements ApplyableToQueryBuilder
      */
     public function getValue()
     {
-        if (in_array($this->getComparison(), [Rfc14\Filter::COMPARISON_IN, Rfc14\Filter::COMPARISON_NOTIN])) {
+        if (in_array($this->getComparison(), [Api\Filter::COMPARISON_IN, Api\Filter::COMPARISON_NOTIN])) {
             return explode(',', $this->getValue());
         }
 
@@ -93,18 +93,18 @@ class FilterField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Rfc14\Filter|null
+     * @return Api\Filter|null
      */
-    public function getFilter(): ?Rfc14\Filter
+    public function getFilter(): ?Api\Filter
     {
         return $this->filter;
     }
 
     /**
-     * @param Rfc14\Filter|null $filter
+     * @param Api\Filter|null $filter
      * @return FilterField
      */
-    public function setFilter(?Rfc14\Filter $filter): FilterField
+    public function setFilter(?Api\Filter $filter): FilterField
     {
         $this->filter = $filter;
         return $this;
@@ -139,35 +139,35 @@ class FilterField implements ApplyableToQueryBuilder
         $parameter = $this->getUniquePlaceholder();
 
         switch ($this->getComparison()) {
-            case Rfc14\Filter::COMPARISON_EQUALS:
+            case Api\Filter::COMPARISON_EQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_NOTEQUALS:
+            case Api\Filter::COMPARISON_NOTEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_IN:
+            case Api\Filter::COMPARISON_IN:
                 $queryBuilder->andWhere($queryBuilder->expr()->in($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_NOTIN:
+            case Api\Filter::COMPARISON_NOTIN:
                 $queryBuilder->andWhere($queryBuilder->expr()->notIn($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_GREATERTHAN:
+            case Api\Filter::COMPARISON_GREATERTHAN:
                 $queryBuilder->andWhere($queryBuilder->expr()->gt($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_GREATERTHANEQUALS:
+            case Api\Filter::COMPARISON_GREATERTHANEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->gte($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_LESSTHAN:
+            case Api\Filter::COMPARISON_LESSTHAN:
                 $queryBuilder->andWhere($queryBuilder->expr()->lt($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Rfc14\Filter::COMPARISON_LESSTHANEQUALS:
+            case Api\Filter::COMPARISON_LESSTHANEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->lte($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
@@ -185,28 +185,28 @@ class FilterField implements ApplyableToQueryBuilder
     public function matches($value): bool
     {
         switch ($this->getComparison()) {
-            case Rfc14\Filter::COMPARISON_EQUALS:
+            case Api\Filter::COMPARISON_EQUALS:
                 return $value === $this->getValue();
 
-            case Rfc14\Filter::COMPARISON_NOTEQUALS:
+            case Api\Filter::COMPARISON_NOTEQUALS:
                 return $value !== $this->getValue();
 
-            case Rfc14\Filter::COMPARISON_IN:
+            case Api\Filter::COMPARISON_IN:
                 return in_array($value, $this->getValue());
 
-            case Rfc14\Filter::COMPARISON_NOTIN:
+            case Api\Filter::COMPARISON_NOTIN:
                 return !in_array($value, $this->getValue());
 
-            case Rfc14\Filter::COMPARISON_GREATERTHAN:
+            case Api\Filter::COMPARISON_GREATERTHAN:
                 return $value > $this->getValue();
 
-            case Rfc14\Filter::COMPARISON_GREATERTHANEQUALS:
+            case Api\Filter::COMPARISON_GREATERTHANEQUALS:
                 return $value >= $this->getValue();
 
-            case Rfc14\Filter::COMPARISON_LESSTHAN:
+            case Api\Filter::COMPARISON_LESSTHAN:
                 return $value < $this->getValue();
 
-            case Rfc14\Filter::COMPARISON_LESSTHANEQUALS:
+            case Api\Filter::COMPARISON_LESSTHANEQUALS:
                 return $value <= $this->getValue();
 
             default:

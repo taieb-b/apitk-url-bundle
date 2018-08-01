@@ -4,7 +4,7 @@ namespace Shopping\ApiFilterBundle\Service;
 
 use Shopping\ApiFilterBundle\Input\FilterField;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Api;
 
 interface Filter {
     /**
@@ -33,7 +33,7 @@ interface Filter {
     /**
      * Checks if only allowed filter fields were given in the request;
      * 
-     * @param Rfc14\Filter[] $filters
+     * @param Api\Filter[] $filters
      */
     public function handleAllowedFilters(array $filters): void;
 

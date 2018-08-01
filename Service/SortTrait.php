@@ -7,12 +7,12 @@ use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiFilterBundle\Exception\SortException;
 use Shopping\ApiFilterBundle\Input\SortField;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 
 /**
  * Trait SortTrait
  *
- * Sort specific methods for the Rfc14Service.
+ * Sort specific methods for the ApiService.
  *
  * @package Shopping\ApiFilterBundle\Service
  */
@@ -28,14 +28,14 @@ trait SortTrait
     private $sortFields;
 
     /**
-     * @var Rfc14\Sort[]
+     * @var Api\Sort[]
      */
     private $sorts = [];
 
     /**
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
-     * @param Rfc14\Sort[] $sorts
+     * @param Api\Sort[] $sorts
      * @throws SortException
      */
     public function handleAllowedSorts(array $sorts): void
@@ -49,7 +49,7 @@ trait SortTrait
                         'Sort "%s" with direction "%s" is not allowed in this request. Available sorts: %s',
                         $sortField->getName(),
                         $sortField->getDirection(),
-                        implode(', ', array_map(function(Rfc14\Sort $sort) {
+                        implode(', ', array_map(function(Api\Sort $sort) {
                             return $sort->name . ' (' . implode(', ', $sort->allowedDirections) . ')';
                         }, $sorts))
                     )
@@ -83,9 +83,9 @@ trait SortTrait
      * Returns the annotated sort by name.
      *
      * @param string $name
-     * @return Rfc14\Sort|null
+     * @return Api\Sort|null
      */
-    private function getSortByName(string $name): ?Rfc14\Sort
+    private function getSortByName(string $name): ?Api\Sort
     {
         foreach ($this->sorts as $sort) {
             if ($sort->name === $name) {

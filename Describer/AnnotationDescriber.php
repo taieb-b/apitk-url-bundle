@@ -10,7 +10,7 @@ use Nelmio\ApiDocBundle\Describer\DescriberInterface;
 use Nelmio\ApiDocBundle\Util\ControllerReflector;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Api;
 
 /**
  * Class AnnotationDescriber
@@ -63,19 +63,19 @@ class AnnotationDescriber implements DescriberInterface
                     if ($methodPath === $uri && in_array($method, $httpMethods)) {
                         $methodAnnotations = $this->reader->getMethodAnnotations($classMethod);
 
-                        /** @var Rfc14\Filter[] $filters */
-                        $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Filter; });
+                        /** @var Api\Filter[] $filters */
+                        $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Filter; });
                         /** @var Route[] $routes */
                         $routes = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Route; });
                         $this->addFiltersToOperation($operation, $filters, $routes);
 
-                        /** @var Rfc14\Sort[] $sorts */
-                        $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Sort; });
+                        /** @var Api\Sort[] $sorts */
+                        $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Sort; });
                         $this->addSortsToOperation($operation, $sorts);
 
                         //Pagination
-                        /** @var Rfc14\Pagination[] $paginations */
-                        $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Pagination; });
+                        /** @var Api\Pagination[] $paginations */
+                        $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Pagination; });
                         $this->addPaginationsToOperation($operation, $paginations);
                     }
                 }
@@ -124,7 +124,7 @@ class AnnotationDescriber implements DescriberInterface
 
     /**
      * @param Operation $operation
-     * @param Rfc14\Filter[] $filters
+     * @param Api\Filter[] $filters
      * @param Route[] $routes
      */
     private function addFiltersToOperation(Operation $operation, array $filters, array $routes): void
@@ -164,7 +164,7 @@ class AnnotationDescriber implements DescriberInterface
 
     /**
      * @param Operation $operation
-     * @param Rfc14\Sort[] $sorts
+     * @param Api\Sort[] $sorts
      */
     private function addSortsToOperation(Operation $operation, array $sorts): void
     {
@@ -183,7 +183,7 @@ class AnnotationDescriber implements DescriberInterface
 
     /**
      * @param Operation $operation
-     * @param Rfc14\Pagination[] $paginations
+     * @param Api\Pagination[] $paginations
      */
     private function addPaginationsToOperation(Operation $operation, array $paginations): void
     {

@@ -2,10 +2,10 @@
 
 namespace Shopping\ApiFilterBundle\EventListener;
 
-use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Api;
 use Shopping\ApiFilterBundle\Exception\FilterException;
 use Shopping\ApiFilterBundle\Exception\SortException;
-use Shopping\ApiFilterBundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Service\ApiService;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 /**
  * Class AnnotationListener
  *
- * Reads the filter/sort/pagination annotations and stores them in the Rfc14Service.
+ * Reads the filter/sort/pagination annotations and stores them in the ApiService.
  *
  * @package Shopping\ApiFilterBundle\EventListener
  */
@@ -36,21 +36,21 @@ class AnnotationListener
     private $masterRequest = true;
 
     /**
-     * @var Rfc14Service
+     * @var ApiService
      */
-    private $rfc14Service;
+    private $apiService;
 
     /**
      * AllowedFilterAnnotationListener constructor.
      * @param Reader $reader
      * @param RequestStack $requestStack
-     * @param Rfc14Service $rfc14Service
+     * @param ApiService $apiService
      */
-    public function __construct(Reader $reader, RequestStack $requestStack, Rfc14Service $rfc14Service)
+    public function __construct(Reader $reader, RequestStack $requestStack, ApiService $apiService)
     {
         $this->requestStack = $requestStack;
         $this->reader = $reader;
-        $this->rfc14Service = $rfc14Service;
+        $this->apiService = $apiService;
     }
 
     /**
@@ -75,18 +75,18 @@ class AnnotationListener
         $methodAnnotations = $this->getAnnotationsByController($controller);
 
         //Filters
-        $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Filter; });
-        $this->rfc14Service->handleAllowedFilters($filters);
+        $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Filter; });
+        $this->apiService->handleAllowedFilters($filters);
 
         //Sorts
-        $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Sort; });
-        $this->rfc14Service->handleAllowedSorts($sorts);
+        $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Sort; });
+        $this->apiService->handleAllowedSorts($sorts);
 
         //Pagination
-        /** @var Rfc14\Pagination[] $paginations */
-        $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Rfc14\Pagination; });
+        /** @var Api\Pagination[] $paginations */
+        $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Pagination; });
         if (count($paginations) > 0) {
-            $this->rfc14Service->handleIsPaginatable(reset($paginations));
+            $this->apiService->handleIsPaginatable(reset($paginations));
         }
     }
 

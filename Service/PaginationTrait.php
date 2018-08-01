@@ -7,12 +7,12 @@ use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiHelperBundle\Service\HeaderInformation;
 use Shopping\ApiFilterBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 
 /**
  * Trait PaginationTrait
  *
- * Pagination specific methods for the Rfc14Service.
+ * Pagination specific methods for the ApiService.
  *
  * @package Shopping\ApiFilterBundle\Service
  */
@@ -29,7 +29,7 @@ trait PaginationTrait
     private $headerInformation;
 
     /**
-     * @var Rfc14\Pagination
+     * @var Api\Pagination
      */
     private $pagination;
 
@@ -51,9 +51,9 @@ trait PaginationTrait
     /**
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
-     * @param Rfc14\Pagination $pagination
+     * @param Api\Pagination $pagination
      */
-    public function handleIsPaginatable(Rfc14\Pagination $pagination): void
+    public function handleIsPaginatable(Api\Pagination $pagination): void
     {
         $this->pagination = $pagination;
     }
@@ -147,7 +147,7 @@ trait PaginationTrait
     {
         $this->paginationTotal = $paginationTotal;
 
-        $this->headerInformation->add('rfc14-pagination-total', $this->paginationTotal);
+        $this->headerInformation->add('pagination-total', $this->paginationTotal);
     }
 
     /**

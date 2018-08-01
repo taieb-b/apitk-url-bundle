@@ -6,26 +6,26 @@ namespace Shopping\ApiFilterBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Shopping\ApiFilterBundle\Exception\PaginationException;
-use Shopping\ApiFilterBundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Service\ApiService;
 
 /**
- * Class Rfc14Repository
+ * Class ApiRepository
  * @package Shopping\ApiFilterBundle\Repository
  */
-class Rfc14Repository extends EntityRepository implements Rfc14RepositoryInterface
+class ApiRepository extends EntityRepository implements ApiRepositoryInterface
 {
 
     /**
-     * @param Rfc14Service $rfc14Service
+     * @param ApiService $apiService
      * @return array
      * @throws NonUniqueResultException
      * @throws PaginationException
      */
-    public function findByRfc14(Rfc14Service $rfc14Service): array
+    public function findByRequest(ApiService $apiService): array
     {
         $queryBuilder = $this->createQueryBuilder('a');
 
-        $rfc14Service->applyToQueryBuilder($queryBuilder);
+        $apiService->applyToQueryBuilder($queryBuilder);
 
         return $queryBuilder->getQuery()->getResult();
     }

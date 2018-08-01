@@ -10,7 +10,7 @@ namespace Shopping\ApiFilterBundle\Service;
 
 
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Api;
 
 interface Pagination
 {
@@ -37,7 +37,7 @@ interface Pagination
     /**
      * Checks if only allowed sort fields were given in the request;
      *
-     * @param Rfc14\Pagination $pagination
+     * @param Api\Pagination $pagination
      */
-    public function handleIsPaginatable(Rfc14\Pagination $pagination): void;
+    public function handleIsPaginatable(Api\Pagination $pagination): void;
 }

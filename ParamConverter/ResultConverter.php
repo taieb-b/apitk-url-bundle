@@ -3,9 +3,9 @@
 namespace Shopping\ApiFilterBundle\ParamConverter;
 
 use Shopping\ApiFilterBundle\Annotation\Result;
-use Shopping\ApiFilterBundle\Repository\Rfc14RepositoryInterface;
+use Shopping\ApiFilterBundle\Repository\ApiRepositoryInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Shopping\ApiFilterBundle\Service\Rfc14Service;
+use Shopping\ApiFilterBundle\Service\ApiService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,19 +25,19 @@ class ResultConverter implements ParamConverterInterface
      */
     private $registry;
     /**
-     * @var Rfc14Service
+     * @var ApiService
      */
-    private $rfc14Service;
+    private $apiService;
 
     /**
-     * Rfc14ParamConverter constructor.
+     * ResultConverter constructor.
      * @param ManagerRegistry|null $registry
-     * @param Rfc14Service $rfc14Service
+     * @param ApiService $apiService
      */
-    public function __construct(ManagerRegistry $registry = null, Rfc14Service $rfc14Service)
+    public function __construct(ManagerRegistry $registry = null, ApiService $apiService)
     {
         $this->registry = $registry;
-        $this->rfc14Service = $rfc14Service;
+        $this->apiService = $apiService;
     }
 
     /**
@@ -53,10 +53,10 @@ class ResultConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
 
         if (!isset($options['entity'])) {
-            throw new \InvalidArgumentException('You have to specify "entity" option for the Rfc14ParamConverter.');
+            throw new \InvalidArgumentException('You have to specify "entity" option for the ResultConverter.');
         }
 
-        $result = $this->findByRfc14($options['entity'], $options['entityManager'] ?? null);
+        $result = $this->findInRepository($options['entity'], $options['entityManager'] ?? null, $options['methodName'] ?? null);
 
         $request->attributes->set($configuration->getName(), $result);
 
@@ -66,26 +66,31 @@ class ResultConverter implements ParamConverterInterface
     /**
      * @param string $entity
      * @param string|null $manager
+     * @param string|null $methodName
      * @return array
      */
-    private function findByRfc14($entity, $manager = null)
+    private function findInRepository(string $entity, string $manager = null, string $methodName = null)
     {
         $om = $this->getManager($manager, $entity);
         $repository = $om->getRepository($entity);
         
-        if (!$repository instanceof Rfc14RepositoryInterface) {
-            throw new \InvalidArgumentException(sprintf('Repository for entity "%s" does not implement the Rfc14RepositoryInterface.', $entity));
+        if (!$repository instanceof ApiRepositoryInterface) {
+            throw new \InvalidArgumentException(sprintf('Repository for entity "%s" does not implement the ApiRepositoryInterface.', $entity));
         }
 
-        return $repository->findByRfc14($this->rfc14Service);
+        if ($methodName === null) {
+            $methodName = 'findByRequest';
+        }
+
+        return $repository->$methodName($this->apiService);
     }
 
     /**
      * @param string|null $name
-     * @param string|null $entity
+     * @param string $entity
      * @return \Doctrine\Common\Persistence\ObjectManager|null
      */
-    private function getManager(?string $name, ?string $entity)
+    private function getManager(?string $name, string $entity)
     {
         if (null === $name) {
             return $this->registry->getManagerForClass($entity);
@@ -102,7 +107,7 @@ class ResultConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return ($configuration instanceof ParamConverter && $configuration->getClass() === 'rfc14.result')
+        return ($configuration instanceof ParamConverter && $configuration->getClass() === 'api.result')
             || $configuration instanceof Result;
     }
 }

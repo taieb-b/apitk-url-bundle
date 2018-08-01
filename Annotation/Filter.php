@@ -42,7 +42,7 @@ class Filter
     public $enum = [];
 
     /**
-     * When the automatic Rfc14Service->applyToQueryBuilder() method is used, it will use the "name" on the primary
+     * When the automatic ApiService->applyToQueryBuilder() method is used, it will use the "name" on the primary
      * table by default. If you need this filter to select for a different field or for a joined table, you can use this
      * option (f.e. "u.foobar").
      *

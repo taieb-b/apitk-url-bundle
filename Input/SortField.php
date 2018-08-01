@@ -1,7 +1,7 @@
 <?php
 namespace Shopping\ApiFilterBundle\Input;
 
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -24,7 +24,7 @@ class SortField implements ApplyableToQueryBuilder
     private $direction;
 
     /**
-     * @var Rfc14\Sort|null
+     * @var Api\Sort|null
      */
     private $sort;
 
@@ -65,18 +65,18 @@ class SortField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Rfc14\Sort|null
+     * @return Api\Sort|null
      */
-    public function getSort(): ?Rfc14\Sort
+    public function getSort(): ?Api\Sort
     {
         return $this->sort;
     }
 
     /**
-     * @param Rfc14\Sort|null $sort
+     * @param Api\Sort|null $sort
      * @return SortField
      */
-    public function setSort(?Rfc14\Sort $sort): SortField
+    public function setSort(?Api\Sort $sort): SortField
     {
         $this->sort = $sort;
         return $this;
@@ -98,11 +98,11 @@ class SortField implements ApplyableToQueryBuilder
     public function applyToQueryBuilder(QueryBuilder $queryBuilder)
     {
         switch ($this->getDirection()) {
-            case Rfc14\Sort::ASCENDING:
+            case Api\Sort::ASCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'ASC');
                 break;
 
-            case Rfc14\Sort::DESCENDING:
+            case Api\Sort::DESCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'DESC');
                 break;
         }

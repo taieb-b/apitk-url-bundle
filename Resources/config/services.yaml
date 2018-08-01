@@ -1,6 +1,6 @@
 services:
 
-    Shopping\ApiFilterBundle\Service\Rfc14Service:
+    Shopping\ApiFilterBundle\Service\ApiService:
         autowire: true
         public: true
 

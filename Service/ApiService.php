@@ -7,7 +7,7 @@ use Shopping\ApiHelperBundle\Service\HeaderInformation;
 use Shopping\ApiFilterBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class Rfc14Service implements Filter, Pagination, Sort
+class ApiService implements Filter, Pagination, Sort
 {
     use FilterTrait;
     use SortTrait;

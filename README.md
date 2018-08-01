@@ -1,4 +1,4 @@
-# RFC14 - Filter, Sorting and Pagination for RESTful API's   
+# api-filter-bundle: Filter, Sorting and Pagination for RESTful API's   
 
 ## Installation
 Add this repository to your `composer.json` until it is available at packagist:
@@ -6,7 +6,7 @@ Add this repository to your `composer.json` until it is available at packagist:
 {
     "repositories": [{
             "type": "vcs",
-            "url": "git@github.com:CHECK24/rfc14-bundle.git"
+            "url": "git@github.com:CHECK24/api-filter-bundle.git"
         }
     ]
 }
@@ -22,7 +22,7 @@ composer install shopping/api-filter-bundle:dev-master
 #### Filtering
 You can specify in the annotations of the action, which fields should be filterable by the client:
 ```
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 
 /**
  * Returns the users in the system.
@@ -30,10 +30,10 @@ use Shopping\ApiFilterBundle\Annotation as Rfc14;
  * @Rest\Get("/v1/users")
  * @Rest\View()
  *
- * @Rfc14\Filter(name="username")
- * @Rfc14\Filter(name="created", allowedComparisons={"gt","lt"})
- * @Rfc14\Filter(name="active", enum={"true","false"})
- * @Rfc14\Filter(name="country", queryBuilderName="a.country")
+ * @Api\Filter(name="username")
+ * @Api\Filter(name="created", allowedComparisons={"gt","lt"})
+ * @Api\Filter(name="active", enum={"true","false"})
+ * @Api\Filter(name="country", queryBuilderName="a.country")
  *
  * @return User[]
  */
@@ -52,7 +52,7 @@ You can also use route parameters for filtering input. Just declare the filter w
  * @Rest\Get("/v1/users/{id}/addresses")
  * @Rest\View()
  *
- * @Rfc14\Filter(name="id", queryBuilderName="u.id")
+ * @Api\Filter(name="id", queryBuilderName="u.id")
  *
  * @return Address[]
  */
@@ -61,7 +61,7 @@ You can also use route parameters for filtering input. Just declare the filter w
 #### Sorting
 You can specify in the annotations of the action, which fields should be sortable by the client:
 ```
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 
 /**
  * Returns the users in the system.
@@ -69,8 +69,8 @@ use Shopping\ApiFilterBundle\Annotation as Rfc14;
  * @Rest\Get("/v1/users")
  * @Rest\View()
  *
- * @Rfc14\Sort(name="username")
- * @Rfc14\Sort(name="zipcode", queryBuilderName="a.zipCode", allowedDirections={"asc"})
+ * @Api\Sort(name="username")
+ * @Api\Sort(name="zipcode", queryBuilderName="a.zipCode", allowedDirections={"asc"})
  *
  * @return User[]
  */
@@ -84,7 +84,7 @@ The client can now call your API endpoint with sort options like `GET /v1/users?
 #### Pagination
 You can specify in the annotations of the action, if the result should be paginatable by the client:
 ```
-use Shopping\ApiFilterBundle\Annotation as Rfc14;
+use Shopping\ApiFilterBundle\Annotation as Api;
 
 /**
  * Returns the users in the system.
@@ -92,9 +92,9 @@ use Shopping\ApiFilterBundle\Annotation as Rfc14;
  * @Rest\Get("/v1/users")
  * @Rest\View()
  *
- * @Rfc14\Pagination
+ * @Api\Pagination
  * Or:
- * @Rfc14\Pagination(maxEntries=25)
+ * @Api\Pagination(maxEntries=25)
  *
  * @return User[]
  */
@@ -103,43 +103,43 @@ If you want to limit the client, how many items per page he gets, you can specif
 
 The client can now call your API endpoint with the limit option like `GET /v1/users?limit=10` (get the first 10 entries) or `GET /v1/users?limit=30,10` (get the 10 entries with an offset of 30 (=4th page)). If the client tries to paginate when it isn't enabled by you or he wants to get more items per page than specified by you, the client will get a 400 response.
 
-Also a new header `x-rfc14-pagination-total` is sent in the response containing the total amount of entries, so the client can adjust his pagination buttons.
+Also a new header `x-pagination-total` is sent in the response containing the total amount of entries, so the client can adjust his pagination buttons.
 
 ### Accessing client input
 #### Autoloading array through param converter
-If you have a default case, just implement Rfc14RepositoryInterface to your repository. You can do this automatically so you even don't have to create a repository for your entity. Just add this line to your `doctrine.yaml`:
+If you have a default case, just implement ApiRepositoryInterface to your repository. You can do this automatically so you even don't have to create a repository for your entity. Just add this line to your `doctrine.yaml`:
 ```
 doctrine:
     orm:
-        default_repository_class: Shopping\ApiFilterBundle\Repository\Rfc14Repository
+        default_repository_class: Shopping\ApiFilterBundle\Repository\ApiRepository
 ```
-After that, add a `@Rfc14\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
+After that, add a `@Api\Result` annotation to your controller action. The action parameter will automatically gets filled with the filtered, sorted and paginated result set of the given entity's repository:
 ```
 //ItemController.php
 /**
- * @Rfc14\Filter(name="name")
- * @Rfc14\Sort(name="name")
- * @Rfc14\Pagination
+ * @Api\Filter(name="name")
+ * @Api\Sort(name="name")
+ * @Api\Pagination
  *
- * @Rfc14\Result("items", entity="App\Entity\Item")
+ * @Api\Result("items", entity="App\Entity\Item")
  */
 public function getItems(array $items)
 {
     return $items;
 }
 ```
-If you need to filter/sort for fields in a joined entity, just define your own `findByRfc14()` method in the custom entity's repository:
+If you need to filter/sort for fields in a joined entity, just define your own `findByRequest()` method in the custom entity's repository:
 ```
 //UserRepository.php
-use Shopping\ApiFilterBundle\Repository\Rfc14Repository;
-class UserRepository extends Rfc14Repository
+use Shopping\ApiFilterBundle\Repository\ApiRepository;
+class UserRepository extends ApiRepository
 {
-    public function findByRfc14(Rfc14Service $rfc14Service): array
+    public function findByRequest(ApiService $apiService): array
     {
         $qb = $this->createQueryBuilder('u');
         $qb->leftJoin('u.addresses', 'a')->distinct();
 
-        $rfc14Service->applyToQueryBuilder($qb);
+        $apiService->applyToQueryBuilder($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -148,32 +148,36 @@ class UserRepository extends Rfc14Repository
 ```
 //UserController.php
 /**
- * @Rfc14\Filter(name="username")
- * @Rfc14\Filter(name="country", queryBuilderName="a.country")
- * @Rfc14\Pagination
+ * @Api\Filter(name="username")
+ * @Api\Filter(name="country", queryBuilderName="a.country")
+ * @Api\Pagination
  *
- * @Rfc14\Result("users", entity="App\Entity\User")
+ * @Api\Result("users", entity="App\Entity\User")
  */
 public function getUsers(array $users)
 {
     return $users;
 }
 ```
+If you need to add different methods to your repository, that can be executed by the `Result` annotation, than you can add the `methodName="findBySomethingElse"` parameter to your annotation. It will then look for this method in your repository instead of the default `findByResult()` method. Be sure to accept as the sole parameter the `ApiService`.
+
 Note: if the paginator was enabled in your annotations, the query will get executed by the `applyToQueryBuilder()` method in your repository to determine the total count. Be sure to call the method at the end, after building the rest of your query.
 
+You can specify the entity manager by adding a `entityManager="foobar"` to your annotation, if you need to use another entity manager / connection than the default one.
+
 #### Manually accessing
-If you have to implement custom logic with filtering, sorting and pagination, you can also inject the `Rfc14Service` and use its methods:
+If you have to implement custom logic with filtering, sorting and pagination, you can also inject the `ApiService` and use its methods:
 ```
 //UserController.php
-public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $rfc14Service)
+public function getUsersV1(EntityManagerInterface $entityManager, ApiService $apiService)
 {
     $users = $entityManager->getRepository(User::class)->findAll();
 
     //Filtering
-    if ($rfc14Service->hasFilteredField('username')) {
-        $usernameFilter = $rfc14Service->getFilteredField('username');
+    if ($apiService->hasFilteredField('username')) {
+        $usernameFilter = $apiService->getFilteredField('username');
         $users = array_filter($users, function($user) use ($usernameFilter) { 
-            if ($usernameFilter->getComparison() === Rfc14\Filter::COMPARISON_EQUALS) {
+            if ($usernameFilter->getComparison() === Api\Filter::COMPARISON_EQUALS) {
                 return $user->getUsername() === $usernameFilter->getValue();
             }
             return false;
@@ -182,10 +186,10 @@ public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $
     /*...*/
     
     //Sorting
-    foreach (array_reverse($rfc14Service->getSortedFields()) as $sortField) {
+    foreach (array_reverse($apiService->getSortedFields()) as $sortField) {
         if ($sortField->getName() === 'username') {
             usort($users, function($user1, $user2) use ($sortField) {
-                if ($sortField->getDirection === Rfc14\Sort::ASCENDING) {
+                if ($sortField->getDirection === Api\Sort::ASCENDING) {
                     return $user1->getUsername() <=> $user2->getUsername();
                 } else {
                     return $user2->getUsername() <=> $user1->getUsername();
@@ -196,8 +200,8 @@ public function getUsersV1(EntityManagerInterface $entityManager, Rfc14Service $
     }
     
     //Pagination
-    $rfc14Service->setPaginationTotal(count($users));
-    $users = array_slice($users, $rfc14Service->getPaginationOffset(), $rfc14Service->getPaginationLimit());
+    $apiService->setPaginationTotal(count($users));
+    $users = array_slice($users, $apiService->getPaginationOffset(), $apiService->getPaginationLimit());
 
     return $users;
 }

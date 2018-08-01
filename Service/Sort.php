@@ -4,7 +4,7 @@ namespace Shopping\ApiFilterBundle\Service;
 
 use Shopping\ApiFilterBundle\Input\SortField;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Rfc14;
+use Shopping\ApiFilterBundle\Annotation AS Api;
 
 interface Sort {
     /**
@@ -33,7 +33,7 @@ interface Sort {
     /**
      * Checks if only allowed sort fields were given in the request;
      * 
-     * @param Rfc14\Sort[] $sorts
+     * @param Api\Sort[] $sorts
      */
     public function handleAllowedSorts(array $sorts): void;
 
