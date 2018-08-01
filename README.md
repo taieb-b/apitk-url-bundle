@@ -103,7 +103,7 @@ If you want to limit the client, how many items per page he gets, you can specif
 
 The client can now call your API endpoint with the limit option like `GET /v1/users?limit=10` (get the first 10 entries) or `GET /v1/users?limit=30,10` (get the 10 entries with an offset of 30 (=4th page)). If the client tries to paginate when it isn't enabled by you or he wants to get more items per page than specified by you, the client will get a 400 response.
 
-Also a new header `x-pagination-total` is sent in the response containing the total amount of entries, so the client can adjust his pagination buttons.
+Also a new header `x-api-pagination-total` is sent in the response containing the total amount of entries, so the client can adjust his pagination buttons.
 
 ### Accessing client input
 #### Autoloading array through param converter
