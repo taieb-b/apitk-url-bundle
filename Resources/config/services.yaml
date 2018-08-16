@@ -3,14 +3,14 @@ services:
         public: true
         arguments:
             - '@request_stack'
-            - 'Shopping\ApiTKHeaderBundle\Service\HeaderInformation'
+            - '@Shopping\ApiTKHeaderBundle\Service\HeaderInformation'
 
     Shopping\ApiTKUrlBundle\EventListener\AnnotationListener:
         public: false
         arguments:
             - '@annotations.reader'
             - '@request_stack'
-            - 'Shopping\ApiTKUrlBundle\Service\ApiService'
+            - '@Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
@@ -26,6 +26,6 @@ services:
     Shopping\ApiTKUrlBundle\ParamConverter\ResultConverter:
         arguments:
             - '@doctrine'
-            - 'Shopping\ApiTKUrlBundle\Service\ApiService'
+            - '@Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: request.param_converter }
