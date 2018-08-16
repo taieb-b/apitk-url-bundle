@@ -1,25 +1,31 @@
 services:
-
     Shopping\ApiTKUrlBundle\Service\ApiService:
-        autowire: true
         public: true
+        arguments:
+            - '@request_stack'
+            - 'Shopping\ApiTKHeaderBundle\Service\HeaderInformation'
 
     Shopping\ApiTKUrlBundle\EventListener\AnnotationListener:
-        autowire: true
         public: false
+        arguments:
+            - '@annotations.reader'
+            - '@request_stack'
+            - 'Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
     Shopping\ApiTKUrlBundle\Describer\AnnotationDescriber:
-        autowire: true
         public: false
         arguments:
             - '@nelmio_api_doc.routes.default'
-            - '@nelmio_api_doc.controller_reflector'
+            - '@Shopping\ApiTKCommonBundle\Util\ControllerReflector'
+            - '@annotations.reader'
         tags:
-            - {name: 'nelmio_api_doc.route_describer', priority: -2000 }
+            - { name: 'nelmio_api_doc.route_describer', priority: -2000 }
 
     Shopping\ApiTKUrlBundle\ParamConverter\ResultConverter:
-        autowire: true
+        arguments:
+            - '@doctrine'
+            - 'Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: request.param_converter }
