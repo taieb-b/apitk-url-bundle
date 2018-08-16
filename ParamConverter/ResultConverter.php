@@ -1,11 +1,12 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\ParamConverter;
+namespace Shopping\ApiTKUrlBundle\ParamConverter;
 
-use Shopping\ApiFilterBundle\Annotation\Result;
-use Shopping\ApiFilterBundle\Repository\ApiRepositoryInterface;
+use Shopping\ApiTKCommonBundle\ParamConverter\ContextAwareParamConverterTrait;
+use Shopping\ApiTKCommonBundle\ParamConverter\EntityAwareParamConverterTrait;
+use Shopping\ApiTKUrlBundle\Annotation\Result;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Shopping\ApiFilterBundle\Service\ApiService;
+use Shopping\ApiTKUrlBundle\Service\ApiService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
  * Fetches the filtered, sorted and paginated result from the configured repository and hands it over to the controller
  * action.
  *
- * @package Shopping\ApiFilterBundle\ParamConverter
+ * @package Shopping\ApiTKUrlBundle\ParamConverter
  */
 class ResultConverter implements ParamConverterInterface
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
+    use ContextAwareParamConverterTrait;
+    use EntityAwareParamConverterTrait;
+
     /**
      * @var ApiService
      */
@@ -34,7 +34,7 @@ class ResultConverter implements ParamConverterInterface
      * @param ManagerRegistry|null $registry
      * @param ApiService $apiService
      */
-    public function __construct(ManagerRegistry $registry = null, ApiService $apiService)
+    public function __construct(ManagerRegistry $registry, ApiService $apiService)
     {
         $this->registry = $registry;
         $this->apiService = $apiService;
@@ -50,53 +50,17 @@ class ResultConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $options = $configuration->getOptions();
+        $this->initialize($request, $configuration);
 
-        if (!isset($options['entity'])) {
+        if ($this->getEntity() === null) {
             throw new \InvalidArgumentException('You have to specify "entity" option for the ResultConverter.');
         }
 
-        $result = $this->findInRepository($options['entity'], $options['entityManager'] ?? null, $options['methodName'] ?? null);
+        $result = $this->callRepositoryMethod($this->getRepositoryMethodName('findByRequest'), $this->apiService);
 
         $request->attributes->set($configuration->getName(), $result);
 
         return true;
-    }
-
-    /**
-     * @param string $entity
-     * @param string|null $manager
-     * @param string|null $methodName
-     * @return array
-     */
-    private function findInRepository(string $entity, string $manager = null, string $methodName = null)
-    {
-        $om = $this->getManager($manager, $entity);
-        $repository = $om->getRepository($entity);
-        
-        if (!$repository instanceof ApiRepositoryInterface) {
-            throw new \InvalidArgumentException(sprintf('Repository for entity "%s" does not implement the ApiRepositoryInterface.', $entity));
-        }
-
-        if ($methodName === null) {
-            $methodName = 'findByRequest';
-        }
-
-        return $repository->$methodName($this->apiService);
-    }
-
-    /**
-     * @param string|null $name
-     * @param string $entity
-     * @return \Doctrine\Common\Persistence\ObjectManager|null
-     */
-    private function getManager(?string $name, string $entity)
-    {
-        if (null === $name) {
-            return $this->registry->getManagerForClass($entity);
-        }
-
-        return $this->registry->getManager($name);
     }
 
     /**

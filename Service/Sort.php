@@ -1,10 +1,10 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
-use Shopping\ApiFilterBundle\Input\SortField;
+use Shopping\ApiTKUrlBundle\Input\SortField;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Api;
+use Shopping\ApiTKUrlBundle\Annotation AS Api;
 
 interface Sort {
     /**

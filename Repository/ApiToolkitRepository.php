@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Shopping\ApiFilterBundle\Repository;
+namespace Shopping\ApiTKUrlBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Shopping\ApiFilterBundle\Exception\PaginationException;
-use Shopping\ApiFilterBundle\Service\ApiService;
+use Shopping\ApiTKUrlBundle\Exception\PaginationException;
+use Shopping\ApiTKUrlBundle\Service\ApiService;
 
 /**
  * Class ApiRepository
- * @package Shopping\ApiFilterBundle\Repository
+ * @package Shopping\ApiTKUrlBundle\Repository
  */
-class ApiRepository extends EntityRepository implements ApiRepositoryInterface
+class ApiToolkitRepository extends EntityRepository
 {
 
     /**

@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiHelperBundle\Service\HeaderInformation;
-use Shopping\ApiFilterBundle\Exception\PaginationException;
+use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiFilterBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 /**
  * Trait PaginationTrait
  *
  * Pagination specific methods for the ApiService.
  *
- * @package Shopping\ApiFilterBundle\Service
+ * @package Shopping\ApiTKUrlBundle\Service
  */
 trait PaginationTrait
 {

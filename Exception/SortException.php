@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\Exception;
+namespace Shopping\ApiTKUrlBundle\Exception;
 
 class SortException extends \Exception {
     

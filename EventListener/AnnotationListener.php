@@ -1,11 +1,11 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\EventListener;
+namespace Shopping\ApiTKUrlBundle\EventListener;
 
-use Shopping\ApiFilterBundle\Annotation AS Api;
-use Shopping\ApiFilterBundle\Exception\FilterException;
-use Shopping\ApiFilterBundle\Exception\SortException;
-use Shopping\ApiFilterBundle\Service\ApiService;
+use Shopping\ApiTKUrlBundle\Annotation AS Api;
+use Shopping\ApiTKUrlBundle\Exception\FilterException;
+use Shopping\ApiTKUrlBundle\Exception\SortException;
+use Shopping\ApiTKUrlBundle\Service\ApiService;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  *
  * Reads the filter/sort/pagination annotations and stores them in the ApiService.
  *
- * @package Shopping\ApiFilterBundle\EventListener
+ * @package Shopping\ApiTKUrlBundle\EventListener
  */
 class AnnotationListener
 {

@@ -1,16 +1,16 @@
 services:
 
-    Shopping\ApiFilterBundle\Service\ApiService:
+    Shopping\ApiTKUrlBundle\Service\ApiService:
         autowire: true
         public: true
 
-    Shopping\ApiFilterBundle\EventListener\AnnotationListener:
+    Shopping\ApiTKUrlBundle\EventListener\AnnotationListener:
         autowire: true
         public: false
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
 
-    Shopping\ApiFilterBundle\Describer\AnnotationDescriber:
+    Shopping\ApiTKUrlBundle\Describer\AnnotationDescriber:
         autowire: true
         public: false
         arguments:
@@ -19,7 +19,7 @@ services:
         tags:
             - {name: 'nelmio_api_doc.route_describer', priority: -2000 }
 
-    Shopping\ApiFilterBundle\ParamConverter\ResultConverter:
+    Shopping\ApiTKUrlBundle\ParamConverter\ResultConverter:
         autowire: true
         tags:
             - { name: request.param_converter }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\Input;
+namespace Shopping\ApiTKUrlBundle\Input;
 
 use Doctrine\ORM\QueryBuilder;
 

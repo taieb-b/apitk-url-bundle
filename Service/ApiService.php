@@ -1,10 +1,10 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiHelperBundle\Service\HeaderInformation;
-use Shopping\ApiFilterBundle\Exception\PaginationException;
+use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ApiService implements Filter, Pagination, Sort

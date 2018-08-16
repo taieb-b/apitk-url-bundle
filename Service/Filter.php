@@ -1,10 +1,10 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
-use Shopping\ApiFilterBundle\Input\FilterField;
+use Shopping\ApiTKUrlBundle\Input\FilterField;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Api;
+use Shopping\ApiTKUrlBundle\Annotation AS Api;
 
 interface Filter {
     /**

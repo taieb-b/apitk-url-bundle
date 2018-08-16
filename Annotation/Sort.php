@@ -1,5 +1,5 @@
 <?php
-namespace Shopping\ApiFilterBundle\Annotation;
+namespace Shopping\ApiTKUrlBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 

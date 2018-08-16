@@ -1,7 +1,7 @@
 <?php
-namespace Shopping\ApiFilterBundle\Input;
+namespace Shopping\ApiTKUrlBundle\Input;
 
-use Shopping\ApiFilterBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * Represents a requested sort from the user.
  *
- * @package Shopping\ApiFilterBundle\Input
+ * @package Shopping\ApiTKUrlBundle\Input
  */
 class SortField implements ApplyableToQueryBuilder
 {
@@ -24,7 +24,7 @@ class SortField implements ApplyableToQueryBuilder
     private $direction;
 
     /**
-     * @var Api\Sort|null
+     * @var ApiTK\Sort|null
      */
     private $sort;
 
@@ -65,18 +65,19 @@ class SortField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Api\Sort|null
+     * @return ApiTK\Sort|null
      */
-    public function getSort(): ?Api\Sort
+    public function getSort(): ?ApiTK\Sort
     {
         return $this->sort;
     }
 
     /**
-     * @param Api\Sort|null $sort
+     * @param ApiTK\Sort|null $sort
+     *
      * @return SortField
      */
-    public function setSort(?Api\Sort $sort): SortField
+    public function setSort(?ApiTK\Sort $sort): SortField
     {
         $this->sort = $sort;
         return $this;
@@ -98,11 +99,11 @@ class SortField implements ApplyableToQueryBuilder
     public function applyToQueryBuilder(QueryBuilder $queryBuilder)
     {
         switch ($this->getDirection()) {
-            case Api\Sort::ASCENDING:
+            case ApiTK\Sort::ASCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'ASC');
                 break;
 
-            case Api\Sort::DESCENDING:
+            case ApiTK\Sort::DESCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'DESC');
                 break;
         }

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Exception\FilterException;
-use Shopping\ApiFilterBundle\Input\FilterField;
-use Shopping\ApiFilterBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Exception\FilterException;
+use Shopping\ApiTKUrlBundle\Input\FilterField;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * Filter specific methods for the ApiService.
  *
- * @package Shopping\ApiFilterBundle\Service
+ * @package Shopping\ApiTKUrlBundle\Service
  */
 trait FilterTrait
 {

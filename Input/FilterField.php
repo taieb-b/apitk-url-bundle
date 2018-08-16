@@ -1,16 +1,16 @@
 <?php
-namespace Shopping\ApiFilterBundle\Input;
+namespace Shopping\ApiTKUrlBundle\Input;
 
-use Shopping\ApiFilterBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Exception\FilterException;
+use Shopping\ApiTKUrlBundle\Exception\FilterException;
 
 /**
  * Class FilterField
  *
  * Represents a given filter from the user.
  *
- * @package Shopping\ApiFilterBundle\Input
+ * @package Shopping\ApiTKUrlBundle\Input
  */
 class FilterField implements ApplyableToQueryBuilder
 {
@@ -30,7 +30,7 @@ class FilterField implements ApplyableToQueryBuilder
     private $comparison;
 
     /**
-     * @var Api\Filter|null
+     * @var ApiTK\Filter|null
      */
     private $filter;
 
@@ -57,7 +57,7 @@ class FilterField implements ApplyableToQueryBuilder
      */
     public function getValue()
     {
-        if (in_array($this->getComparison(), [Api\Filter::COMPARISON_IN, Api\Filter::COMPARISON_NOTIN])) {
+        if (in_array($this->getComparison(), [ApiTK\Filter::COMPARISON_IN, ApiTK\Filter::COMPARISON_NOTIN])) {
             return explode(',', $this->getValue());
         }
 
@@ -93,18 +93,19 @@ class FilterField implements ApplyableToQueryBuilder
     }
 
     /**
-     * @return Api\Filter|null
+     * @return ApiTK\Filter|null
      */
-    public function getFilter(): ?Api\Filter
+    public function getFilter(): ?ApiTK\Filter
     {
         return $this->filter;
     }
 
     /**
-     * @param Api\Filter|null $filter
+     * @param ApiTK\Filter|null $filter
+     *
      * @return FilterField
      */
-    public function setFilter(?Api\Filter $filter): FilterField
+    public function setFilter(?ApiTK\Filter $filter): FilterField
     {
         $this->filter = $filter;
         return $this;
@@ -139,35 +140,35 @@ class FilterField implements ApplyableToQueryBuilder
         $parameter = $this->getUniquePlaceholder();
 
         switch ($this->getComparison()) {
-            case Api\Filter::COMPARISON_EQUALS:
+            case ApiTK\Filter::COMPARISON_EQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_NOTEQUALS:
+            case ApiTK\Filter::COMPARISON_NOTEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_IN:
+            case ApiTK\Filter::COMPARISON_IN:
                 $queryBuilder->andWhere($queryBuilder->expr()->in($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_NOTIN:
+            case ApiTK\Filter::COMPARISON_NOTIN:
                 $queryBuilder->andWhere($queryBuilder->expr()->notIn($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_GREATERTHAN:
+            case ApiTK\Filter::COMPARISON_GREATERTHAN:
                 $queryBuilder->andWhere($queryBuilder->expr()->gt($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_GREATERTHANEQUALS:
+            case ApiTK\Filter::COMPARISON_GREATERTHANEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->gte($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_LESSTHAN:
+            case ApiTK\Filter::COMPARISON_LESSTHAN:
                 $queryBuilder->andWhere($queryBuilder->expr()->lt($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
-            case Api\Filter::COMPARISON_LESSTHANEQUALS:
+            case ApiTK\Filter::COMPARISON_LESSTHANEQUALS:
                 $queryBuilder->andWhere($queryBuilder->expr()->lte($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
@@ -185,28 +186,28 @@ class FilterField implements ApplyableToQueryBuilder
     public function matches($value): bool
     {
         switch ($this->getComparison()) {
-            case Api\Filter::COMPARISON_EQUALS:
+            case ApiTK\Filter::COMPARISON_EQUALS:
                 return $value === $this->getValue();
 
-            case Api\Filter::COMPARISON_NOTEQUALS:
+            case ApiTK\Filter::COMPARISON_NOTEQUALS:
                 return $value !== $this->getValue();
 
-            case Api\Filter::COMPARISON_IN:
+            case ApiTK\Filter::COMPARISON_IN:
                 return in_array($value, $this->getValue());
 
-            case Api\Filter::COMPARISON_NOTIN:
+            case ApiTK\Filter::COMPARISON_NOTIN:
                 return !in_array($value, $this->getValue());
 
-            case Api\Filter::COMPARISON_GREATERTHAN:
+            case ApiTK\Filter::COMPARISON_GREATERTHAN:
                 return $value > $this->getValue();
 
-            case Api\Filter::COMPARISON_GREATERTHANEQUALS:
+            case ApiTK\Filter::COMPARISON_GREATERTHANEQUALS:
                 return $value >= $this->getValue();
 
-            case Api\Filter::COMPARISON_LESSTHAN:
+            case ApiTK\Filter::COMPARISON_LESSTHAN:
                 return $value < $this->getValue();
 
-            case Api\Filter::COMPARISON_LESSTHANEQUALS:
+            case ApiTK\Filter::COMPARISON_LESSTHANEQUALS:
                 return $value <= $this->getValue();
 
             default:

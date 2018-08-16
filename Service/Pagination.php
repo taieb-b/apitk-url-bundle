@@ -6,11 +6,11 @@
  * Time: 02:17
  */
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
 
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Annotation AS Api;
+use Shopping\ApiTKUrlBundle\Annotation AS Api;
 
 interface Pagination
 {

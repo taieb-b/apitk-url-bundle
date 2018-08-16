@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Shopping\ApiFilterBundle\Service;
+namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiFilterBundle\Exception\SortException;
-use Shopping\ApiFilterBundle\Input\SortField;
+use Shopping\ApiTKUrlBundle\Exception\SortException;
+use Shopping\ApiTKUrlBundle\Input\SortField;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiFilterBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 /**
  * Trait SortTrait
  *
  * Sort specific methods for the ApiService.
  *
- * @package Shopping\ApiFilterBundle\Service
+ * @package Shopping\ApiTKUrlBundle\Service
  */
 trait SortTrait
 {

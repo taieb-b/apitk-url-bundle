@@ -1,13 +1,13 @@
 <?php
 
-namespace Shopping\ApiFilterBundle\DependencyInjection;
+namespace Shopping\ApiTKUrlBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ShoppingApiFilterExtension extends Extension
+class ShoppingApiTKUrlExtension extends Extension
 {
     /**
      * Loads a specific configuration.
