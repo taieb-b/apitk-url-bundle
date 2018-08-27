@@ -45,4 +45,20 @@ class ApiService implements Filter, Pagination, Sort
         $this->applySortedFieldsToQueryBuilder($queryBuilder);
         $this->applyPaginationToQueryBuilder($queryBuilder);
     }
+
+    /**
+     * @return RequestStack
+     */
+    public function getRequestStack(): RequestStack
+    {
+        return $this->requestStack;
+    }
+
+    /**
+     * @return HeaderInformation
+     */
+    public function getHeaderInformation(): HeaderInformation
+    {
+        return $this->headerInformation;
+    }
 }
