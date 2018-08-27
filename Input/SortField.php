@@ -98,6 +98,10 @@ class SortField implements ApplyableToQueryBuilder
 
     public function applyToQueryBuilder(QueryBuilder $queryBuilder)
     {
+        if (!$this->getSort()->autoApply) {
+            return;
+        }
+
         switch ($this->getDirection()) {
             case ApiTK\Sort::ASCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'ASC');

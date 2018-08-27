@@ -137,6 +137,10 @@ class FilterField implements ApplyableToQueryBuilder
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!$this->getFilter()->autoApply) {
+            return;
+        }
+
         $parameter = $this->getUniquePlaceholder();
 
         switch ($this->getComparison()) {
