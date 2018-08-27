@@ -22,6 +22,7 @@ trait SortTrait
      * @var RequestStack
      */
     private $requestStack;
+
     /**
      * @var SortField[]
      */
@@ -109,10 +110,15 @@ trait SortTrait
         }
 
         foreach ($requestSorts as $name => $direction) {
+            $sort = $this->getSortByName($name);
+            if ($sort->autoApply === false) {
+                continue;
+            }
+
             $sortField = new SortField();
             $sortField->setName($name)
                 ->setDirection($direction)
-                ->setSort($this->getSortByName($name));
+                ->setSort($sort);
 
             $this->sortFields[] = $sortField;
         }

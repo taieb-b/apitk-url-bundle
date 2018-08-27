@@ -36,4 +36,13 @@ class Sort
      * @var string
      */
     public $queryBuilderName = null;
+
+    /**
+     * Params will, by default, be automatically applied to the QueryBuilder. In case you need a field with special
+     * handling, eg. a search that goes across multiple fields, set this attribute to false to prevent it being added
+     * to the QueryBuilder automatically.
+     *
+     * @var bool
+     */
+    public $autoApply = true;
 }

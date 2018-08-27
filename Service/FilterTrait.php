@@ -117,11 +117,16 @@ trait FilterTrait
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {
                 foreach ($limitations as $comparison => $value) {
+                    $filter = $this->getFilterByName($name);
+                    if ($filter->autoApply === false) {
+                        continue;
+                    }
+
                     $filterField = new FilterField();
                     $filterField->setName($name)
                         ->setValue($value)
                         ->setComparison($comparison)
-                        ->setFilter($this->getFilterByName($name));
+                        ->setFilter($filter);
 
                     $this->filterFields[] = $filterField;
                 }
@@ -140,11 +145,16 @@ trait FilterTrait
                 continue;
             }
 
+            $filter = $this->getFilterByName($key);
+            if ($filter->autoApply === false) {
+                continue;
+            }
+
             $filterField = new FilterField();
             $filterField->setName($key)
                 ->setValue($value)
                 ->setComparison(Api\Filter::COMPARISON_EQUALS)
-                ->setFilter($this->getFilterByName($key));
+                ->setFilter($filter);
 
             $this->filterFields[] = $filterField;
         }

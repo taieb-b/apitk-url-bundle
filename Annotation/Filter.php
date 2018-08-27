@@ -32,7 +32,7 @@ class Filter
      *
      * @var string[]
      */
-    public $allowedComparisons = ['eq','neq','gt','gteq','lt','lteq','in','nin'];
+    public $allowedComparisons = ['eq', 'neq', 'gt', 'gteq', 'lt', 'lteq', 'in', 'nin'];
 
     /**
      * Specify what values are allowed for this filter.
@@ -49,4 +49,14 @@ class Filter
      * @var string
      */
     public $queryBuilderName = null;
+
+    /**
+     * Params will, by default, be automatically applied to the QueryBuilder with the correct
+     * filter (allowedComparisons). In case you need a field with special handling, eg. a search that goes
+     * across multiple fields, set this attribute to false to prevent it being added to the QueryBuilder
+     * automatically.
+     *
+     * @var bool
+     */
+    public $autoApply = true;
 }

@@ -263,6 +263,96 @@ public function getUsersV1(EntityManagerInterface $entityManager, ApiService $ap
 
 ```
 
+#### Implementing only some filters manually
+In case you have some "virtual" fields that need some custom logic, you can use applyToQueryBuilder and  
+ still define your field by hand.
+
+Let's say you want to implement a search parameter. This search looks into username and email.
+```
+//UserController.php
+/**
+ * @ApiTK\Filter(name="search", autoApply=false)
+ *
+ * @ApiTK\Result("users", entity="App\Entity\User")
+ */
+public function getUsers(array $users)
+{
+    return $users;
+}
+```
+
+For your parameter to be available, you need to register a new `Filter` field. It is required to set 
+`autoApply=false` for this filter, because there's no "search" field on the Entity and we want to assemble this
+part of the query on our own.
+
+```
+//UserRepository.php
+use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
+class UserRepository extends ApiToolkitRepository
+{
+    public function findByRequest(ApiService $apiService): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $apiService->applyToQueryBuilder($qb);
+        
+        if ($apiService->hasFilteredField('search')) {
+            $search = $apiService->getFilteredField('search');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('u.username', ':query'),
+                    $qb->expr()->like('u.email', ':query')
+                )
+            )->setParameter('query', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+}
+```
+
+`applyToQueryBuilder` will skip our `autoApply=false` field, so we can add it ourselves.
+
+#### Implementing a sort manually
+Same as with manual filter properties, you can implement manual sorting like shown above:
+
+```
+//UserController.php
+/**
+ * @ApiTK\Sort(name="mySortProperty", autoApply=false)
+ *
+ * @ApiTK\Result("users", entity="App\Entity\User")
+ */
+public function getUsers(array $users)
+{
+    return $users;
+}
+```
+
+```
+//UserRepository.php
+use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
+class UserRepository extends ApiToolkitRepository
+{
+    public function findByRequest(ApiService $apiService): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $apiService->applyToQueryBuilder($qb);
+    
+        if ($apiService->hasSortedField('mySortProperty')) {
+            // perform your own sorting logic for this field
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+}
+
+```
+
+For more advanced purposes, see refer to the "Manually accessing" section above.
+
+
 ### Documentation
 The defined filers, sorts and pagination will automatically get added to the 
 NelmioApiDoc output (aka Swagger UI). You don't have to worry about that.
