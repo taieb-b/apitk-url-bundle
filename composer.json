@@ -1,6 +1,6 @@
 {
   "name": "shopping/apitk-url-bundle",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "symfony-bundle",
   "description": "This bundle provides filter, sorting and pagination for RESTful API's",
   "authors": [
