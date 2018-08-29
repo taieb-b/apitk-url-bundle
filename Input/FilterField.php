@@ -149,7 +149,12 @@ class FilterField implements ApplyableToQueryBuilder
                 break;
 
             case ApiTK\Filter::COMPARISON_NOTEQUALS:
-                $queryBuilder->andWhere($queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
+                $queryBuilder->andWhere(
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter),
+                        $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder))
+                    )
+                );
                 break;
 
             case ApiTK\Filter::COMPARISON_IN:
@@ -157,7 +162,12 @@ class FilterField implements ApplyableToQueryBuilder
                 break;
 
             case ApiTK\Filter::COMPARISON_NOTIN:
-                $queryBuilder->andWhere($queryBuilder->expr()->notIn($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
+                $queryBuilder->andWhere(
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->notIn($this->getQueryBuilderName($queryBuilder), ':' . $parameter),
+                        $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder))
+                    )
+                );
                 break;
 
             case ApiTK\Filter::COMPARISON_GREATERTHAN:
