@@ -58,7 +58,7 @@ class FilterField implements ApplyableToQueryBuilder
     public function getValue()
     {
         if (in_array($this->getComparison(), [ApiTK\Filter::COMPARISON_IN, ApiTK\Filter::COMPARISON_NOTIN])) {
-            return explode(',', $this->getValue());
+            return explode(',', $this->value);
         }
 
         return $this->value;
