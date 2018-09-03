@@ -1,20 +1,9 @@
 # apitk-url-bundle: Filter, Sorting and Pagination for RESTful API's   
 
 ## Installation
-Add this repository to your `composer.json` until it is available at packagist:
+Install the package via composer:
 ```
-{
-    "repositories": [{
-            "type": "vcs",
-            "url": "git@github.com:CHECK24/apitk-url-bundle.git"
-        }
-    ]
-}
-```
-
-After that, install the package via composer:
-```
-composer install shopping/apitk-url-bundle:dev-master
+composer install check24/apitk-url-bundle
 ```
 
 ## Usage
