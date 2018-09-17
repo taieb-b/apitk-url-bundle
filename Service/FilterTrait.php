@@ -50,7 +50,7 @@ trait FilterTrait
                         'Filter "%s" with comparison "%s" and value "%s" is not allowed in this request. Available filters: %s',
                         $filterField->getName(),
                         $filterField->getComparison(),
-                        $filterField->getValue(),
+                        is_array($filterField->getValue()) ? implode(',', $filterField->getValue()) : $filterField->getValue(),
                         implode(', ', array_map(function(Api\Filter $filter) {
                             $hints = [];
                             $hints[] = 'comparisons: ' . implode(', ', $filter->allowedComparisons);
@@ -79,15 +79,66 @@ trait FilterTrait
                 continue;
             }
 
-            if (
-                in_array($filterField->getComparison(), $filter->allowedComparisons) &&
-                (count($filter->enum) === 0 || in_array($filterField->getValue(), $filter->enum))
-            ) {
-                return true;
+            if (!$this->checkComparison($filterField, $filter)) {
+                return false;
             }
+
+            if (!$this->checkEnum($filterField, $filter)) {
+                return false;
+            }
+
+            return true;
         }
 
         return false;
+    }
+
+    /**
+     * Validates if a given filter's comparison from the request is allowed by its definition
+     *
+     * @param FilterField $filterFieldDefinition
+     * @param             $filter
+     *
+     * @return bool
+     */
+    private function checkComparison(FilterField $filterFieldDefinition, $filter): bool
+    {
+        return in_array($filterFieldDefinition->getComparison(), $filter->allowedComparisons);
+    }
+
+    /**
+     * Validates if a given filter value from the request is allowed by its definition.
+     * Also checks whether the definition includes an enum and, if so, validates the supplied
+     * value against all possible ones.
+     *
+     * @param FilterField $filterFieldDefinition
+     * @param             $filter
+     *
+     * @return bool
+     */
+    private function checkEnum(FilterField $filterFieldDefinition, $filter): bool
+    {
+        if (count($filter->enum) < 1) {
+            // no enum criteria for this filter, comparison allowed; everything is fine
+            return true;
+        }
+
+        $filterValue = $filterFieldDefinition->getValue();
+        if (is_array($filterValue)) {
+            // supplied filter has multiple values; check if all of them are allowed
+            foreach ($filterValue as $value) {
+                if (!in_array($value, $filter->enum)) {
+                    // exit on first invalid value
+                    return false;
+                }
+            }
+
+            // arriving here, the loop above encountered valid values only
+            return true;
+        }
+
+        // supplied filter has only one value; check if it's an allowed value
+        return in_array($filterValue, $filter->enum);
     }
 
     /**
