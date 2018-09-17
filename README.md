@@ -1,20 +1,9 @@
 # apitk-url-bundle: Filter, Sorting and Pagination for RESTful API's   
 
 ## Installation
-Add this repository to your `composer.json` until it is available at packagist:
+Install the package via composer:
 ```
-{
-    "repositories": [{
-            "type": "vcs",
-            "url": "git@github.com:CHECK24/apitk-url-bundle.git"
-        }
-    ]
-}
-```
-
-After that, install the package via composer:
-```
-composer install shopping/apitk-url-bundle:dev-master
+composer install check24/apitk-url-bundle
 ```
 
 ## Usage
@@ -293,8 +282,6 @@ class UserRepository extends ApiToolkitRepository
     public function findByRequest(ApiService $apiService): array
     {
         $qb = $this->createQueryBuilder('u');
-
-        $apiService->applyToQueryBuilder($qb);
         
         if ($apiService->hasFilteredField('search')) {
             $search = $apiService->getFilteredField('search');
@@ -306,12 +293,16 @@ class UserRepository extends ApiToolkitRepository
             )->setParameter('query', '%' . $search . '%');
         }
 
+        $apiService->applyToQueryBuilder($qb);
+
         return $qb->getQuery()->getResult();
     }
 }
 ```
 
 `applyToQueryBuilder` will skip our `autoApply=false` field, so we can add it ourselves.
+
+Important: When using also the paginator, call the `$apiService->applyToQueryBuilder()` method AFTER your manual filtering, so the paginator can build the total count header on the filtered result. Otherwise you get incorrect values in your header.
 
 #### Implementing a sort manually
 Same as with manual filter properties, you can implement manual sorting like shown above:
