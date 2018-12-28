@@ -3,7 +3,7 @@
 ## Installation
 Install the package via composer:
 ```
-composer install check24/apitk-url-bundle
+composer require check24/apitk-url-bundle
 ```
 
 ## Usage
