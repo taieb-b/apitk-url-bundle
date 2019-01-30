@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @package Shopping\ApiTKUrlBundle\Input
  */
-class SortField implements ApplyableToQueryBuilder
+class SortField implements ApplicableToQueryBuilder
 {
     /**
      * @var string
