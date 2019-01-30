@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiHelperBundle\Service\HeaderInformation;
+use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
