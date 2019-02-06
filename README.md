@@ -114,7 +114,7 @@ amount of entries, so the client can adjust his pagination buttons.
 
 ### Accessing client input
 #### Autoloading array through param converter
-If you have a default case, just extend ApiToolkitRepository in your own repo. You can do this 
+If you have a default case, just **extend** ApiToolkitRepository in your own repo. You can do this 
 automatically so you even don't have to create a repository for your entity. Just add this 
 line to your `doctrine.yaml`:
 ```
