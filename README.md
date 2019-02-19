@@ -114,14 +114,15 @@ amount of entries, so the client can adjust his pagination buttons.
 
 ### Accessing client input
 #### Autoloading array through param converter
-If you have a default case, just extend ApiToolkitRepository in your own repo. You can do this 
-automatically so you even don't have to create a repository for your entity. Just add this 
-line to your `doctrine.yaml`:
+You can automatically get the entity result array of all your filters in the correct order and pagination subset easily injected into your action.
+
+First set your default repository in your `doctrine.yaml` to our `ApiToolkitRepository`:
 ```
 doctrine:
     orm:
         default_repository_class: Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository
 ```
+For all your custom repositories, extend them from the `ApiToolkitRepository` so they also get the needed functionality.
 
 After that, add a `@ApiTK\Result` annotation to your controller action. The action parameter 
 will automatically gets filled with the filtered, sorted and paginated result set of the 
