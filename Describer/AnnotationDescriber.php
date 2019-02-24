@@ -123,6 +123,18 @@ class AnnotationDescriber extends AbstractDescriber
                 'description' => 'Paginate the result by giving offset and limit ("limit=20,5" for offset 20 and limit 5. Offset can be emitted, so "limit=5" would give the first 5 entries.).' . ($pagination->maxEntries !== null ? ' Max allowed limit: ' . $pagination->maxEntries : '')
             ]);
             $operation->getParameters()->add($parameter);
+
+            $headerInformation = [
+                'x-apitk-pagination-total' => [
+                    'description' => 'Total count of entries',
+                    'type' => 'integer',
+                ]
+            ];
+
+            $response = $operation->getResponses()->get(200);
+            $response->merge(['headers' => $headerInformation]);
+
+            $operation->getResponses()->set(200, $response);
         }
     }
 }
