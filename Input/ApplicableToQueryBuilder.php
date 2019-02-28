@@ -4,6 +4,6 @@ namespace Shopping\ApiTKUrlBundle\Input;
 
 use Doctrine\ORM\QueryBuilder;
 
-interface ApplyableToQueryBuilder {
+interface ApplicableToQueryBuilder {
     public function applyToQueryBuilder(QueryBuilder $queryBuilder);
 }
