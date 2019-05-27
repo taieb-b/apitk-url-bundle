@@ -3,18 +3,16 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
 
 /**
- * Class ApiToolkitRepository
+ * Class ApiToolkitDefaultRepository
  * @package Shopping\ApiTKUrlBundle\Repository
- *
- * @todo For 2.0.0, rename this to ApiToolkitServiceRepository and the other one to ApiToolkitRepository. Breaking change, but better naming...
  */
-class ApiToolkitRepository extends ServiceEntityRepository
+class ApiToolkitDefaultRepository extends EntityRepository
 {
 
     /**
