@@ -19,6 +19,7 @@ class Filter
     const COMPARISON_LESSTHANEQUALS = 'lteq';
     const COMPARISON_IN = 'in';
     const COMPARISON_NOTIN = 'nin';
+    const COMPARISON_LIKE = 'like';
 
     /**
      * Specify the name of this filter.
@@ -32,7 +33,17 @@ class Filter
      *
      * @var string[]
      */
-    public $allowedComparisons = ['eq', 'neq', 'gt', 'gteq', 'lt', 'lteq', 'in', 'nin'];
+    public $allowedComparisons = [
+        self::COMPARISON_EQUALS,
+        self::COMPARISON_NOTEQUALS,
+        self::COMPARISON_GREATERTHAN,
+        self::COMPARISON_GREATERTHANEQUALS,
+        self::COMPARISON_LESSTHAN,
+        self::COMPARISON_LESSTHANEQUALS,
+        self::COMPARISON_IN,
+        self::COMPARISON_NOTIN,
+        self::COMPARISON_LIKE
+    ];
 
     /**
      * Specify what values are allowed for this filter.

@@ -186,6 +186,9 @@ class FilterField implements ApplicableToQueryBuilder
                 $queryBuilder->andWhere($queryBuilder->expr()->lte($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
                 break;
 
+            case ApiTK\Filter::COMPARISON_LIKE:
+                $queryBuilder->andWhere($queryBuilder->expr()->like($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
+
         }
         $queryBuilder->setParameter($parameter, $this->getValue());
     }
