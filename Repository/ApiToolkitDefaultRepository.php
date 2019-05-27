@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\EntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
