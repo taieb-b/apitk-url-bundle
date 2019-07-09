@@ -145,7 +145,7 @@ class FilterField implements ApplicableToQueryBuilder
 
         switch ($this->getComparison()) {
             case ApiTK\Filter::COMPARISON_EQUALS:
-                if (strtolower($this->getValue()) == 'null'){
+                if (strtolower($this->getValue()) == '\null'){
                     $exp = $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
                 }else{
                     $exp = $queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
@@ -197,7 +197,7 @@ class FilterField implements ApplicableToQueryBuilder
                 break;
 
         }
-        if (strtolower($this->getValue()) != 'null'){
+        if (strtolower($this->getValue()) != '\null'){
             $queryBuilder->setParameter($parameter, $this->getValue());
         }
     }
