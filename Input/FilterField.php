@@ -12,7 +12,7 @@ use Shopping\ApiTKUrlBundle\Exception\FilterException;
  *
  * @package Shopping\ApiTKUrlBundle\Input
  */
-class FilterField implements ApplyableToQueryBuilder
+class FilterField implements ApplicableToQueryBuilder
 {
     /**
      * @var string
