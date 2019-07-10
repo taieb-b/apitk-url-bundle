@@ -154,7 +154,7 @@ class FilterField implements ApplicableToQueryBuilder
                 break;
 
             case ApiTK\Filter::COMPARISON_NOTEQUALS:
-                if (strtolower($this->getValue()) === 'null'){
+                if (strtolower($this->getValue()) === '\null'){
                     $exp = $queryBuilder->expr()->isNotNull($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
                 }else{
                     $exp = $queryBuilder->andWhere(
