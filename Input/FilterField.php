@@ -145,16 +145,26 @@ class FilterField implements ApplicableToQueryBuilder
 
         switch ($this->getComparison()) {
             case ApiTK\Filter::COMPARISON_EQUALS:
-                $queryBuilder->andWhere($queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter));
+                if (strtolower($this->getValue()) === '\null'){
+                    $exp = $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
+                }else{
+                    $exp = $queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
+                }
+                $queryBuilder->andWhere($exp);
                 break;
 
             case ApiTK\Filter::COMPARISON_NOTEQUALS:
-                $queryBuilder->andWhere(
-                    $queryBuilder->expr()->orX(
-                        $queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter),
-                        $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder))
-                    )
-                );
+                if (strtolower($this->getValue()) === '\null'){
+                    $exp = $queryBuilder->expr()->isNotNull($this->getQueryBuilderName($queryBuilder), ':' . $parameter);
+                }else{
+                    $exp = $queryBuilder->andWhere(
+                        $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter),
+                            $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder))
+                        )
+                    );
+                }
+                $queryBuilder->andWhere($exp);
                 break;
 
             case ApiTK\Filter::COMPARISON_IN:
@@ -187,7 +197,9 @@ class FilterField implements ApplicableToQueryBuilder
                 break;
 
         }
-        $queryBuilder->setParameter($parameter, $this->getValue());
+        if (strtolower($this->getValue()) !== '\null'){
+            $queryBuilder->setParameter($parameter, $this->getValue());
+        }
     }
 
     /**
