@@ -146,27 +146,25 @@ class FilterField implements ApplicableToQueryBuilder
         switch ($this->getComparison()) {
             case ApiTK\Filter::COMPARISON_EQUALS:
                 if (strtolower($this->getValue()) === '\null'){
-                    $exp = $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder));
+                    $queryBuilder->andWhere($queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder)));
                 } else {
-                    $exp = $queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter)
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq($this->getQueryBuilderName($queryBuilder), ':' . $parameter))
                         ->setParameter($parameter, $this->getValue());
                 }
-                $queryBuilder->andWhere($exp);
                 break;
 
             case ApiTK\Filter::COMPARISON_NOTEQUALS:
                 if (strtolower($this->getValue()) === '\null'){
-                    $exp = $queryBuilder->expr()->isNotNull($this->getQueryBuilderName($queryBuilder));
+                    $queryBuilder->andWhere($queryBuilder->expr()->isNotNull($this->getQueryBuilderName($queryBuilder)));
                 } else {
-                    $exp = $queryBuilder->andWhere(
+                    $queryBuilder->andWhere(
                         $queryBuilder->expr()->orX(
                             $queryBuilder->expr()->neq($this->getQueryBuilderName($queryBuilder), ':' . $parameter),
                             $queryBuilder->expr()->isNull($this->getQueryBuilderName($queryBuilder))
                         )
                     )
-                        ->setParameter($parameter, $this->getValue());
+                    ->setParameter($parameter, $this->getValue());
                 }
-                $queryBuilder->andWhere($exp);
                 break;
 
             case ApiTK\Filter::COMPARISON_IN:
