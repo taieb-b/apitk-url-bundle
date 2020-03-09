@@ -232,12 +232,19 @@ trait FilterTrait
      * Returns the filter field for the given name.
      *
      * @param string $name
+     * @param string|null $comparison
      * @return FilterField|null
      */
-    public function getFilteredField(string $name): ?FilterField
+    public function getFilteredField(string $name, string $comparison = null): ?FilterField
     {
         foreach ($this->getFilteredFields() as $filterField) {
-            if ($filterField->getName() === $name) {
+            if (
+                $filterField->getName() === $name &&
+                (
+                    $comparison === null ||
+                    $filterField->getComparison() === $comparison
+                )
+            ) {
                 return $filterField;
             }
         }
