@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Repository;
@@ -9,19 +10,21 @@ use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
 
 /**
- * Class ApiToolkitRepository
+ * Class ApiToolkitRepository.
+ *
  * @package Shopping\ApiTKUrlBundle\Repository
  *
  * @todo For 2.0.0, rename this to ApiToolkitServiceRepository and the other one to ApiToolkitRepository. Breaking change, but better naming...
  */
 class ApiToolkitRepository extends ServiceEntityRepository
 {
-
     /**
      * @param ApiService $apiService
-     * @return array
+     *
      * @throws NonUniqueResultException
      * @throws PaginationException
+     *
+     * @return array
      */
     public function findByRequest(ApiService $apiService): array
     {

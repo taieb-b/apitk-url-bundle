@@ -2,17 +2,17 @@
 
 namespace Shopping\ApiTKUrlBundle\EventListener;
 
-use Shopping\ApiTKUrlBundle\Annotation AS Api;
+use Doctrine\Common\Annotations\Reader;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
-use Doctrine\Common\Annotations\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
- * Class AnnotationListener
+ * Class AnnotationListener.
  *
  * Reads the filter/sort/pagination annotations and stores them in the ApiService.
  *
@@ -42,9 +42,10 @@ class AnnotationListener
 
     /**
      * AllowedFilterAnnotationListener constructor.
-     * @param Reader $reader
+     *
+     * @param Reader       $reader
      * @param RequestStack $requestStack
-     * @param ApiService $apiService
+     * @param ApiService   $apiService
      */
     public function __construct(Reader $reader, RequestStack $requestStack, ApiService $apiService)
     {
@@ -55,6 +56,7 @@ class AnnotationListener
 
     /**
      * @param FilterControllerEvent $event
+     *
      * @throws FilterException
      * @throws SortException
      */
@@ -75,16 +77,16 @@ class AnnotationListener
         $methodAnnotations = $this->getAnnotationsByController($controller);
 
         //Filters
-        $filters = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Filter; });
+        $filters = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Filter; });
         $this->apiService->handleAllowedFilters($filters);
 
         //Sorts
-        $sorts = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Sort; });
+        $sorts = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Sort; });
         $this->apiService->handleAllowedSorts($sorts);
 
         //Pagination
         /** @var Api\Pagination[] $paginations */
-        $paginations = array_filter($methodAnnotations, function($annotation) { return $annotation instanceof Api\Pagination; });
+        $paginations = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Pagination; });
         if (count($paginations) > 0) {
             $this->apiService->handleIsPaginatable(reset($paginations));
         }
@@ -92,6 +94,7 @@ class AnnotationListener
 
     /**
      * @param array $controller
+     *
      * @return array
      */
     private function getAnnotationsByController(array $controller): array

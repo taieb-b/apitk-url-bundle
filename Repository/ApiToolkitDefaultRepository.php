@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Repository;
@@ -9,17 +10,19 @@ use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
 
 /**
- * Class ApiToolkitDefaultRepository
+ * Class ApiToolkitDefaultRepository.
+ *
  * @package Shopping\ApiTKUrlBundle\Repository
  */
 class ApiToolkitDefaultRepository extends EntityRepository
 {
-
     /**
      * @param ApiService $apiService
-     * @return array
+     *
      * @throws NonUniqueResultException
      * @throws PaginationException
+     *
+     * @return array
      */
     public function findByRequest(ApiService $apiService): array
     {

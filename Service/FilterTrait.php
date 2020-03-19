@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
-use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait FilterTrait
+ * Trait FilterTrait.
  *
  * Filter specific methods for the ApiService.
  *
@@ -37,6 +38,7 @@ trait FilterTrait
      * Checks if only allowed filter fields were given in the request. Will be called by the event listener.
      *
      * @param Api\Filter[] $filters
+     *
      * @throws FilterException
      */
     public function handleAllowedFilters(array $filters): void
@@ -51,7 +53,7 @@ trait FilterTrait
                         $filterField->getName(),
                         $filterField->getComparison(),
                         is_array($filterField->getValue()) ? implode(',', $filterField->getValue()) : $filterField->getValue(),
-                        implode(', ', array_map(function(Api\Filter $filter) {
+                        implode(', ', array_map(function (Api\Filter $filter) {
                             $hints = [];
                             $hints[] = 'comparisons: ' . implode(', ', $filter->allowedComparisons);
                             if (count($filter->enum) > 0) {
@@ -70,6 +72,7 @@ trait FilterTrait
      * Validates a requested filter field against the annotated allowed filters.
      *
      * @param FilterField $filterField
+     *
      * @return bool
      */
     private function isAllowedFilterField(FilterField $filterField): bool
@@ -94,7 +97,7 @@ trait FilterTrait
     }
 
     /**
-     * Validates if a given filter's comparison from the request is allowed by its definition
+     * Validates if a given filter's comparison from the request is allowed by its definition.
      *
      * @param FilterField $filterFieldDefinition
      * @param             $filter
@@ -145,6 +148,7 @@ trait FilterTrait
      * Returns the annotated filter by filter name.
      *
      * @param string $name
+     *
      * @return Api\Filter|null
      */
     private function getFilterByName(string $name): ?Api\Filter
@@ -221,6 +225,7 @@ trait FilterTrait
      * Returns true if this filtering for this filter was requested by the user.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function hasFilteredField(string $name): bool
@@ -231,8 +236,9 @@ trait FilterTrait
     /**
      * Returns the filter field for the given name.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $comparison
+     *
      * @return FilterField|null
      */
     public function getFilteredField(string $name, string $comparison = null): ?FilterField

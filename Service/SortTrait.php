@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Input\SortField;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 /**
- * Trait SortTrait
+ * Trait SortTrait.
  *
  * Sort specific methods for the ApiService.
  *
@@ -37,6 +38,7 @@ trait SortTrait
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
      * @param Api\Sort[] $sorts
+     *
      * @throws SortException
      */
     public function handleAllowedSorts(array $sorts): void
@@ -50,7 +52,7 @@ trait SortTrait
                         'Sort "%s" with direction "%s" is not allowed in this request. Available sorts: %s',
                         $sortField->getName(),
                         $sortField->getDirection(),
-                        implode(', ', array_map(function(Api\Sort $sort) {
+                        implode(', ', array_map(function (Api\Sort $sort) {
                             return $sort->name . ' (' . implode(', ', $sort->allowedDirections) . ')';
                         }, $sorts))
                     )
@@ -63,6 +65,7 @@ trait SortTrait
      * Validates a requested sort field against the annotated allowed sorts.
      *
      * @param SortField $sortField
+     *
      * @return bool
      */
     private function isAllowedSortField(SortField $sortField): bool
@@ -84,6 +87,7 @@ trait SortTrait
      * Returns the annotated sort by name.
      *
      * @param string $name
+     *
      * @return Api\Sort|null
      */
     private function getSortByName(string $name): ?Api\Sort
@@ -137,6 +141,7 @@ trait SortTrait
      * Returns true if this sort field was given.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function hasSortedField(string $name): bool
@@ -148,6 +153,7 @@ trait SortTrait
      * Returns the sort field for the given name.
      *
      * @param string $name
+     *
      * @return SortField|null
      */
     public function getSortedField(string $name): ?SortField

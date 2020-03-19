@@ -1,10 +1,11 @@
 <?php
+
 namespace Shopping\ApiTKUrlBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Class Filter
+ * Class Filter.
  *
  * @package App\Dto
  * @Annotation
@@ -12,13 +13,21 @@ use Doctrine\Common\Annotations\Annotation;
 class Filter
 {
     const COMPARISON_EQUALS = 'eq';
+
     const COMPARISON_NOTEQUALS = 'neq';
+
     const COMPARISON_GREATERTHAN = 'gt';
+
     const COMPARISON_GREATERTHANEQUALS = 'gteq';
+
     const COMPARISON_LESSTHAN = 'lt';
+
     const COMPARISON_LESSTHANEQUALS = 'lteq';
+
     const COMPARISON_IN = 'in';
+
     const COMPARISON_NOTIN = 'nin';
+
     const COMPARISON_LIKE = 'like';
 
     /**
@@ -42,7 +51,7 @@ class Filter
         self::COMPARISON_LESSTHANEQUALS,
         self::COMPARISON_IN,
         self::COMPARISON_NOTIN,
-        self::COMPARISON_LIKE
+        self::COMPARISON_LIKE,
     ];
 
     /**
@@ -59,7 +68,7 @@ class Filter
      *
      * @var string
      */
-    public $queryBuilderName = null;
+    public $queryBuilderName;
 
     /**
      * Params will, by default, be automatically applied to the QueryBuilder with the correct

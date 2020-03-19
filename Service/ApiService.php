@@ -25,7 +25,8 @@ class ApiService implements Filter, Pagination, Sort
 
     /**
      * FilterFromRequestQuery constructor.
-     * @param RequestStack $requestStack
+     *
+     * @param RequestStack      $requestStack
      * @param HeaderInformation $headerInformation
      */
     public function __construct(RequestStack $requestStack, HeaderInformation $headerInformation)
@@ -36,6 +37,7 @@ class ApiService implements Filter, Pagination, Sort
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws PaginationException
      */

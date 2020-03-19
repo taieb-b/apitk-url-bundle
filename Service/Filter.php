@@ -2,37 +2,40 @@
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
-use Shopping\ApiTKUrlBundle\Input\FilterField;
 use Doctrine\ORM\QueryBuilder;
-use Shopping\ApiTKUrlBundle\Annotation AS Api;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Input\FilterField;
 
-interface Filter {
+interface Filter
+{
     /**
      * Returns all filter fields.
-     * 
+     *
      * @return FilterField[]
      */
     public function getFilteredFields(): array;
 
     /**
      * Returns true if this filter field was given.
-     * 
+     *
      * @param string $name
+     *
      * @return bool
      */
     public function hasFilteredField(string $name): bool;
 
     /**
      * Returns the filter field for the given name.
-     * 
+     *
      * @param string $name
+     *
      * @return FilterField|null
      */
     public function getFilteredField(string $name): ?FilterField;
 
     /**
-     * Checks if only allowed filter fields were given in the request;
-     * 
+     * Checks if only allowed filter fields were given in the request;.
+     *
      * @param Api\Filter[] $filters
      */
     public function handleAllowedFilters(array $filters): void;

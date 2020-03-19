@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 /**
- * Trait PaginationTrait
+ * Trait PaginationTrait.
  *
  * Pagination specific methods for the ApiService.
  *
@@ -62,6 +63,7 @@ trait PaginationTrait
      * Applies the requested pagination to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
      * @throws PaginationException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -74,8 +76,9 @@ trait PaginationTrait
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
 
             try {
-                $this->setPaginationTotal((int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
-            } catch (\Exception $e) {} //F.e. for TableNotFoundExceptions
+                $this->setPaginationTotal((int) $totalQueryBuilder->getQuery()->getSingleScalarResult());
+            } catch (\Exception $e) {
+            } //F.e. for TableNotFoundExceptions
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
@@ -105,7 +108,7 @@ trait PaginationTrait
             } else {
                 throw new PaginationException('Invalid limit parameter. Allowed formats: limit=[limit], limit=[offset],[limit]');
             }
-        } else if ($this->pagination !== null) {
+        } elseif ($this->pagination !== null) {
             $this->paginationLimit = $this->pagination->maxEntries;
         }
     }
@@ -113,8 +116,9 @@ trait PaginationTrait
     /**
      * Gets the pagination offset.
      *
-     * @return int
      * @throws PaginationException
+     *
+     * @return int
      */
     public function getPaginationOffset(): int
     {
@@ -126,8 +130,9 @@ trait PaginationTrait
     /**
      * Gets the pagination limit (max results).
      *
-     * @return int|null
      * @throws PaginationException
+     *
+     * @return int|null
      */
     public function getPaginationLimit(): ?int
     {
