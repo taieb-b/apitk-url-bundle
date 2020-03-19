@@ -115,7 +115,8 @@ class FilterField implements ApplicableToQueryBuilder
      * @param QueryBuilder $queryBuilder
      * @return string
      */
-    private function getQueryBuilderName(QueryBuilder $queryBuilder) {
+    private function getQueryBuilderName(QueryBuilder $queryBuilder): string
+    {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();
         if ($this->filter->queryBuilderName) {
             $queryBuilderName = $this->filter->queryBuilderName;
@@ -129,7 +130,7 @@ class FilterField implements ApplicableToQueryBuilder
      */
     private function getUniquePlaceholder(): string
     {
-        return 'filter_' . $this->getName() . '_' . uniqid();
+        return 'filter_' . $this->getName() . '_' . uniqid('', true);
     }
 
     /**
