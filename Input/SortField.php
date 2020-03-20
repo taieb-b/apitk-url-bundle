@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Input;
 
 use Doctrine\ORM\QueryBuilder;

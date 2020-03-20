@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\ParamConverter;
 
 use Doctrine\Common\Persistence\ManagerRegistry;

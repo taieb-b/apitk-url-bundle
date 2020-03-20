@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Describer;
 
 use EXSyst\Component\Swagger\Operation;
