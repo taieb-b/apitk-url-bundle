@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
 
@@ -13,10 +15,8 @@ use Shopping\ApiTKUrlBundle\Service\ApiService;
  * Class ApiToolkitRepository.
  *
  * @package Shopping\ApiTKUrlBundle\Repository
- *
- * @todo For 2.0.0, rename this to ApiToolkitServiceRepository and the other one to ApiToolkitRepository. Breaking change, but better naming...
  */
-class ApiToolkitRepository extends ServiceEntityRepository
+class ApiToolkitRepository extends EntityRepository
 {
     /**
      * @param ApiService $apiService
@@ -28,6 +28,12 @@ class ApiToolkitRepository extends ServiceEntityRepository
      */
     public function findByRequest(ApiService $apiService): array
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         $queryBuilder = $this->createQueryBuilder('a');
 
         $apiService->applyToQueryBuilder($queryBuilder);

@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Wulf
- * Date: 24.06.2018
- * Time: 02:17.
- */
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 interface Pagination
@@ -30,6 +25,8 @@ interface Pagination
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void;
 

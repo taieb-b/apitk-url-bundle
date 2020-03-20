@@ -127,7 +127,7 @@ class FilterField implements ApplicableToQueryBuilder
     private function getQueryBuilderName(QueryBuilder $queryBuilder): string
     {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();
-        if ($this->filter->queryBuilderName) {
+        if ($this->filter !== null && $this->filter->queryBuilderName) {
             $queryBuilderName = $this->filter->queryBuilderName;
         }
 
@@ -144,10 +144,12 @@ class FilterField implements ApplicableToQueryBuilder
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        if (!$this->getFilter()->autoApply) {
+        if ($this->filter !== null && !$this->filter->autoApply) {
             return;
         }
 
@@ -220,7 +222,7 @@ class FilterField implements ApplicableToQueryBuilder
     /**
      * Returns true if the given value matches this filter.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @throws FilterException
      *

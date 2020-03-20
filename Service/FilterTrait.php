@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -100,7 +102,7 @@ trait FilterTrait
      * Validates if a given filter's comparison from the request is allowed by its definition.
      *
      * @param FilterField $filterFieldDefinition
-     * @param             $filter
+     * @param Api\Filter  $filter
      *
      * @return bool
      */
@@ -115,7 +117,7 @@ trait FilterTrait
      * value against all possible ones.
      *
      * @param FilterField $filterFieldDefinition
-     * @param             $filter
+     * @param Api\Filter  $filter
      *
      * @return bool
      */
@@ -167,7 +169,7 @@ trait FilterTrait
      */
     private function loadFiltersFromQuery(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
         $requestFilters = $masterRequest->query->get('filter');
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {
@@ -189,8 +191,9 @@ trait FilterTrait
      */
     private function loadFiltersFromAttributes(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
         foreach ($masterRequest->attributes->getIterator() as $key => $value) {
+            $key = (string) $key;
             if ($this->getFilterByName($key) === null) {
                 continue;
             }
@@ -262,9 +265,17 @@ trait FilterTrait
      * Applies all requested filter fields to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         foreach ($this->getFilteredFields() as $filterField) {
             $filterField->applyToQueryBuilder($queryBuilder);
         }

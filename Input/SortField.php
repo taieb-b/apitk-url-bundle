@@ -94,19 +94,19 @@ class SortField implements ApplicableToQueryBuilder
      *
      * @return string
      */
-    private function getQueryBuilderName(QueryBuilder $queryBuilder)
+    private function getQueryBuilderName(QueryBuilder $queryBuilder): string
     {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();
-        if ($this->sort->queryBuilderName) {
+        if ($this->sort !== null && $this->sort->queryBuilderName) {
             $queryBuilderName = $this->sort->queryBuilderName;
         }
 
         return $queryBuilderName;
     }
 
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder)
+    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        if (!$this->getSort()->autoApply) {
+        if ($this->sort !== null && !$this->sort->autoApply) {
             return;
         }
 

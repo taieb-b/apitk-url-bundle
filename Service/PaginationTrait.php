@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -65,10 +68,17 @@ trait PaginationTrait
      * @param QueryBuilder $queryBuilder
      *
      * @throws PaginationException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
+     * @throws MissingDependencyException
      */
     public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         if ($this->pagination !== null) {
             $queryBuilder->distinct();
 
@@ -78,7 +88,8 @@ trait PaginationTrait
             try {
                 $this->setPaginationTotal((int) $totalQueryBuilder->getQuery()->getSingleScalarResult());
             } catch (\Exception $e) {
-            } //F.e. for TableNotFoundExceptions
+                // f.e. for TableNotFoundExceptions
+            }
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
@@ -92,7 +103,8 @@ trait PaginationTrait
      */
     private function parsePagination(): void
     {
-        $parameter = $this->requestStack->getMasterRequest()->query->get('limit');
+        $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $parameter = $request->query->get('limit');
 
         if ($parameter !== null) {
             if ($this->pagination === null) {

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Input\SortField;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -108,7 +110,8 @@ trait SortTrait
     {
         $this->sortFields = [];
 
-        $requestSorts = $this->requestStack->getMasterRequest()->query->get('sort');
+        $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $requestSorts = $request->query->get('sort');
         if (!is_array($requestSorts)) {
             return;
         }
@@ -171,9 +174,17 @@ trait SortTrait
      * Applies all requested sort fields to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         foreach ($this->getSortedFields() as $sortField) {
             $sortField->applyToQueryBuilder($queryBuilder);
         }

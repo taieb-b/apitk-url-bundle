@@ -9,7 +9,6 @@ services:
         public: false
         arguments:
             - '@annotations.reader'
-            - '@request_stack'
             - '@Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
@@ -25,7 +24,7 @@ services:
 
     Shopping\ApiTKUrlBundle\ParamConverter\ResultConverter:
         arguments:
-            - '@doctrine'
+            - '@?doctrine'
             - '@Shopping\ApiTKUrlBundle\Service\ApiService'
         tags:
             - { name: request.param_converter }

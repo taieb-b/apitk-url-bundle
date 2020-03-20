@@ -3,6 +3,7 @@
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
 
@@ -42,6 +43,8 @@ interface Filter
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
 }

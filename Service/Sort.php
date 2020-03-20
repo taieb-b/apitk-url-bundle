@@ -3,6 +3,7 @@
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Input\SortField;
 
@@ -42,6 +43,8 @@ interface Sort
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
 }

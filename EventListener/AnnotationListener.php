@@ -3,13 +3,14 @@
 namespace Shopping\ApiTKUrlBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use ReflectionException;
+use ReflectionObject;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
  * Class AnnotationListener.
@@ -20,11 +21,6 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  */
 class AnnotationListener
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     /**
      * @var Reader
      */
@@ -43,26 +39,25 @@ class AnnotationListener
     /**
      * AllowedFilterAnnotationListener constructor.
      *
-     * @param Reader       $reader
-     * @param RequestStack $requestStack
-     * @param ApiService   $apiService
+     * @param Reader     $reader
+     * @param ApiService $apiService
      */
-    public function __construct(Reader $reader, RequestStack $requestStack, ApiService $apiService)
+    public function __construct(Reader $reader, ApiService $apiService)
     {
-        $this->requestStack = $requestStack;
         $this->reader = $reader;
         $this->apiService = $apiService;
     }
 
     /**
-     * @param FilterControllerEvent $event
+     * @param ControllerEvent $event
      *
      * @throws FilterException
      * @throws SortException
+     * @throws ReflectionException
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
-        //Only parse annotations on original action
+        // Only parse annotations on original action
         if (!$this->masterRequest) {
             return;
         }
@@ -76,33 +71,38 @@ class AnnotationListener
 
         $methodAnnotations = $this->getAnnotationsByController($controller);
 
-        //Filters
-        $filters = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Filter; });
+        // Filters
+        $filters = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Filter; });
         $this->apiService->handleAllowedFilters($filters);
 
-        //Sorts
-        $sorts = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Sort; });
+        // Sorts
+        $sorts = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Sort; });
         $this->apiService->handleAllowedSorts($sorts);
 
-        //Pagination
+        // Pagination
         /** @var Api\Pagination[] $paginations */
-        $paginations = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Pagination; });
+        $paginations = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Pagination; });
         if (count($paginations) > 0) {
-            $this->apiService->handleIsPaginatable(reset($paginations));
+            $pagination = reset($paginations);
+            if ($pagination !== false) {
+                $this->apiService->handleIsPaginatable($pagination);
+            }
         }
     }
 
     /**
      * @param array $controller
      *
+     * @throws ReflectionException
+     *
      * @return array
      */
     private function getAnnotationsByController(array $controller): array
     {
-        /** @var Controller $controllerObject */
+        /** @var AbstractController $controllerObject */
         list($controllerObject, $methodName) = $controller;
 
-        $controllerReflectionObject = new \ReflectionObject($controllerObject);
+        $controllerReflectionObject = new ReflectionObject($controllerObject);
         $reflectionMethod = $controllerReflectionObject->getMethod($methodName);
 
         return $this->reader->getMethodAnnotations($reflectionMethod);
