@@ -1,16 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
-use Shopping\ApiTKUrlBundle\Annotation as Api;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait FilterTrait
+ * Trait FilterTrait.
  *
  * Filter specific methods for the ApiService.
  *
@@ -37,6 +40,7 @@ trait FilterTrait
      * Checks if only allowed filter fields were given in the request. Will be called by the event listener.
      *
      * @param Api\Filter[] $filters
+     *
      * @throws FilterException
      */
     public function handleAllowedFilters(array $filters): void
@@ -51,7 +55,7 @@ trait FilterTrait
                         $filterField->getName(),
                         $filterField->getComparison(),
                         is_array($filterField->getValue()) ? implode(',', $filterField->getValue()) : $filterField->getValue(),
-                        implode(', ', array_map(function(Api\Filter $filter) {
+                        implode(', ', array_map(function (Api\Filter $filter) {
                             $hints = [];
                             $hints[] = 'comparisons: ' . implode(', ', $filter->allowedComparisons);
                             if (count($filter->enum) > 0) {
@@ -70,6 +74,7 @@ trait FilterTrait
      * Validates a requested filter field against the annotated allowed filters.
      *
      * @param FilterField $filterField
+     *
      * @return bool
      */
     private function isAllowedFilterField(FilterField $filterField): bool
@@ -94,10 +99,10 @@ trait FilterTrait
     }
 
     /**
-     * Validates if a given filter's comparison from the request is allowed by its definition
+     * Validates if a given filter's comparison from the request is allowed by its definition.
      *
      * @param FilterField $filterFieldDefinition
-     * @param             $filter
+     * @param Api\Filter  $filter
      *
      * @return bool
      */
@@ -112,7 +117,7 @@ trait FilterTrait
      * value against all possible ones.
      *
      * @param FilterField $filterFieldDefinition
-     * @param             $filter
+     * @param Api\Filter  $filter
      *
      * @return bool
      */
@@ -145,6 +150,7 @@ trait FilterTrait
      * Returns the annotated filter by filter name.
      *
      * @param string $name
+     *
      * @return Api\Filter|null
      */
     private function getFilterByName(string $name): ?Api\Filter
@@ -163,7 +169,7 @@ trait FilterTrait
      */
     private function loadFiltersFromQuery(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
         $requestFilters = $masterRequest->query->get('filter');
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {
@@ -185,8 +191,9 @@ trait FilterTrait
      */
     private function loadFiltersFromAttributes(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
         foreach ($masterRequest->attributes->getIterator() as $key => $value) {
+            $key = (string) $key;
             if ($this->getFilterByName($key) === null) {
                 continue;
             }
@@ -221,6 +228,7 @@ trait FilterTrait
      * Returns true if this filtering for this filter was requested by the user.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function hasFilteredField(string $name): bool
@@ -231,8 +239,9 @@ trait FilterTrait
     /**
      * Returns the filter field for the given name.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $comparison
+     *
      * @return FilterField|null
      */
     public function getFilteredField(string $name, string $comparison = null): ?FilterField
@@ -256,9 +265,17 @@ trait FilterTrait
      * Applies all requested filter fields to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         foreach ($this->getFilteredFields() as $filterField) {
             $filterField->applyToQueryBuilder($queryBuilder);
         }

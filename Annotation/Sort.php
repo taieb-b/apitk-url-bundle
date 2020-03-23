@@ -1,18 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Class Sort
+ * Class Sort.
  *
  * @package App\Dto
  * @Annotation
  */
 class Sort
 {
-    CONST ASCENDING = 'asc';
-    CONST DESCENDING = 'desc';
+    const ASCENDING = 'asc';
+
+    const DESCENDING = 'desc';
 
     /**
      * Specify the name of this sort field.
@@ -35,7 +39,7 @@ class Sort
      *
      * @var string
      */
-    public $queryBuilderName = null;
+    public $queryBuilderName;
 
     /**
      * Params will, by default, be automatically applied to the QueryBuilder. In case you need a field with special

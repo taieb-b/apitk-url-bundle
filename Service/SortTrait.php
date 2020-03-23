@@ -1,16 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
+use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Input\SortField;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopping\ApiTKUrlBundle\Annotation as Api;
 
 /**
- * Trait SortTrait
+ * Trait SortTrait.
  *
  * Sort specific methods for the ApiService.
  *
@@ -37,6 +40,7 @@ trait SortTrait
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
      *
      * @param Api\Sort[] $sorts
+     *
      * @throws SortException
      */
     public function handleAllowedSorts(array $sorts): void
@@ -50,7 +54,7 @@ trait SortTrait
                         'Sort "%s" with direction "%s" is not allowed in this request. Available sorts: %s',
                         $sortField->getName(),
                         $sortField->getDirection(),
-                        implode(', ', array_map(function(Api\Sort $sort) {
+                        implode(', ', array_map(function (Api\Sort $sort) {
                             return $sort->name . ' (' . implode(', ', $sort->allowedDirections) . ')';
                         }, $sorts))
                     )
@@ -63,6 +67,7 @@ trait SortTrait
      * Validates a requested sort field against the annotated allowed sorts.
      *
      * @param SortField $sortField
+     *
      * @return bool
      */
     private function isAllowedSortField(SortField $sortField): bool
@@ -84,6 +89,7 @@ trait SortTrait
      * Returns the annotated sort by name.
      *
      * @param string $name
+     *
      * @return Api\Sort|null
      */
     private function getSortByName(string $name): ?Api\Sort
@@ -104,7 +110,8 @@ trait SortTrait
     {
         $this->sortFields = [];
 
-        $requestSorts = $this->requestStack->getMasterRequest()->query->get('sort');
+        $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $requestSorts = $request->query->get('sort');
         if (!is_array($requestSorts)) {
             return;
         }
@@ -137,6 +144,7 @@ trait SortTrait
      * Returns true if this sort field was given.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function hasSortedField(string $name): bool
@@ -148,6 +156,7 @@ trait SortTrait
      * Returns the sort field for the given name.
      *
      * @param string $name
+     *
      * @return SortField|null
      */
     public function getSortedField(string $name): ?SortField
@@ -165,9 +174,17 @@ trait SortTrait
      * Applies all requested sort fields to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
+     * @throws MissingDependencyException
      */
     public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         foreach ($this->getSortedFields() as $sortField) {
             $sortField->applyToQueryBuilder($queryBuilder);
         }

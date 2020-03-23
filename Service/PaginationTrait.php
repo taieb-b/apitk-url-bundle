@@ -1,16 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Service;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
-use Shopping\ApiTKUrlBundle\Exception\PaginationException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
+use Shopping\ApiTKUrlBundle\Exception\PaginationException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait PaginationTrait
+ * Trait PaginationTrait.
  *
  * Pagination specific methods for the ApiService.
  *
@@ -62,11 +66,19 @@ trait PaginationTrait
      * Applies the requested pagination to the query builder.
      *
      * @param QueryBuilder $queryBuilder
+     *
      * @throws PaginationException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
+     * @throws MissingDependencyException
      */
     public function applyPaginationToQueryBuilder(QueryBuilder $queryBuilder): void
     {
+        if (!class_exists(QueryBuilder::class)) {
+            throw new MissingDependencyException(
+                'You need to install doctrine/orm and doctrine/doctrine-bundle > 2.0 to use ORM-capabilities within ApiTK bundles.'
+            );
+        }
+
         if ($this->pagination !== null) {
             $queryBuilder->distinct();
 
@@ -74,8 +86,10 @@ trait PaginationTrait
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
 
             try {
-                $this->setPaginationTotal((int)$totalQueryBuilder->getQuery()->getSingleScalarResult());
-            } catch (\Exception $e) {} //F.e. for TableNotFoundExceptions
+                $this->setPaginationTotal((int) $totalQueryBuilder->getQuery()->getSingleScalarResult());
+            } catch (\Exception $e) {
+                // f.e. for TableNotFoundExceptions
+            }
 
             $queryBuilder->setMaxResults($this->getPaginationLimit());
             $queryBuilder->setFirstResult($this->getPaginationOffset());
@@ -89,7 +103,8 @@ trait PaginationTrait
      */
     private function parsePagination(): void
     {
-        $parameter = $this->requestStack->getMasterRequest()->query->get('limit');
+        $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $parameter = $request->query->get('limit');
 
         if ($parameter !== null) {
             if ($this->pagination === null) {
@@ -105,7 +120,7 @@ trait PaginationTrait
             } else {
                 throw new PaginationException('Invalid limit parameter. Allowed formats: limit=[limit], limit=[offset],[limit]');
             }
-        } else if ($this->pagination !== null) {
+        } elseif ($this->pagination !== null) {
             $this->paginationLimit = $this->pagination->maxEntries;
         }
     }
@@ -113,8 +128,9 @@ trait PaginationTrait
     /**
      * Gets the pagination offset.
      *
-     * @return int
      * @throws PaginationException
+     *
+     * @return int
      */
     public function getPaginationOffset(): int
     {
@@ -126,8 +142,9 @@ trait PaginationTrait
     /**
      * Gets the pagination limit (max results).
      *
-     * @return int|null
      * @throws PaginationException
+     *
+     * @return int|null
      */
     public function getPaginationLimit(): ?int
     {

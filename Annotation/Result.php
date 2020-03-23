@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Annotation;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Shopping\ApiTKCommonBundle\Annotation\ParamConverter\EntityAwareAnnotationTrait;
 
 /**
- * Class Result
+ * Class Result.
  *
  * Automatically calls the "findByRequest" method on the entity's repository and applies the given filters, sorts and
  * pagination. The result will be written in the given methods parameter.

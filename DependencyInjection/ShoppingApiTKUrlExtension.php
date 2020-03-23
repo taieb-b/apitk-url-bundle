@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
@@ -12,8 +14,9 @@ class ShoppingApiTKUrlExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array $configs
+     * @param array            $configs
      * @param ContainerBuilder $container
+     *
      * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container)

@@ -1,9 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Input;
 
 use Doctrine\ORM\QueryBuilder;
 
-interface ApplicableToQueryBuilder {
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder);
+/**
+ * Interface ApplicableToQueryBuilder.
+ *
+ * @package Shopping\ApiTKUrlBundle\Input
+ */
+interface ApplicableToQueryBuilder
+{
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void;
 }

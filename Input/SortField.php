@@ -1,11 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Shopping\ApiTKUrlBundle\Input;
 
-use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 use Doctrine\ORM\QueryBuilder;
+use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
 /**
- * Class SortField
+ * Class SortField.
  *
  * Represents a requested sort from the user.
  *
@@ -38,11 +41,13 @@ class SortField implements ApplicableToQueryBuilder
 
     /**
      * @param string $name
+     *
      * @return SortField
      */
     public function setName(string $name): SortField
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -56,11 +61,13 @@ class SortField implements ApplicableToQueryBuilder
 
     /**
      * @param string $direction
+     *
      * @return SortField
      */
     public function setDirection(string $direction): SortField
     {
         $this->direction = $direction;
+
         return $this;
     }
 
@@ -80,35 +87,39 @@ class SortField implements ApplicableToQueryBuilder
     public function setSort(?ApiTK\Sort $sort): SortField
     {
         $this->sort = $sort;
+
         return $this;
     }
 
     /**
      * @param QueryBuilder $queryBuilder
+     *
      * @return string
      */
-    private function getQueryBuilderName(QueryBuilder $queryBuilder) {
+    private function getQueryBuilderName(QueryBuilder $queryBuilder): string
+    {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();
-        if ($this->sort->queryBuilderName) {
+        if ($this->sort !== null && $this->sort->queryBuilderName) {
             $queryBuilderName = $this->sort->queryBuilderName;
         }
 
         return $queryBuilderName;
     }
 
-    public function applyToQueryBuilder(QueryBuilder $queryBuilder)
+    public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        if (!$this->getSort()->autoApply) {
+        if ($this->sort !== null && !$this->sort->autoApply) {
             return;
         }
 
         switch ($this->getDirection()) {
             case ApiTK\Sort::ASCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'ASC');
-                break;
 
+                break;
             case ApiTK\Sort::DESCENDING:
                 $queryBuilder->addOrderBy($this->getQueryBuilderName($queryBuilder), 'DESC');
+
                 break;
         }
     }
