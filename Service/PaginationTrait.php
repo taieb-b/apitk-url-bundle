@@ -150,7 +150,7 @@ trait PaginationTrait
     {
         $this->parsePagination();
 
-        return $this->paginationLimit ?? $this->pagination->maxEntries;
+        return $this->paginationLimit ?? ($this->pagination !== null ? $this->pagination->maxEntries : null);
     }
 
     /**
