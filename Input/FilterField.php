@@ -141,7 +141,7 @@ class FilterField implements ApplicableToQueryBuilder
      */
     private function getUniquePlaceholder(): string
     {
-        return 'filter_' . $this->getName() . '_' . uniqid('', true);
+        return 'filter_' . $this->getName() . '_' . sha1(uniqid('', true));
     }
 
     /**
