@@ -6,12 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
 
+## [2.0.2] - 2020-06-15
+### Fixed
 * Prevent method `getUniquePlaceholder()` hash from generating strings with a `dot` in it which will break doctrine query builder
 
--
-
+## [2.0.1] - 2020-03-30
+### Fixed
+* Fix `getPaginationLimit()` getter when no pagination was given by the user
 
 ## [2.0.0] - 2020-03-20
 ### Added
