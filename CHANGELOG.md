@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [2.0.3] - 2020-08-03
+### Fixed
+* Deprecations against symfony/http-foundation 5.1
+
 ## [2.0.2] - 2020-06-15
 ### Fixed
 * Prevent method `getUniquePlaceholder()` hash from generating strings with a `dot` in it which will break doctrine query builder
