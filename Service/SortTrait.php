@@ -111,7 +111,7 @@ trait SortTrait
         $this->sortFields = [];
 
         $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        $requestSorts = $request->query->get('sort');
+        $requestSorts = $request->query->all('sort');
         if (!is_array($requestSorts)) {
             return;
         }

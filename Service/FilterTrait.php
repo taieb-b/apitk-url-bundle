@@ -170,7 +170,7 @@ trait FilterTrait
     private function loadFiltersFromQuery(): void
     {
         $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        $requestFilters = $masterRequest->query->get('filter');
+        $requestFilters = $masterRequest->query->all('filter');
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {
                 foreach ($limitations as $comparison => $value) {
