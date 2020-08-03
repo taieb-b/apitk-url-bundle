@@ -1,4 +1,10 @@
 parameters:
+    level: 8
+    paths:
+        - .
     excludes_analyse:
         - ./vendor
         - ./DependencyInjection
+    checkMissingIterableValueType: false
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon

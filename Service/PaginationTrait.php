@@ -104,7 +104,7 @@ trait PaginationTrait
     private function parsePagination(): void
     {
         $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        $parameter = $request->query->get('limit');
+        $parameter = $request->query->get('limit', null);
 
         if ($parameter !== null) {
             if ($this->pagination === null) {
