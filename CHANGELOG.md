@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.5] - 2020-09-21
+### Fixed
+* Breaking change from 2.0.3 fixed at filter/sort
 
 ## [2.0.3] - 2020-08-03
 ### Fixed
