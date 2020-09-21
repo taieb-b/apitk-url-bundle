@@ -11,6 +11,7 @@ use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Trait FilterTrait.
@@ -170,7 +171,13 @@ trait FilterTrait
     private function loadFiltersFromQuery(): void
     {
         $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        $requestFilters = $masterRequest->query->all('filter');
+
+        if (Kernel::VERSION_ID >= 50100) {
+            $requestFilters = $masterRequest->query->all('filter');
+        } else {
+            $requestFilters = $masterRequest->query->get('filter');
+        }
+
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {
                 foreach ($limitations as $comparison => $value) {
