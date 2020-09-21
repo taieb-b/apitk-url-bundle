@@ -1,6 +1,6 @@
 {
   "name": "check24/apitk-url-bundle",
-  "version": "2.0.3",
+  "version": "2.0.5",
   "license": "MIT",
   "type": "symfony-bundle",
   "description": "This bundle provides filter, sorting and pagination for RESTful API's",
