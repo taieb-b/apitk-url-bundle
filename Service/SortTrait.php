@@ -11,6 +11,7 @@ use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Input\SortField;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Trait SortTrait.
@@ -111,7 +112,13 @@ trait SortTrait
         $this->sortFields = [];
 
         $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        $requestSorts = $request->query->all('sort');
+
+        if (Kernel::VERSION_ID >= 50100) {
+            $requestSorts = $request->query->all('sort');
+        } else {
+            $requestSorts = $request->query->get('sort');
+        }
+
         if (!is_array($requestSorts)) {
             return;
         }
