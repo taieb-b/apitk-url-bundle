@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.6] - 2021-05-20
+
+### Changed
+
+- Doctrine ManagerRegistry in ResultConverter
+
 ## [2.0.5] - 2020-09-21
 
 ### Fixed
