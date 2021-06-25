@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed some variable names accordingly
 
 ### Updated
+
 - Upgrade to Symfony 5.3
 - Updated php cs fixer 3.0
 
