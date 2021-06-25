@@ -9,6 +9,7 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
+use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
@@ -170,12 +171,12 @@ trait FilterTrait
      */
     private function loadFiltersFromQuery(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
 
         if (Kernel::VERSION_ID >= 50100) {
-            $requestFilters = $masterRequest->query->all('filter');
+            $requestFilters = $request->query->all('filter');
         } else {
-            $requestFilters = $masterRequest->query->get('filter');
+            $requestFilters = $request->query->get('filter');
         }
 
         if (is_array($requestFilters)) {
@@ -198,8 +199,8 @@ trait FilterTrait
      */
     private function loadFiltersFromAttributes(): void
     {
-        $masterRequest = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
-        foreach ($masterRequest->attributes->getIterator() as $key => $value) {
+        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
+        foreach ($request->attributes->getIterator() as $key => $value) {
             $key = (string) $key;
             if ($this->getFilterByName($key) === null) {
                 continue;
