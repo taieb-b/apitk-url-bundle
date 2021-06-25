@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2021-06-25
+
+### Fixed
+
+- Deprecation message with Symfony 5.3 where `getMasterRequest()` is renamed to `getMainRequest()`
+- Fixed backwards compatible utilizing the RequestUtil which decides what method to call
+- Changed some variable names accordingly
+
+### Updated
+
+- Upgrade to Symfony 5.3
+- Updated php cs fixer 3.0
+
 ## [2.0.6] - 2021-05-20
 
 ### Changed

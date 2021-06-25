@@ -6,5 +6,6 @@ parameters:
         - ./vendor
         - ./DependencyInjection
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon

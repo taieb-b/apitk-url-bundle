@@ -10,6 +10,7 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
+use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -103,7 +104,7 @@ trait PaginationTrait
      */
     private function parsePagination(): void
     {
-        $request = $this->requestStack->getMasterRequest() ?? Request::createFromGlobals();
+        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
         $parameter = $request->query->get('limit', null);
 
         if ($parameter !== null) {
@@ -111,7 +112,7 @@ trait PaginationTrait
                 throw new PaginationException('Limit parameter not available in current request.');
             }
 
-            $parts = explode(',', $parameter);
+            $parts = explode(',', (string) $parameter);
             if (count($parts) === 1) {
                 $this->paginationLimit = (int) $parts[0];
             } elseif (count($parts) === 2) {

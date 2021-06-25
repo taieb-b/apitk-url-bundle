@@ -31,7 +31,7 @@ class AnnotationListener
     /**
      * @var bool
      */
-    private $masterRequest = true;
+    private $mainRequest = true;
 
     /**
      * @var ApiService
@@ -60,10 +60,10 @@ class AnnotationListener
     public function onKernelController(ControllerEvent $event): void
     {
         // Only parse annotations on original action
-        if (!$this->masterRequest) {
+        if (!$this->mainRequest) {
             return;
         }
-        $this->masterRequest = false;
+        $this->mainRequest = false;
 
         $controller = $event->getController();
 
