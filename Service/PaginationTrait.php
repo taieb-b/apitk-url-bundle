@@ -112,7 +112,7 @@ trait PaginationTrait
                 throw new PaginationException('Limit parameter not available in current request.');
             }
 
-            $parts = explode(',', $parameter);
+            $parts = explode(',', (string) $parameter);
             if (count($parts) === 1) {
                 $this->paginationLimit = (int) $parts[0];
             } elseif (count($parts) === 2) {

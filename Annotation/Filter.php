@@ -14,23 +14,23 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Filter
 {
-    const COMPARISON_EQUALS = 'eq';
+    public const COMPARISON_EQUALS = 'eq';
 
-    const COMPARISON_NOTEQUALS = 'neq';
+    public const COMPARISON_NOTEQUALS = 'neq';
 
-    const COMPARISON_GREATERTHAN = 'gt';
+    public const COMPARISON_GREATERTHAN = 'gt';
 
-    const COMPARISON_GREATERTHANEQUALS = 'gteq';
+    public const COMPARISON_GREATERTHANEQUALS = 'gteq';
 
-    const COMPARISON_LESSTHAN = 'lt';
+    public const COMPARISON_LESSTHAN = 'lt';
 
-    const COMPARISON_LESSTHANEQUALS = 'lteq';
+    public const COMPARISON_LESSTHANEQUALS = 'lteq';
 
-    const COMPARISON_IN = 'in';
+    public const COMPARISON_IN = 'in';
 
-    const COMPARISON_NOTIN = 'nin';
+    public const COMPARISON_NOTIN = 'nin';
 
-    const COMPARISON_LIKE = 'like';
+    public const COMPARISON_LIKE = 'like';
 
     /**
      * Specify the name of this filter.

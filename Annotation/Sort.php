@@ -14,9 +14,9 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Sort
 {
-    const ASCENDING = 'asc';
+    public const ASCENDING = 'asc';
 
-    const DESCENDING = 'desc';
+    public const DESCENDING = 'desc';
 
     /**
      * Specify the name of this sort field.

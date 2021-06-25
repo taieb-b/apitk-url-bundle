@@ -23,6 +23,6 @@ class RequestUtil
     {
         return method_exists($requestStack, 'getMainRequest')
             ? $requestStack->getMainRequest() // symfony >= 5.3
-            : $requestStack->getMasterRequest(); // symfony <= 5.2
+            : $requestStack->getMasterRequest(); // symfony <= 5.2 @phpstan-ignore-line
     }
 }
