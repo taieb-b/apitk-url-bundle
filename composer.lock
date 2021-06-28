@@ -4,38 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9042e09ca94a1939313fc6c9a4c2c79a",
+    "content-hash": "973c9717ec1fec60775a4940606852ad",
     "packages": [
         {
             "name": "check24/apitk-common-bundle",
-            "version": "2.0.2",
+            "version": "dev-feature/php8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/byWulf/apitk-common-bundle.git",
-                "reference": "b4f835054f25a701f9dde7c7b2b63d55a7688c06"
+                "reference": "5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/byWulf/apitk-common-bundle/zipball/b4f835054f25a701f9dde7c7b2b63d55a7688c06",
-                "reference": "b4f835054f25a701f9dde7c7b2b63d55a7688c06",
+                "url": "https://api.github.com/repos/byWulf/apitk-common-bundle/zipball/5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774",
+                "reference": "5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774",
                 "shasum": ""
             },
             "require": {
                 "nelmio/api-doc-bundle": "^3.2",
-                "php": "^7.1.3",
+                "php": "^7.1.3 || ^8.0",
                 "sensio/framework-extra-bundle": "^5.2",
                 "symfony/config": ">= 4.3 <6.0",
                 "symfony/dependency-injection": ">= 4.3 <6.0",
                 "symfony/framework-bundle": ">= 4.3 <6.0"
             },
             "require-dev": {
+                "captainhook/captainhook": "^5.8",
                 "doctrine/doctrine-bundle": ">=1.8 <3.0",
                 "doctrine/orm": "^2.6",
                 "friendsofphp/php-cs-fixer": "^2.12",
                 "phpmd/phpmd": "^2.6",
-                "phpstan/phpstan": "^0.11",
-                "phpunit/phpunit": "^7.0",
-                "sebastianfeldmann/captainhook": "^2.1",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^9.3",
                 "symfony/phpunit-bridge": "^4.0"
             },
             "type": "symfony-bundle",
@@ -65,29 +66,30 @@
                     "email": "alexdo@alexdo.de"
                 }
             ],
+            "description": "Contains classes, interfaces and traits that are shared between check24/apitk-* bundles",
             "support": {
-                "source": "https://github.com/byWulf/apitk-common-bundle/tree/2.0.2"
+                "source": "https://github.com/byWulf/apitk-common-bundle/tree/feature/php8.0"
             },
-            "time": "2020-11-19T08:35:03+00:00"
+            "time": "2021-06-28T05:35:20+00:00"
         },
         {
             "name": "check24/apitk-header-bundle",
-            "version": "2.0.1",
+            "version": "dev-feature/php8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/byWulf/apitk-header-bundle.git",
-                "reference": "2519ffd55e5dfbbb262688892c02cffa736202d5"
+                "reference": "8bc30670b717fdc48179cbcdbe5928ddc24e93cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/byWulf/apitk-header-bundle/zipball/2519ffd55e5dfbbb262688892c02cffa736202d5",
-                "reference": "2519ffd55e5dfbbb262688892c02cffa736202d5",
+                "url": "https://api.github.com/repos/byWulf/apitk-header-bundle/zipball/8bc30670b717fdc48179cbcdbe5928ddc24e93cb",
+                "reference": "8bc30670b717fdc48179cbcdbe5928ddc24e93cb",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "^1.6",
                 "nelmio/api-doc-bundle": "^3.2",
-                "php": "^7.1.3",
+                "php": "^7.1.3 || ^8.0",
                 "sensio/framework-extra-bundle": "^5.1",
                 "symfony/config": ">= 4.3 <6.0",
                 "symfony/dependency-injection": ">= 4.3 <6.0",
@@ -99,7 +101,7 @@
                 "captainhook/plugin-composer": "^5.1",
                 "friendsofphp/php-cs-fixer": "^2.12",
                 "phpmd/phpmd": "^2.6",
-                "phpstan/phpstan": "^0.11"
+                "phpstan/phpstan": "^0.12"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -121,9 +123,9 @@
             ],
             "description": "This bundle provides helpful api helpers for RESTful API's",
             "support": {
-                "source": "https://github.com/byWulf/apitk-header-bundle/tree/2.0.1"
+                "source": "https://github.com/byWulf/apitk-header-bundle/tree/feature/php8.0"
             },
-            "time": "2020-06-26T11:08:27+00:00"
+            "time": "2021-06-28T05:52:52+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -4616,6 +4618,10 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
+            "support": {
+                "issues": "https://github.com/pdepend/pdepend/issues",
+                "source": "https://github.com/pdepend/pdepend/tree/2.9.1"
+            },
             "funding": [
                 {
                     "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
@@ -4742,6 +4748,11 @@
                 "phpmd",
                 "pmd"
             ],
+            "support": {
+                "irc": "irc://irc.freenode.org/phpmd",
+                "issues": "https://github.com/phpmd/phpmd/issues",
+                "source": "https://github.com/phpmd/phpmd/tree/2.10.1"
+            },
             "funding": [
                 {
                     "url": "https://tidelift.com/funding/github/packagist/phpmd/phpmd",
@@ -4790,6 +4801,10 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.90"
+            },
             "funding": [
                 {
                     "url": "https://github.com/ondrejmirtes",
@@ -4855,6 +4870,10 @@
                 "MIT"
             ],
             "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits.",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-deprecation-rules/issues",
+                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/0.12.6"
+            },
             "time": "2020-12-13T10:20:54+00:00"
         },
         {
@@ -5414,14 +5433,30 @@
             "time": "2021-05-26T17:43:10+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "check24/apitk-common-bundle",
+            "version": "dev-feature/php8.0",
+            "alias": "2.2",
+            "alias_normalized": "2.2.0.0"
+        },
+        {
+            "package": "check24/apitk-header-bundle",
+            "version": "dev-feature/php8.0",
+            "alias": "2.2",
+            "alias_normalized": "2.2.0.0"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "check24/apitk-common-bundle": 20,
+        "check24/apitk-header-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.1.3"
+        "php": "^7.1.3 || ^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
