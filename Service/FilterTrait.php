@@ -173,8 +173,10 @@ trait FilterTrait
     {
         $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
 
+        /** @phpstan-ignore-next-line */
         if (Kernel::VERSION_ID >= 50100) {
             $requestFilters = $request->query->all('filter');
+        /** @phpstan-ignore-next-line */
         } else {
             $requestFilters = $request->query->get('filter');
         }

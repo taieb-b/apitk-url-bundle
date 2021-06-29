@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "973c9717ec1fec60775a4940606852ad",
+    "content-hash": "5d526e66ff7c38e9ed3a8b998da83384",
     "packages": [
         {
             "name": "check24/apitk-common-bundle",
-            "version": "dev-feature/php8.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/byWulf/apitk-common-bundle.git",
-                "reference": "5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774"
+                "reference": "9a92c741cf0d6e1a4d4782750d1cf9c76d57edd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/byWulf/apitk-common-bundle/zipball/5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774",
-                "reference": "5c0606cf4a7b848b5ecaf9cd1bba0b503cce1774",
+                "url": "https://api.github.com/repos/byWulf/apitk-common-bundle/zipball/9a92c741cf0d6e1a4d4782750d1cf9c76d57edd8",
+                "reference": "9a92c741cf0d6e1a4d4782750d1cf9c76d57edd8",
                 "shasum": ""
             },
             "require": {
@@ -68,22 +68,22 @@
             ],
             "description": "Contains classes, interfaces and traits that are shared between check24/apitk-* bundles",
             "support": {
-                "source": "https://github.com/byWulf/apitk-common-bundle/tree/feature/php8.0"
+                "source": "https://github.com/byWulf/apitk-common-bundle/tree/2.2.0"
             },
-            "time": "2021-06-28T05:35:20+00:00"
+            "time": "2021-06-29T05:42:08+00:00"
         },
         {
             "name": "check24/apitk-header-bundle",
-            "version": "dev-feature/php8.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/byWulf/apitk-header-bundle.git",
-                "reference": "8bc30670b717fdc48179cbcdbe5928ddc24e93cb"
+                "reference": "6141756f73304f2c3932f55902ba5e6044efb803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/byWulf/apitk-header-bundle/zipball/8bc30670b717fdc48179cbcdbe5928ddc24e93cb",
-                "reference": "8bc30670b717fdc48179cbcdbe5928ddc24e93cb",
+                "url": "https://api.github.com/repos/byWulf/apitk-header-bundle/zipball/6141756f73304f2c3932f55902ba5e6044efb803",
+                "reference": "6141756f73304f2c3932f55902ba5e6044efb803",
                 "shasum": ""
             },
             "require": {
@@ -123,9 +123,9 @@
             ],
             "description": "This bundle provides helpful api helpers for RESTful API's",
             "support": {
-                "source": "https://github.com/byWulf/apitk-header-bundle/tree/feature/php8.0"
+                "source": "https://github.com/byWulf/apitk-header-bundle/tree/2.2.0"
             },
-            "time": "2021-06-28T05:52:52+00:00"
+            "time": "2021-06-29T05:43:33+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -5433,25 +5433,9 @@
             "time": "2021-05-26T17:43:10+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "check24/apitk-common-bundle",
-            "version": "dev-feature/php8.0",
-            "alias": "2.2",
-            "alias_normalized": "2.2.0.0"
-        },
-        {
-            "package": "check24/apitk-header-bundle",
-            "version": "dev-feature/php8.0",
-            "alias": "2.2",
-            "alias_normalized": "2.2.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "check24/apitk-common-bundle": 20,
-        "check24/apitk-header-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

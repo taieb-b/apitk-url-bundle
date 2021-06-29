@@ -37,8 +37,8 @@
     "doctrine/annotations": "^1.8",
     "nelmio/api-doc-bundle": "^3.4",
     "sensio/framework-extra-bundle": "^5.1",
-    "check24/apitk-common-bundle": "dev-feature/php8.0 as 2.2",
-    "check24/apitk-header-bundle": "dev-feature/php8.0 as 2.2"
+    "check24/apitk-common-bundle": "^2.2.0",
+    "check24/apitk-header-bundle": "^2.2.0"
   },
   "require-dev": {
     "captainhook/captainhook": "^5.0",

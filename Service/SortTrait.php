@@ -114,8 +114,10 @@ trait SortTrait
 
         $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
 
+        /** @phpstan-ignore-next-line */
         if (Kernel::VERSION_ID >= 50100) {
             $requestSorts = $request->query->all('sort');
+        /** @phpstan-ignore-next-line */
         } else {
             $requestSorts = $request->query->get('sort');
         }
