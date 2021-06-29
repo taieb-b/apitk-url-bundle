@@ -3,13 +3,13 @@
     "enabled": true,
     "actions": [
       {
-        "action": "php ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --verbose --dry-run"
+        "action": "php ./vendor/bin/php-cs-fixer fix --verbose --dry-run"
       },
       {
-        "action": "php ./vendor/phpstan/phpstan/phpstan.phar analyse"
+        "action": "php ./vendor/bin/phpstan analyse -c phpstan.neon ."
       },
       {
-        "action": "php ./vendor/phpmd/phpmd/src/bin/phpmd Annotation,DependencyInjection,Describer,EventListener,Exception,Input,ParamConverter,Repository,Service,ShoppingApiTKUrlBundle.php text ruleset.xml"
+        "action": "php ./vendor/bin/phpmd ./ text ruleset.xml --exclude vendor"
       }
     ]
   }
