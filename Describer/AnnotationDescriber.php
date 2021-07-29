@@ -37,7 +37,7 @@ class AnnotationDescriber extends AbstractDescriber
         $attributes = [];
         if (PHP_MAJOR_VERSION >= 8) {
             $attributes = array_map(
-                fn (ReflectionAttribute $attribute): object => $attribute->newInstance(),
+                function (ReflectionAttribute $attribute): object { return $attribute->newInstance(); },
                 array_merge(
                     $classMethod->getAttributes(Api\ApiTKAttribute::class, ReflectionAttribute::IS_INSTANCEOF),
                     $classMethod->getAttributes(Route::class, ReflectionAttribute::IS_INSTANCEOF)

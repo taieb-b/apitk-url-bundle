@@ -112,7 +112,7 @@ class AnnotationListener
         $attributes = [];
         if (PHP_MAJOR_VERSION >= 8) {
             $attributes = array_map(
-                fn (ReflectionAttribute $attribute): object => $attribute->newInstance(),
+                function (ReflectionAttribute $attribute): object { return $attribute->newInstance(); },
                 $reflectionMethod->getAttributes(Api\ApiTKAttribute::class, ReflectionAttribute::IS_INSTANCEOF)
             );
         }
