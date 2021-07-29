@@ -22,7 +22,10 @@ class Sort implements ApiTKAttribute
 
     public const DESCENDING = 'desc';
 
-    public const AVAILABLE_DIRECTIONS = ['asc', 'desc'];
+    public const AVAILABLE_DIRECTIONS = [
+        self::ASCENDING,
+        self::DESCENDING,
+    ];
 
     /**
      * Specify the name of this sort field.
