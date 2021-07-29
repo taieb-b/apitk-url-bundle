@@ -181,7 +181,7 @@ public function getItems(array $items)
 }
 ```
 
-The `ApiTK\Result` annotation is also available in PHP 8.x as an attribute:
+The `ApiTK\Result` annotation is also available in PHP 8.x as an attribute (`sensio/framework-extra-bundle` must be at least 6.1):
 ```injectablephp
 #[ApiTK\Result('items', options: ['entity' => Item::class])]
 ```

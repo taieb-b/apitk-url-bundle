@@ -19,7 +19,6 @@ use Shopping\ApiTKCommonBundle\Annotation\ParamConverter\EntityAwareAnnotationTr
  *
  * @package App\Annotation
  * @Annotation
- * @NamedArgumentConstructor()
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Result extends ParamConverter
