@@ -54,7 +54,7 @@ trait PaginationTrait
     private $paginationTotal;
 
     /**
-     * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
+     * Will be called by the event listener.
      *
      * @param Api\Pagination $pagination
      */

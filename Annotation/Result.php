@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Annotation;
 
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Shopping\ApiTKCommonBundle\Annotation\ParamConverter\EntityAwareAnnotationTrait;
 
@@ -18,7 +19,9 @@ use Shopping\ApiTKCommonBundle\Annotation\ParamConverter\EntityAwareAnnotationTr
  *
  * @package App\Annotation
  * @Annotation
+ * @NamedArgumentConstructor()
  */
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Result extends ParamConverter
 {
     use EntityAwareAnnotationTrait;

@@ -49,4 +49,7 @@
             <property name="maximum" description="The variable length reporting threshold" value="40" />
         </properties>
     </rule>
+
+    <exclude-pattern>Annotation\*.php</exclude-pattern>
+    <exclude-pattern>Annotation/*.php</exclude-pattern>
 </ruleset>

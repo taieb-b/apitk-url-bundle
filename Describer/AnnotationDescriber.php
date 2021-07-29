@@ -7,6 +7,7 @@ namespace Shopping\ApiTKUrlBundle\Describer;
 use EXSyst\Component\Swagger\Operation;
 use EXSyst\Component\Swagger\Parameter;
 use EXSyst\Component\Swagger\Path;
+use ReflectionAttribute;
 use Shopping\ApiTKCommonBundle\Describer\AbstractDescriber;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +33,22 @@ class AnnotationDescriber extends AbstractDescriber
         Path $path,
         string $method
     ): void {
-        $methodAnnotations = $this->reader->getMethodAnnotations($classMethod);
+        // PHP >= 8 attributes handling
+        $attributes = [];
+        if (PHP_MAJOR_VERSION >= 8) {
+            $attributes = array_map(
+                fn (ReflectionAttribute $attribute): object => $attribute->newInstance(),
+                array_merge(
+                    $classMethod->getAttributes(Api\ApiTKAttribute::class, ReflectionAttribute::IS_INSTANCEOF),
+                    $classMethod->getAttributes(Route::class, ReflectionAttribute::IS_INSTANCEOF)
+                )
+            );
+        }
+
+        // Annotations handling (can be removed when support for annotations is dropped)
+        $annotations = $this->reader->getMethodAnnotations($classMethod);
+
+        $methodAnnotations = array_merge($attributes, $annotations);
 
         /** @var Api\Filter[] $filters */
         $filters = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Filter; });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shopping\ApiTKUrlBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use ReflectionAttribute;
 use ReflectionException;
 use ReflectionObject;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
@@ -107,6 +108,18 @@ class AnnotationListener
         $controllerReflectionObject = new ReflectionObject($controllerObject);
         $reflectionMethod = $controllerReflectionObject->getMethod($methodName);
 
-        return $this->reader->getMethodAnnotations($reflectionMethod);
+        // PHP >= 8 attributes handling
+        $attributes = [];
+        if (PHP_MAJOR_VERSION >= 8) {
+            $attributes = array_map(
+                fn (ReflectionAttribute $attribute): object => $attribute->newInstance(),
+                $reflectionMethod->getAttributes(Api\ApiTKAttribute::class, ReflectionAttribute::IS_INSTANCEOF)
+            );
+        }
+
+        // Annotations handling (can be removed when support for annotations is dropped)
+        $annotations = $this->reader->getMethodAnnotations($reflectionMethod);
+
+        return array_merge($attributes, $annotations);
     }
 }

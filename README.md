@@ -4,7 +4,7 @@
 
 Install the package via composer:
 
-```
+```shell
 composer require check24/apitk-url-bundle
 ```
 
@@ -16,9 +16,11 @@ composer require check24/apitk-url-bundle
 
 You can specify in the annotations of the action, which fields should be filterable by the client:
 
-```
+
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
+// PHP 7.x annotations
 /**
  * Returns the users in the system.
  *
@@ -32,7 +34,14 @@ use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
  *
  * @return User[]
  */
+ 
+// PHP 8.x attributes
+#[ApiTK\Filter(name: 'username')
+#[ApiTK\Filter(name: 'created', allowedComparisons: [ApiTK\Filter::COMPARISON_GREATERTHAN, ApiTK\Filter::COMPARISON_LESSTHAN])
+#[ApiTK\Filter(name: 'active', enum: ['true', 'false'])
+#[ApiTK\Filter(name: 'country', queryBuilderName: 'a.country')
 ```
+
 
 Limit the possibilities for the user with the `allowedComparisons` and `enum` option.
 
@@ -48,7 +57,7 @@ response.
 You can also use route parameters for filtering input. Just declare the filter with the same
 name the placeholder in the route is named:
 
-```
+```injectablephp
 /**
  * Returns the addresses for the given user.
  *
@@ -65,9 +74,10 @@ name the placeholder in the route is named:
 
 You can specify in the annotations of the action, which fields should be sortable by the client:
 
-```
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
+// PHP 7.x annotations
 /**
  * Returns the users in the system.
  *
@@ -79,6 +89,10 @@ use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
  *
  * @return User[]
  */
+ 
+// PHP 8.x attributes
+#[ApiTK\Sort(name: 'username')]
+#[ApiTK\Sort(name: 'zipcode', queryBuilderName: 'a.zipCode', allowedDirections: [ApiTK\Sort::ASCENDING)]
 ```
 
 Limit the possibilities for the user with the `allowedDirections` option (f.e. if you only want to
@@ -96,9 +110,10 @@ The client can now call your API endpoint with sort options like
 
 You can specify in the annotations of the action, if the result should be paginatable by the client:
 
-```
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
+// PHP 7.x annotations
 /**
  * Returns the users in the system.
  *
@@ -111,6 +126,11 @@ use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
  *
  * @return User[]
  */
+
+// PHP 8.x attributes
+#[ApiTK\Pagination]
+// or
+#[ApiTK\Pagination(maxEntries: 25)]
 ```
 
 If you want to limit the client, how many items per page he gets, you can specify the
@@ -146,7 +166,7 @@ After that, add a `@ApiTK\Result` annotation to your controller action. The acti
 will automatically gets filled with the filtered, sorted and paginated result set of the
 given entity's repository:
 
-```
+```injectablephp
 //ItemController.php
 /**
  * @ApiTK\Filter(name="name")
@@ -161,10 +181,15 @@ public function getItems(array $items)
 }
 ```
 
+The `ApiTK\Result` annotation is also available in PHP 8.x as an attribute:
+```injectablephp
+#[ApiTK\Result('items', options: ['entity' => Item::class])]
+```
+
 If you need to filter/sort for fields in a joined entity, just define your own
 `findByRequest()` method in the custom entity's repository:
 
-```
+```injectablephp
 //UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
@@ -181,7 +206,7 @@ class UserRepository extends ApiToolkitRepository
 }
 ```
 
-```
+```injectablephp
 //UserController.php
 /**
  * @ApiTK\Filter(name="username")
@@ -203,7 +228,7 @@ the default `findByResult()` method. Be sure to accept as the sole parameter the
 
 As a result, this is also possible:
 
-```
+```injectablephp
 //UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
@@ -215,7 +240,7 @@ class UserRepository extends ApiToolkitRepository
 }
 ```
 
-```
+```injectablephp
 //UserController.php
 /**
  * @ApiTK\Result("users", entity="App\Entity\User", methodName="findBarBaz")
@@ -238,7 +263,7 @@ annotation, if you need to use another entity manager / connection than the defa
 If you have to implement custom logic with filtering, sorting and pagination,
 you can also inject the `ApiService` and use its methods:
 
-```
+```injectablephp
 //UserController.php
 public function getUsersV1(EntityManagerInterface $entityManager, ApiService $apiService)
 {
@@ -286,7 +311,7 @@ In case you have some "virtual" fields that need some custom logic, you can use 
 
 Let's say you want to implement a search parameter. This search looks into username and email.
 
-```
+```injectablephp
 //UserController.php
 /**
  * @ApiTK\Filter(name="search", autoApply=false)
@@ -303,7 +328,7 @@ For your parameter to be available, you need to register a new `Filter` field. I
 `autoApply=false` for this filter, because there's no "search" field on the Entity and we want to assemble this
 part of the query on our own.
 
-```
+```injectablephp
 //UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
@@ -337,7 +362,7 @@ Important: When using also the paginator, call the `$apiService->applyToQueryBui
 
 Same as with manual filter properties, you can implement manual sorting like shown above:
 
-```
+```injectablephp
 //UserController.php
 /**
  * @ApiTK\Sort(name="mySortProperty", autoApply=false)
@@ -350,7 +375,7 @@ public function getUsers(array $users)
 }
 ```
 
-```
+```injectablephp
 //UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository

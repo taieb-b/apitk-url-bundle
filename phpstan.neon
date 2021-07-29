@@ -7,5 +7,28 @@ parameters:
         - ./DependencyInjection
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # Backwards compatibility for PHP < 8
+        -
+            message: '#Call to method newInstance\(\) on an unknown class ReflectionAttribute\.#'
+            paths:
+                - 'EventListener/AnnotationListener.php'
+                - 'Describer/AnnotationDescriber.php'
+        -
+            message: '#Parameter \$attribute of anonymous function has invalid typehint type ReflectionAttribute\.#'
+            paths:
+                - 'EventListener/AnnotationListener.php'
+                - 'Describer/AnnotationDescriber.php'
+        -
+            message: '#Call to an undefined method ReflectionMethod::getAttributes\(\)\.#'
+            paths:
+                - 'EventListener/AnnotationListener.php'
+                - 'Describer/AnnotationDescriber.php'
+        -
+            message: '#Access to constant IS_INSTANCEOF on an unknown class ReflectionAttribute\.#'
+            paths:
+                - 'EventListener/AnnotationListener.php'
+                - 'Describer/AnnotationDescriber.php'
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
