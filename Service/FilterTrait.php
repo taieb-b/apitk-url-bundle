@@ -12,7 +12,6 @@ use Shopping\ApiTKUrlBundle\Input\FilterField;
 use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Trait FilterTrait.
@@ -172,14 +171,7 @@ trait FilterTrait
     private function loadFiltersFromQuery(): void
     {
         $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
-
-        /** @phpstan-ignore-next-line */
-        if (Kernel::VERSION_ID >= 50100) {
-            $requestFilters = $request->query->all('filter');
-        /** @phpstan-ignore-next-line */
-        } else {
-            $requestFilters = $request->query->get('filter');
-        }
+        $requestFilters = $request->query->all('filter');
 
         if (is_array($requestFilters)) {
             foreach ($requestFilters as $name => $limitations) {

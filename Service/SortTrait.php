@@ -12,7 +12,6 @@ use Shopping\ApiTKUrlBundle\Input\SortField;
 use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Trait SortTrait.
@@ -113,14 +112,7 @@ trait SortTrait
         $this->sortFields = [];
 
         $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
-
-        /** @phpstan-ignore-next-line */
-        if (Kernel::VERSION_ID >= 50100) {
-            $requestSorts = $request->query->all('sort');
-        /** @phpstan-ignore-next-line */
-        } else {
-            $requestSorts = $request->query->get('sort');
-        }
+        $requestSorts = $request->query->all('sort');
 
         if (!is_array($requestSorts)) {
             return;
