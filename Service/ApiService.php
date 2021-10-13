@@ -35,9 +35,7 @@ class ApiService implements Filter, Pagination, Sort
      */
     public function __construct(RequestStack $requestStack, HeaderInformation $headerInformation)
     {
-        /** @noinspection UnusedConstructorDependenciesInspection - used in traits */
         $this->requestStack = $requestStack;
-        /** @noinspection UnusedConstructorDependenciesInspection - used in traits */
         $this->headerInformation = $headerInformation;
     }
 
