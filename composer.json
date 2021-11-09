@@ -36,8 +36,8 @@
     "doctrine/annotations": "^1.8",
     "nelmio/api-doc-bundle": "^3.4",
     "sensio/framework-extra-bundle": "^5.1 || ^6.0",
-    "check24/apitk-common-bundle": "^2.2.0",
-    "check24/apitk-header-bundle": "^2.2.0"
+    "check24/apitk-common-bundle": "^2.2 || ^3.0",
+    "check24/apitk-header-bundle": "^2.2 || ^3.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
