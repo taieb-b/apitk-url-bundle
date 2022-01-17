@@ -7,9 +7,6 @@ namespace Shopping\ApiTKUrlBundle\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Class Sort.
- *
- * @package App\Dto
  * @Annotation
  */
 class Sort

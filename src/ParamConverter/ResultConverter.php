@@ -15,39 +15,24 @@ use Shopping\ApiTKUrlBundle\Service\ApiService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ResultConverter.
- *
  * Fetches the filtered, sorted and paginated result from the configured repository and hands it over to the controller
  * action.
- *
- * @package Shopping\ApiTKUrlBundle\ParamConverter
  */
 class ResultConverter implements ParamConverterInterface
 {
     use ContextAwareParamConverterTrait;
     use EntityAwareParamConverterTrait;
 
-    /**
-     * @var ApiService
-     */
-    private $apiService;
-
-    /**
-     * ResultConverter constructor.
-     *
-     * @param ManagerRegistry|null $registry
-     * @param ApiService           $apiService
-     */
-    public function __construct(?ManagerRegistry $registry, ApiService $apiService)
-    {
+    public function __construct(
+        ?ManagerRegistry $registry,
+        private ApiService $apiService
+    ) {
         $this->registry = $registry;
-        $this->apiService = $apiService;
     }
 
     /**
      * Stores the object in the request.
      *
-     * @param Request        $request
      * @param ParamConverter $configuration Contains the name, class and options of the object
      *
      * @return bool True if the object has been successfully set, else false
@@ -70,8 +55,6 @@ class ResultConverter implements ParamConverterInterface
 
     /**
      * Checks if the object is supported.
-     *
-     * @param ParamConverter $configuration
      *
      * @return bool True if the object is supported, else false
      */

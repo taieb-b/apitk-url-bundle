@@ -15,17 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class AnnotationDescriber.
  *
  * Will auto generate documentation for the filters, sorts and pagination annotated in the called controller action.
- *
- * @package Shopping\ApiTKUrlBundle\Describer
  */
 class AnnotationDescriber extends AbstractDescriber
 {
-    /**
-     * @param Operation         $operation
-     * @param \ReflectionMethod $classMethod
-     * @param Path              $path
-     * @param string            $method
-     */
     protected function handleOperation(
         Operation $operation,
         \ReflectionMethod $classMethod,
@@ -51,7 +43,6 @@ class AnnotationDescriber extends AbstractDescriber
     }
 
     /**
-     * @param Operation    $operation
      * @param Api\Filter[] $filters
      * @param Route[]      $routes
      */
@@ -91,7 +82,6 @@ class AnnotationDescriber extends AbstractDescriber
     }
 
     /**
-     * @param Operation  $operation
      * @param Api\Sort[] $sorts
      */
     private function addSortsToOperation(Operation $operation, array $sorts): void
@@ -110,7 +100,6 @@ class AnnotationDescriber extends AbstractDescriber
     }
 
     /**
-     * @param Operation        $operation
      * @param Api\Pagination[] $paginations
      */
     private function addPaginationsToOperation(Operation $operation, array $paginations): void

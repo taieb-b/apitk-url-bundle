@@ -15,44 +15,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
- * Class AnnotationListener.
- *
  * Reads the filter/sort/pagination annotations and stores them in the ApiService.
- *
- * @package Shopping\ApiTKUrlBundle\EventListener
  */
 class AnnotationListener
 {
-    /**
-     * @var Reader
-     */
-    private $reader;
+    private bool $mainRequest = true;
 
-    /**
-     * @var bool
-     */
-    private $mainRequest = true;
-
-    /**
-     * @var ApiService
-     */
-    private $apiService;
-
-    /**
-     * AllowedFilterAnnotationListener constructor.
-     *
-     * @param Reader     $reader
-     * @param ApiService $apiService
-     */
-    public function __construct(Reader $reader, ApiService $apiService)
-    {
-        $this->reader = $reader;
-        $this->apiService = $apiService;
+    public function __construct(
+        private Reader $reader,
+        private ApiService $apiService
+    ) {
     }
 
     /**
-     * @param ControllerEvent $event
-     *
      * @throws FilterException
      * @throws SortException
      * @throws ReflectionException
@@ -93,11 +68,7 @@ class AnnotationListener
     }
 
     /**
-     * @param array $controller
-     *
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function getAnnotationsByController(array $controller): array
     {

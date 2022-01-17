@@ -9,47 +9,23 @@ use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 
 /**
- * Class FilterField.
- *
  * Represents a given filter from the user.
- *
- * @package Shopping\ApiTKUrlBundle\Input
  */
 class FilterField implements ApplicableToQueryBuilder
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var mixed
-     */
-    private $value;
+    private mixed $value;
 
-    /**
-     * @var string
-     */
-    private $comparison;
+    private string $comparison;
 
-    /**
-     * @var ApiTK\Filter|null
-     */
-    private $filter;
+    private ?ApiTK\Filter $filter;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return FilterField
-     */
     public function setName(string $name): FilterField
     {
         $this->name = $name;
@@ -57,10 +33,7 @@ class FilterField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         if (in_array($this->getComparison(), [ApiTK\Filter::COMPARISON_IN, ApiTK\Filter::COMPARISON_NOTIN])) {
             return explode(',', $this->value);
@@ -69,31 +42,18 @@ class FilterField implements ApplicableToQueryBuilder
         return $this->value;
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return FilterField
-     */
-    public function setValue($value): FilterField
+    public function setValue(mixed $value): FilterField
     {
         $this->value = $value;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getComparison(): string
     {
         return $this->comparison;
     }
 
-    /**
-     * @param string $comparison
-     *
-     * @return FilterField
-     */
     public function setComparison(string $comparison): FilterField
     {
         $this->comparison = $comparison;
@@ -101,19 +61,11 @@ class FilterField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @return ApiTK\Filter|null
-     */
     public function getFilter(): ?ApiTK\Filter
     {
         return $this->filter;
     }
 
-    /**
-     * @param ApiTK\Filter|null $filter
-     *
-     * @return FilterField
-     */
     public function setFilter(?ApiTK\Filter $filter): FilterField
     {
         $this->filter = $filter;
@@ -121,11 +73,6 @@ class FilterField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     *
-     * @return string
-     */
     private function getQueryBuilderName(QueryBuilder $queryBuilder): string
     {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();
@@ -136,17 +83,12 @@ class FilterField implements ApplicableToQueryBuilder
         return $queryBuilderName;
     }
 
-    /**
-     * @return string
-     */
     private function getUniquePlaceholder(): string
     {
         return 'filter_' . $this->getName() . '_' . sha1(uniqid('', true));
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function applyToQueryBuilder(QueryBuilder $queryBuilder): void
@@ -224,13 +166,9 @@ class FilterField implements ApplicableToQueryBuilder
     /**
      * Returns true if the given value matches this filter.
      *
-     * @param mixed $value
-     *
      * @throws FilterException
-     *
-     * @return bool
      */
-    public function matches($value): bool
+    public function matches(mixed $value): bool
     {
         switch ($this->getComparison()) {
             case ApiTK\Filter::COMPARISON_EQUALS:

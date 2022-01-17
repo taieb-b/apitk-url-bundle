@@ -9,33 +9,25 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\SortException;
 use Shopping\ApiTKUrlBundle\Input\SortField;
-use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait SortTrait.
- *
  * Sort specific methods for the ApiService.
- *
- * @package Shopping\ApiTKUrlBundle\Service
  */
 trait SortTrait
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
-     * @var SortField[]
+     * @var SortField[]|null
      */
-    private $sortFields;
+    private ?array $sortFields = null;
 
     /**
      * @var Api\Sort[]
      */
-    private $sorts = [];
+    private array $sorts = [];
 
     /**
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
@@ -66,10 +58,6 @@ trait SortTrait
 
     /**
      * Validates a requested sort field against the annotated allowed sorts.
-     *
-     * @param SortField $sortField
-     *
-     * @return bool
      */
     private function isAllowedSortField(SortField $sortField): bool
     {
@@ -88,10 +76,6 @@ trait SortTrait
 
     /**
      * Returns the annotated sort by name.
-     *
-     * @param string $name
-     *
-     * @return Api\Sort|null
      */
     private function getSortByName(string $name): ?Api\Sort
     {
@@ -111,7 +95,7 @@ trait SortTrait
     {
         $this->sortFields = [];
 
-        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
+        $request = $this->requestStack->getMainRequest() ?? Request::createFromGlobals();
         $requestSorts = $request->query->all('sort');
 
         if (!is_array($requestSorts)) {
@@ -139,15 +123,11 @@ trait SortTrait
             $this->loadSortsFromQuery();
         }
 
-        return $this->sortFields;
+        return $this->sortFields ?? [];
     }
 
     /**
      * Returns true if this sort field was given.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasSortedField(string $name): bool
     {
@@ -156,10 +136,6 @@ trait SortTrait
 
     /**
      * Returns the sort field for the given name.
-     *
-     * @param string $name
-     *
-     * @return SortField|null
      */
     public function getSortedField(string $name): ?SortField
     {
@@ -174,8 +150,6 @@ trait SortTrait
 
     /**
      * Applies all requested sort fields to the query builder.
-     *
-     * @param QueryBuilder $queryBuilder
      *
      * @throws MissingDependencyException
      */

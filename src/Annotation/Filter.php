@@ -7,9 +7,6 @@ namespace Shopping\ApiTKUrlBundle\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Class Filter.
- *
- * @package App\Dto
  * @Annotation
  */
 class Filter

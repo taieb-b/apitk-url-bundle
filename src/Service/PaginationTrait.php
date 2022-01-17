@@ -10,53 +10,28 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKHeaderBundle\Service\HeaderInformation;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
-use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait PaginationTrait.
- *
  * Pagination specific methods for the ApiService.
- *
- * @package Shopping\ApiTKUrlBundle\Service
  */
 trait PaginationTrait
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /**
-     * @var HeaderInformation
-     */
-    private $headerInformation;
+    private HeaderInformation $headerInformation;
 
-    /**
-     * @var Api\Pagination
-     */
-    private $pagination;
+    private ?Api\Pagination $pagination = null;
 
-    /**
-     * @var int|null
-     */
-    private $paginationOffset;
+    private ?int $paginationOffset = null;
 
-    /**
-     * @var int|null
-     */
-    private $paginationLimit;
+    private ?int $paginationLimit = null;
 
-    /**
-     * @var int
-     */
-    private $paginationTotal;
+    private int $paginationTotal;
 
     /**
      * Checks if only allowed sort fields were given in the request. Will be called by the event listener.
-     *
-     * @param Api\Pagination $pagination
      */
     public function handleIsPaginatable(Api\Pagination $pagination): void
     {
@@ -65,8 +40,6 @@ trait PaginationTrait
 
     /**
      * Applies the requested pagination to the query builder.
-     *
-     * @param QueryBuilder $queryBuilder
      *
      * @throws PaginationException
      * @throws NonUniqueResultException
@@ -104,7 +77,7 @@ trait PaginationTrait
      */
     private function parsePagination(): void
     {
-        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
+        $request = $this->requestStack->getMainRequest() ?? Request::createFromGlobals();
         $parameter = $request->query->get('limit', null);
 
         if ($parameter !== null) {
@@ -130,8 +103,6 @@ trait PaginationTrait
      * Gets the pagination offset.
      *
      * @throws PaginationException
-     *
-     * @return int
      */
     public function getPaginationOffset(): int
     {
@@ -144,8 +115,6 @@ trait PaginationTrait
      * Gets the pagination limit (max results).
      *
      * @throws PaginationException
-     *
-     * @return int|null
      */
     public function getPaginationLimit(): ?int
     {
@@ -158,8 +127,6 @@ trait PaginationTrait
      * Sets the total amount of rows for the given filters/sorts.
      *
      * Only has to be set if applyToQueryBuilder() is not used.
-     *
-     * @param int $paginationTotal
      */
     public function setPaginationTotal(int $paginationTotal): void
     {
@@ -170,8 +137,6 @@ trait PaginationTrait
 
     /**
      * Returns the total amount of rows for the given filters/sorts.
-     *
-     * @return int|null
      */
     public function getPaginationTotal(): ?int
     {

@@ -9,33 +9,25 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
 use Shopping\ApiTKUrlBundle\Input\FilterField;
-use Shopping\ApiTKUrlBundle\Util\RequestUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trait FilterTrait.
- *
  * Filter specific methods for the ApiService.
- *
- * @package Shopping\ApiTKUrlBundle\Service
  */
 trait FilterTrait
 {
     /**
-     * @var FilterField[]
+     * @var FilterField[]|null
      */
-    private $filterFields;
+    private ?array $filterFields = null;
 
     /**
      * @var Api\Filter[]
      */
-    private $filters = [];
+    private array $filters = [];
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Checks if only allowed filter fields were given in the request. Will be called by the event listener.
@@ -73,10 +65,6 @@ trait FilterTrait
 
     /**
      * Validates a requested filter field against the annotated allowed filters.
-     *
-     * @param FilterField $filterField
-     *
-     * @return bool
      */
     private function isAllowedFilterField(FilterField $filterField): bool
     {
@@ -102,10 +90,7 @@ trait FilterTrait
     /**
      * Validates if a given filter's comparison from the request is allowed by its definition.
      *
-     * @param FilterField $filterFieldDefinition
-     * @param Api\Filter  $filter
-     *
-     * @return bool
+     * @param Api\Filter $filter
      */
     private function checkComparison(FilterField $filterFieldDefinition, $filter): bool
     {
@@ -117,10 +102,7 @@ trait FilterTrait
      * Also checks whether the definition includes an enum and, if so, validates the supplied
      * value against all possible ones.
      *
-     * @param FilterField $filterFieldDefinition
-     * @param Api\Filter  $filter
-     *
-     * @return bool
+     * @param Api\Filter $filter
      */
     private function checkEnum(FilterField $filterFieldDefinition, $filter): bool
     {
@@ -149,10 +131,6 @@ trait FilterTrait
 
     /**
      * Returns the annotated filter by filter name.
-     *
-     * @param string $name
-     *
-     * @return Api\Filter|null
      */
     private function getFilterByName(string $name): ?Api\Filter
     {
@@ -170,7 +148,7 @@ trait FilterTrait
      */
     private function loadFiltersFromQuery(): void
     {
-        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
+        $request = $this->requestStack->getMainRequest() ?? Request::createFromGlobals();
         $requestFilters = $request->query->all('filter');
 
         if (is_array($requestFilters)) {
@@ -193,7 +171,7 @@ trait FilterTrait
      */
     private function loadFiltersFromAttributes(): void
     {
-        $request = RequestUtil::getMainRequest($this->requestStack) ?? Request::createFromGlobals();
+        $request = $this->requestStack->getMainRequest() ?? Request::createFromGlobals();
         foreach ($request->attributes->getIterator() as $key => $value) {
             $key = (string) $key;
             if ($this->getFilterByName($key) === null) {
@@ -223,15 +201,11 @@ trait FilterTrait
             $this->loadFiltersFromAttributes();
         }
 
-        return $this->filterFields;
+        return $this->filterFields ?? [];
     }
 
     /**
      * Returns true if this filtering for this filter was requested by the user.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasFilteredField(string $name): bool
     {
@@ -240,11 +214,6 @@ trait FilterTrait
 
     /**
      * Returns the filter field for the given name.
-     *
-     * @param string      $name
-     * @param string|null $comparison
-     *
-     * @return FilterField|null
      */
     public function getFilteredField(string $name, string $comparison = null): ?FilterField
     {
@@ -265,8 +234,6 @@ trait FilterTrait
 
     /**
      * Applies all requested filter fields to the query builder.
-     *
-     * @param QueryBuilder $queryBuilder
      *
      * @throws MissingDependencyException
      */

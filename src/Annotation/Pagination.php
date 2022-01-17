@@ -7,9 +7,6 @@ namespace Shopping\ApiTKUrlBundle\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Class Pagination.
- *
- * @package App\Dto
  * @Annotation
  */
 class Pagination

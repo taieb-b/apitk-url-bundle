@@ -20,19 +20,11 @@ interface Filter
 
     /**
      * Returns true if this filter field was given.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasFilteredField(string $name): bool;
 
     /**
      * Returns the filter field for the given name.
-     *
-     * @param string $name
-     *
-     * @return FilterField|null
      */
     public function getFilteredField(string $name): ?FilterField;
 
@@ -44,8 +36,6 @@ interface Filter
     public function handleAllowedFilters(array $filters): void;
 
     /**
-     * @param QueryBuilder $queryBuilder
-     *
      * @throws MissingDependencyException
      */
     public function applyFilteredFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;

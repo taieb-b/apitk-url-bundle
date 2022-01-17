@@ -8,11 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
 /**
- * Class SortField.
- *
  * Represents a requested sort from the user.
- *
- * @package Shopping\ApiTKUrlBundle\Input
  */
 class SortField implements ApplicableToQueryBuilder
 {
@@ -31,19 +27,11 @@ class SortField implements ApplicableToQueryBuilder
      */
     private $sort;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return SortField
-     */
     public function setName(string $name): SortField
     {
         $this->name = $name;
@@ -51,19 +39,11 @@ class SortField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDirection(): string
     {
         return $this->direction;
     }
 
-    /**
-     * @param string $direction
-     *
-     * @return SortField
-     */
     public function setDirection(string $direction): SortField
     {
         $this->direction = $direction;
@@ -71,19 +51,11 @@ class SortField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @return ApiTK\Sort|null
-     */
     public function getSort(): ?ApiTK\Sort
     {
         return $this->sort;
     }
 
-    /**
-     * @param ApiTK\Sort|null $sort
-     *
-     * @return SortField
-     */
     public function setSort(?ApiTK\Sort $sort): SortField
     {
         $this->sort = $sort;
@@ -91,11 +63,6 @@ class SortField implements ApplicableToQueryBuilder
         return $this;
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     *
-     * @return string
-     */
     private function getQueryBuilderName(QueryBuilder $queryBuilder): string
     {
         $queryBuilderName = $queryBuilder->getRootAliases()[0] . '.' . $this->getName();

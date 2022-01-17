@@ -11,20 +11,11 @@ use Shopping\ApiTKCommonBundle\Exception\MissingDependencyException;
 use Shopping\ApiTKUrlBundle\Exception\PaginationException;
 use Shopping\ApiTKUrlBundle\Service\ApiService;
 
-/**
- * Class ApiToolkitServiceRepository.
- *
- * @package Shopping\ApiTKUrlBundle\Repository
- */
 class ApiToolkitServiceRepository extends ServiceEntityRepository
 {
     /**
-     * @param ApiService $apiService
-     *
      * @throws NonUniqueResultException
      * @throws PaginationException
-     *
-     * @return array
      */
     public function findByRequest(ApiService $apiService): array
     {

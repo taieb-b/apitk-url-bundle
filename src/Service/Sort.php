@@ -20,19 +20,11 @@ interface Sort
 
     /**
      * Returns true if this sort field was given.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasSortedField(string $name): bool;
 
     /**
      * Returns the sort field for the given name.
-     *
-     * @param string $name
-     *
-     * @return SortField|null
      */
     public function getSortedField(string $name): ?SortField;
 
@@ -44,8 +36,6 @@ interface Sort
     public function handleAllowedSorts(array $sorts): void;
 
     /**
-     * @param QueryBuilder $queryBuilder
-     *
      * @throws MissingDependencyException
      */
     public function applySortedFieldsToQueryBuilder(QueryBuilder $queryBuilder): void;
