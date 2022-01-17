@@ -132,15 +132,15 @@ amount of entries, so the client can adjust his pagination buttons.
 
 You can automatically get the entity result array of all your filters in the correct order and pagination subset easily injected into your action.
 
-First set your default repository in your `doctrine.yaml` to our `ApiToolkitDefaultRepository`:
+First set your default repository in your `doctrine.yaml` to our `ApiToolkitRepository`:
 
 ```yaml
 doctrine:
   orm:
-    default_repository_class: Shopping\ApiTKUrlBundle\Repository\ApiToolkitDefaultRepository
+    default_repository_class: Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository
 ```
 
-For all your custom repositories, extend them from the `ApiToolkitDefaultRepository` (or if you want them to be injectable, from `ApiToolkitRepository`, which extends from the `ServiceEntityRepository`, so be sure to implement the constructor the right way) so they also get the needed functionality.
+For all your custom repositories, extend them from the `ApiToolkitRepository` (or if you want them to be injectable, from `ApiToolkitServiceRepository`, which extends from the `ServiceEntityRepository`, so be sure to implement the constructor the right way) so they also get the needed functionality.
 
 After that, add a `@ApiTK\Result` annotation to your controller action. The action parameter
 will automatically gets filled with the filtered, sorted and paginated result set of the
