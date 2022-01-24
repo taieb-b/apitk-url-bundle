@@ -13,11 +13,11 @@ use Shopping\ApiTKUrlBundle\Exception\FilterException;
  */
 class FilterField implements ApplicableToQueryBuilder
 {
-    private string $name;
+    private string $name = '';
 
-    private mixed $value;
+    private mixed $value = null;
 
-    private string $comparison;
+    private string $comparison = '';
 
     private ?ApiTK\Filter $filter;
 

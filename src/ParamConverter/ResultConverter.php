@@ -37,7 +37,7 @@ class ResultConverter implements ParamConverterInterface
      *
      * @return bool True if the object has been successfully set, else false
      */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         $this->initialize($request, $configuration);
 
@@ -60,7 +60,6 @@ class ResultConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration): bool
     {
-        return ($configuration instanceof ParamConverter && $configuration->getClass() === 'api.result')
-            || $configuration instanceof Result;
+        return ($configuration->getClass() === 'api.result') || $configuration instanceof Result;
     }
 }

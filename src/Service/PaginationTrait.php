@@ -132,7 +132,7 @@ trait PaginationTrait
     {
         $this->paginationTotal = $paginationTotal;
 
-        $this->headerInformation->add('pagination-total', $this->paginationTotal);
+        $this->headerInformation->add('pagination-total', (string) $this->paginationTotal);
     }
 
     /**

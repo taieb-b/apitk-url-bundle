@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Shopping\ApiTKUrlBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use ReflectionAttribute;
 use ReflectionException;
+use ReflectionMethod;
 use ReflectionObject;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
 use Shopping\ApiTKUrlBundle\Exception\FilterException;
@@ -46,19 +48,15 @@ class AnnotationListener
             return;
         }
 
-        $methodAnnotations = $this->getAnnotationsByController($controller);
-
         // Filters
-        $filters = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Filter; });
-        $this->apiService->handleAllowedFilters($filters);
+        $this->apiService->handleAllowedFilters($this->getAnnotationsByController($controller, Api\Filter::class));
 
         // Sorts
-        $sorts = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Sort; });
-        $this->apiService->handleAllowedSorts($sorts);
+        $this->apiService->handleAllowedSorts($this->getAnnotationsByController($controller, Api\Sort::class));
 
         // Pagination
         /** @var Api\Pagination[] $paginations */
-        $paginations = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Pagination; });
+        $paginations = $this->getAnnotationsByController($controller, Api\Pagination::class);
         if (count($paginations) > 0) {
             $pagination = reset($paginations);
             if ($pagination !== false) {
@@ -68,9 +66,12 @@ class AnnotationListener
     }
 
     /**
+     * @param mixed[]      $controller
+     * @param class-string $annotationClass
+     *
      * @throws ReflectionException
      */
-    private function getAnnotationsByController(array $controller): array
+    private function getAnnotationsByController(array $controller, string $annotationClass): array
     {
         /** @var AbstractController $controllerObject */
         list($controllerObject, $methodName) = $controller;
@@ -78,6 +79,26 @@ class AnnotationListener
         $controllerReflectionObject = new ReflectionObject($controllerObject);
         $reflectionMethod = $controllerReflectionObject->getMethod($methodName);
 
-        return $this->reader->getMethodAnnotations($reflectionMethod);
+        return $this->getAnnotations($reflectionMethod, $annotationClass);
+    }
+
+    /**
+     * @param class-string $annotationClass
+     *
+     * @return mixed[]
+     */
+    private function getAnnotations(ReflectionMethod $method, string $annotationClass): array
+    {
+        $annotations = $this->reader->getMethodAnnotations($method);
+        $annotations = array_filter($annotations, static function ($value) use ($annotationClass) {
+            return $value instanceof $annotationClass;
+        });
+
+        $attributes = array_map(
+            static function (ReflectionAttribute $attribute): object { return $attribute->newInstance(); },
+            $method->getAttributes($annotationClass, ReflectionAttribute::IS_INSTANCEOF),
+        );
+
+        return array_merge($attributes, $annotations);
     }
 }

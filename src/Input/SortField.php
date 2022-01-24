@@ -12,20 +12,11 @@ use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
  */
 class SortField implements ApplicableToQueryBuilder
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name = '';
 
-    /**
-     * @var string
-     */
-    private $direction;
+    private string $direction = '';
 
-    /**
-     * @var ApiTK\Sort|null
-     */
-    private $sort;
+    private ?ApiTK\Sort $sort;
 
     public function getName(): string
     {

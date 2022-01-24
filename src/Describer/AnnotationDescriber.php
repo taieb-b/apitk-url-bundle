@@ -4,127 +4,151 @@ declare(strict_types=1);
 
 namespace Shopping\ApiTKUrlBundle\Describer;
 
-use EXSyst\Component\Swagger\Operation;
-use EXSyst\Component\Swagger\Parameter;
-use EXSyst\Component\Swagger\Path;
-use Shopping\ApiTKCommonBundle\Describer\AbstractDescriber;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Nelmio\ApiDocBundle\OpenApiPhp\Util;
+use Nelmio\ApiDocBundle\RouteDescriber\RouteDescriberInterface;
+use OpenApi\Annotations as OA;
+use ReflectionAttribute;
+use ReflectionMethod;
+use Shopping\ApiTKCommonBundle\Describer\RouteDescriberTrait;
 use Shopping\ApiTKUrlBundle\Annotation as Api;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Route;
 
-/**
- * Class AnnotationDescriber.
- *
- * Will auto generate documentation for the filters, sorts and pagination annotated in the called controller action.
- */
-class AnnotationDescriber extends AbstractDescriber
+class AnnotationDescriber implements RouteDescriberInterface
 {
-    protected function handleOperation(
-        Operation $operation,
-        \ReflectionMethod $classMethod,
-        Path $path,
-        string $method
-    ): void {
-        $methodAnnotations = $this->reader->getMethodAnnotations($classMethod);
+    use RouteDescriberTrait;
 
-        /** @var Api\Filter[] $filters */
-        $filters = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Filter; });
-        /** @var Route[] $routes */
-        $routes = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Route; });
-        $this->addFiltersToOperation($operation, $filters, $routes);
-
-        /** @var Api\Sort[] $sorts */
-        $sorts = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Sort; });
-        $this->addSortsToOperation($operation, $sorts);
-
-        //Pagination
-        /** @var Api\Pagination[] $paginations */
-        $paginations = array_filter($methodAnnotations, function ($annotation) { return $annotation instanceof Api\Pagination; });
-        $this->addPaginationsToOperation($operation, $paginations);
+    public function __construct(
+        private AnnotationReader $annotationReader
+    ) {
     }
 
-    /**
-     * @param Api\Filter[] $filters
-     * @param Route[]      $routes
-     */
-    private function addFiltersToOperation(Operation $operation, array $filters, array $routes): void
+    public function describe(OA\OpenApi $api, Route $route, ReflectionMethod $reflectionMethod): void
     {
-        $routePlaceholders = [];
-        foreach ($routes as $route) {
-            $matches = [];
-            preg_match_all('/{([^}]+)}/', $route->getPath(), $matches);
-            $routePlaceholders = array_merge($routePlaceholders, $matches[1]);
-        }
+        /** @var Api\Filter[] $filters */
+        $filters = $this->getAnnotations($reflectionMethod, Api\Filter::class);
+        /** @var Api\Sort[] $sorts */
+        $sorts = $this->getAnnotations($reflectionMethod, Api\Sort::class);
+        /** @var Api\Pagination[] $paginations */
+        $paginations = $this->getAnnotations($reflectionMethod, Api\Pagination::class);
 
-        foreach ($filters as $filter) {
-            if (in_array($filter->name, $routePlaceholders)) {
-                $parameter = new Parameter([
-                    'name' => $filter->name,
-                    'in' => 'path',
-                    'type' => 'string',
-                    'required' => true,
-                    'description' => 'Only show entries, which match this ' . $filter->name . '.',
-                ]);
-            } else {
-                $parameter = new Parameter([
-                    'name' => 'filter[' . $filter->name . '][' . $filter->allowedComparisons[0] . ']',
-                    'in' => 'query',
-                    'type' => 'string',
-                    'required' => false,
-                    'description' => 'Only show entries, which match this ' . $filter->name . '.' . (count($filter->allowedComparisons) > 1 ? ' Available comparisons: ' . implode(', ', $filter->allowedComparisons) : ''),
-                ]);
-            }
-            if (count($filter->enum) > 0) {
-                $parameter->setEnum($filter->enum);
+        foreach ($this->getOperations($api, $route) as $operation) {
+            if (!empty($filters)) {
+                $this->addFiltersToOperation($operation, $filters, $route);
             }
 
-            $operation->getParameters()->add($parameter);
+            if (!empty($sorts)) {
+                $this->addSortsToOperation($operation, $sorts);
+            }
+
+            if (!empty($paginations)) {
+                $this->addPaginationsToOperation($operation, $paginations);
+            }
         }
     }
 
     /**
      * @param Api\Sort[] $sorts
      */
-    private function addSortsToOperation(Operation $operation, array $sorts): void
+    private function addSortsToOperation(OA\Operation $operation, array $sorts): void
     {
         foreach ($sorts as $sort) {
-            $parameter = new Parameter([
-                'name' => 'sort[' . $sort->name . ']',
-                'in' => 'query',
-                'type' => 'string',
-                'enum' => $sort->allowedDirections,
-                'required' => false,
-                'description' => 'Sort the result by ' . $sort->name . '.',
-            ]);
-            $operation->getParameters()->add($parameter);
+            $parameter = Util::getOperationParameter($operation, 'sort[' . $sort->name . ']', 'query');
+
+            $parameter->required = false;
+            $parameter->description = 'Sort the result by ' . $sort->name . '.';
+
+            /** @var OA\Schema $schema */
+            $schema = Util::getChild($parameter, OA\Schema::class);
+            $schema->type = 'string';
+            $schema->enum = $sort->allowedDirections;
         }
     }
 
     /**
      * @param Api\Pagination[] $paginations
      */
-    private function addPaginationsToOperation(Operation $operation, array $paginations): void
+    private function addPaginationsToOperation(OA\Operation $operation, array $paginations): void
     {
         foreach ($paginations as $pagination) {
-            $parameter = new Parameter([
-                'name' => 'limit',
-                'in' => 'query',
-                'type' => 'string',
-                'required' => false,
-                'description' => 'Paginate the result by giving offset and limit ("limit=20,5" for offset 20 and limit 5. Offset can be emitted, so "limit=5" would give the first 5 entries.).' . ($pagination->maxEntries !== null ? ' Max allowed limit: ' . $pagination->maxEntries : ''),
-            ]);
-            $operation->getParameters()->add($parameter);
+            $parameter = Util::getOperationParameter($operation, 'limit', 'query');
 
-            $headerInformation = [
-                'x-apitk-pagination-total' => [
-                    'description' => 'Total count of entries',
-                    'type' => 'integer',
-                ],
-            ];
+            $parameter->description = 'Paginate the result by giving offset and limit '
+                . '("limit=20,5" for offset 20 and limit 5. Offset can be emitted, so "limit=5" would give the first 5 entries.).'
+                . ($pagination->maxEntries !== null ? ' Max allowed limit: ' . $pagination->maxEntries : '');
+            $parameter->required = false;
 
-            $response = $operation->getResponses()->get(200);
-            $response->merge(['headers' => $headerInformation]);
+            /** @var OA\Schema $schema */
+            $schema = Util::getChild($parameter, OA\Schema::class);
+            $schema->type = 'string';
 
-            $operation->getResponses()->set(200, $response);
+            /** @var OA\Response $response */
+            $response = Util::getCollectionItem($operation, OA\Response::class, ['response' => 200]);
+
+            /** @var OA\Header $header */
+            $header = Util::getCollectionItem($response, OA\Header::class, ['header' => 'x-apitk-pagination-total']);
+            $header->description = 'Total count of entries';
+
+            /** @var OA\Schema $schema */
+            $schema = Util::getChild($header, OA\Schema::class, ['type' => 'integer']);
+            $header->schema = $schema;
         }
+    }
+
+    /**
+     * @param Api\Filter[] $filters
+     */
+    private function addFiltersToOperation(OA\Operation $operation, array $filters, Route $route): void
+    {
+        $routePlaceholders = [];
+        preg_match_all('/{([^}]+)}/', $route->getPath(), $routePlaceholders);
+        $routePlaceholders = $routePlaceholders[1];
+
+        foreach ($filters as $filter) {
+            if (in_array($filter->name, $routePlaceholders)) {
+                $parameter = Util::getOperationParameter($operation, $filter->name, 'path');
+                $parameter->description = 'Only show entries, which match this ' . $filter->name . '.';
+                $parameter->required = true;
+            } else {
+                $parameter = Util::getOperationParameter($operation, 'filter[' . $filter->name . '][' . $filter->allowedComparisons[0] . ']', 'query');
+
+                $description = 'Only show entries, which match this ' . $filter->name . '.';
+                if (count($filter->allowedComparisons) > 1) {
+                    $description .= ' Available comparisons: ' . implode(', ', $filter->allowedComparisons);
+                }
+
+                $parameter->description = $description;
+                $parameter->required = false;
+            }
+
+            /** @var OA\Schema $schema */
+            $schema = Util::getChild($parameter, OA\Schema::class);
+            if (count($filter->enum) > 0) {
+                $schema->type = 'enum';
+                $schema->enum = $filter->enum;
+            } else {
+                $schema->type = 'string';
+            }
+        }
+    }
+
+    /**
+     * @param class-string $annotationClass
+     *
+     * @return mixed[]
+     */
+    private function getAnnotations(ReflectionMethod $method, string $annotationClass): array
+    {
+        $annotations = $this->annotationReader->getMethodAnnotations($method);
+        $annotations = array_filter($annotations, static function ($value) use ($annotationClass) {
+            return $value instanceof $annotationClass;
+        });
+
+        $attributes = array_map(
+            static function (ReflectionAttribute $attribute): object { return $attribute->newInstance(); },
+            $method->getAttributes($annotationClass, ReflectionAttribute::IS_INSTANCEOF),
+        );
+
+        return array_merge($attributes, $annotations);
     }
 }

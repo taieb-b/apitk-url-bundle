@@ -16,8 +16,6 @@ services:
     Shopping\ApiTKUrlBundle\Describer\AnnotationDescriber:
         public: false
         arguments:
-            - '@nelmio_api_doc.routes.default'
-            - '@Shopping\ApiTKCommonBundle\Util\ControllerReflector'
             - '@annotations.reader'
         tags:
             - { name: 'nelmio_api_doc.route_describer', priority: -2000 }
