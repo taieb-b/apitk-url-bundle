@@ -14,29 +14,35 @@ composer require check24/apitk-url-bundle
 
 #### Filtering
 
-You can specify in the annotations of the action, which fields should be filterable by the client:
+You can specify in the attributes of the action, which fields should be filterable by the client:
 
-```
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
 /**
  * Returns the users in the system.
  *
- * @Rest\Get("/v1/users")
- * @Rest\View()
- *
- * @ApiTK\Filter(name="username")
- * @ApiTK\Filter(name="created", allowedComparisons={"gt","lt"})
- * @ApiTK\Filter(name="active", enum={"true","false"})
- * @ApiTK\Filter(name="country", queryBuilderName="a.country")
- *
  * @return User[]
  */
+ #[Rest\Get("/v1/users")]
+ #[Rest\View]
+ #[ApiTK\Filter(name: "username")]
+ #[ApiTK\Filter(name: "active", enum: ["true", "false"])]
+ #[ApiTK\Filter(name: "country", queryBuilderName: "a.country")]
+ #[ApiTK\Filter(
+    name: "created",
+    allowedComparisons: [
+        ApiTK\Filter::COMPARISON_GREATERTHAN,
+        ApiTK\Filter::COMPARISON_LESSTHAN,
+    ]
+ )]
 ```
 
 Limit the possibilities for the user with the `allowedComparisons` and `enum` option.
 
-If you want to use the built in query builder applier and the entity field name differs from the
+**Hint:** All attributes can also be uses as "normal" annotations within the docblock.
+
+If you want to use the builtin query builder applier and the entity field name differs from the
 filter field name (f.e. because it's a field from a joined tabled with an alias) use the
 `queryBuilderName` option.
 
@@ -48,41 +54,43 @@ response.
 You can also use route parameters for filtering input. Just declare the filter with the same
 name the placeholder in the route is named:
 
-```
+```injectablephp
 /**
  * Returns the addresses for the given user.
  *
- * @Rest\Get("/v1/users/{id}/addresses")
- * @Rest\View()
- *
- * @ApiTK\Filter(name="id", queryBuilderName="u.id")
- *
  * @return Address[]
  */
+#[Rest\Get("/v1/users/{id}/addresses")]
+#[Rest\View]
+#[ApiTK\Filter(name: "id", queryBuilderName: "u.id")]
 ```
 
 #### Sorting
 
-You can specify in the annotations of the action, which fields should be sortable by the client:
+You can specify in the attributes of the action, which fields should be sortable by the client:
 
-```
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
 /**
  * Returns the users in the system.
  *
- * @Rest\Get("/v1/users")
- * @Rest\View()
- *
- * @ApiTK\Sort(name="username")
- * @ApiTK\Sort(name="zipcode", queryBuilderName="a.zipCode", allowedDirections={"asc"})
- *
  * @return User[]
  */
+#[Rest\Get("/v1/users")]
+#[Rest\View]
+#[ApiTK\Sort(name: "username")]
+#[ApiTK\Sort(
+    name: "zipcode",
+    queryBuilderName: "a.zipCode",
+    allowedDirections: [ApiTK\Sort::ASCENDING]
+)]
 ```
 
 Limit the possibilities for the user with the `allowedDirections` option (f.e. if you only want to
 support ascending sorting).
+
+**Hint:** All attributes can also be uses as "normal" annotations within the docblock.
 
 If you want to use the built in query builder applier and the entity field name differs from the
 sort field name (f.e. because it's a field from a joined tabled with an alias) use the
@@ -94,28 +102,25 @@ The client can now call your API endpoint with sort options like
 
 #### Pagination
 
-You can specify in the annotations of the action, if the result should be paginatable by the client:
+You can specify in the attributes of the action, if the result should be paginatable by the client:
 
-```
+```injectablephp
 use Shopping\ApiTKUrlBundle\Annotation as ApiTK;
 
 /**
  * Returns the users in the system.
  *
- * @Rest\Get("/v1/users")
- * @Rest\View()
- *
- * @ApiTK\Pagination
- * Or:
- * @ApiTK\Pagination(maxEntries=25)
- *
  * @return User[]
  */
+#[Rest\Get("/v1/users")]
+#[Rest\View]
+#[ApiTK\Pagination]
 ```
 
 If you want to limit the client, how many items per page he gets, you can specify the
-`maxEntries` option. But please only add one `Pagination` annotation (not like in the example
-above).
+`maxEntries` option.
+
+**Hint:** All attributes can also be uses as "normal" annotations within the docblock.
 
 The client can now call your API endpoint with the limit option like
 `GET /v1/users?limit=10` (get the first 10 entries) or `GET /v1/users?limit=30,10` (get the
@@ -142,20 +147,19 @@ doctrine:
 
 For all your custom repositories, extend them from the `ApiToolkitRepository` (or if you want them to be injectable, from `ApiToolkitServiceRepository`, which extends from the `ServiceEntityRepository`, so be sure to implement the constructor the right way) so they also get the needed functionality.
 
-After that, add a `@ApiTK\Result` annotation to your controller action. The action parameter
+After that, add a `#[ApiTK\Result]` attribute to your controller action. The action parameter
 will automatically gets filled with the filtered, sorted and paginated result set of the
 given entity's repository:
 
-```
-//ItemController.php
-/**
- * @ApiTK\Filter(name="name")
- * @ApiTK\Sort(name="name")
- * @ApiTK\Pagination
- *
- * @ApiTK\Result("items", entity="App\Entity\Item")
- */
-public function getItems(array $items)
+```injectablephp
+// ItemController.php
+use App\Entity\Item;
+
+#[ApiTK\Filter(name: "name")]
+#[ApiTK\Sort(name: "name")]
+#[ApiTK\Pagination]
+#[ApiTK\Result("items", entity: Item::class)]
+public function getItems(array $items): array
 {
     return $items;
 }
@@ -164,8 +168,8 @@ public function getItems(array $items)
 If you need to filter/sort for fields in a joined entity, just define your own
 `findByRequest()` method in the custom entity's repository:
 
-```
-//UserRepository.php
+```injectablephp
+// UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
 {
@@ -181,31 +185,31 @@ class UserRepository extends ApiToolkitRepository
 }
 ```
 
-```
-//UserController.php
-/**
- * @ApiTK\Filter(name="username")
- * @ApiTK\Filter(name="country", queryBuilderName="a.country")
- * @ApiTK\Pagination
- *
- * @ApiTK\Result("users", entity="App\Entity\User")
- */
-public function getUsers(array $users)
+```injectablephp
+// UserController.php
+use App\Entity\User;
+
+#[ApiTK\Filter(name: "username")]
+#[ApiTK\Filter(name: "country", queryBuilderName: "a.country")]
+#[ApiTK\Pagination]
+#[ApiTK\Result("users", entity: User::class)]
+public function getUsers(array $users): array
 {
     return $users;
 }
 ```
 
 If you need to add different methods to your repository, that can be executed by the
-`Result` annotation, than you can add the `methodName="findBySomethingElse"` parameter
-to your annotation. It will then look for this method in your repository instead of
+`Result` attribute, than you can add the `methodName: "findBySomethingElse"` parameter
+to your attribute. It will then look for this method in your repository instead of
 the default `findByResult()` method. Be sure to accept as the sole parameter the `ApiService`.
 
 As a result, this is also possible:
 
-```
-//UserRepository.php
+```injectablephp
+// UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
+
 class UserRepository extends ApiToolkitRepository
 {
     public function findBarBaz(ApiService $apiService): array
@@ -215,36 +219,38 @@ class UserRepository extends ApiToolkitRepository
 }
 ```
 
-```
-//UserController.php
-/**
- * @ApiTK\Result("users", entity="App\Entity\User", methodName="findBarBaz")
- */
-public function getUsers(array $users)
+```injectablephp
+// UserController.php
+use App\Entity\User;
+
+#[ApiTK\Result("users", entity: User::class, methodName: "findBarBaz")]
+public function getUsers(array $users): array
 {
     return $users;
 }
 ```
 
-Note: if the paginator was enabled in your annotations, the query will get
+Note: if the paginator was enabled in your attributes, the query will get
 executed by the `applyToQueryBuilder()` method in your repository to determine the
 total count. Be sure to call the method at the end, after building the rest of your query.
 
-You can specify the entity manager by adding a `entityManager="foobar"` to your
-annotation, if you need to use another entity manager / connection than the default one.
+You can specify the entity manager by adding a `entityManager: "foobar"` to your
+attribute, if you need to use another entity manager / connection than the default one.
 
 #### Manually accessing
 
 If you have to implement custom logic with filtering, sorting and pagination,
 you can also inject the `ApiService` and use its methods:
 
-```
-//UserController.php
-public function getUsersV1(EntityManagerInterface $entityManager, ApiService $apiService)
-{
+```injectablephp
+// UserController.php
+public function getUsersV1(
+    EntityManagerInterface $entityManager,
+    ApiService $apiService
+): array {
     $users = $entityManager->getRepository(User::class)->findAll();
 
-    //Filtering
+    // Filtering
     if ($apiService->hasFilteredField('username')) {
         $usernameFilter = $apiService->getFilteredField('username');
         $users = array_filter($users, function($user) use ($usernameFilter) {
@@ -256,7 +262,7 @@ public function getUsersV1(EntityManagerInterface $entityManager, ApiService $ap
     }
     /*...*/
 
-    //Sorting
+    // Sorting
     foreach (array_reverse($apiService->getSortedFields()) as $sortField) {
         if ($sortField->getName() === 'username') {
             usort($users, function($user1, $user2) use ($sortField) {
@@ -270,9 +276,13 @@ public function getUsersV1(EntityManagerInterface $entityManager, ApiService $ap
         /*...*/
     }
 
-    //Pagination
+    // Pagination
     $apiService->setPaginationTotal(count($users));
-    $users = array_slice($users, $apiService->getPaginationOffset(), $apiService->getPaginationLimit());
+    $users = array_slice(
+        $users,
+        $apiService->getPaginationOffset(),
+        $apiService->getPaginationLimit()
+    );
 
     return $users;
 }
@@ -286,25 +296,24 @@ In case you have some "virtual" fields that need some custom logic, you can use 
 
 Let's say you want to implement a search parameter. This search looks into username and email.
 
-```
-//UserController.php
-/**
- * @ApiTK\Filter(name="search", autoApply=false)
- *
- * @ApiTK\Result("users", entity="App\Entity\User")
- */
-public function getUsers(array $users)
+```injectablephp
+// UserController.php
+use App\Entity\User;
+
+#[ApiTK\Filter(name: "search", autoApply=false)]
+#[ApiTK\Result("users", entity: User::class)]
+public function getUsers(array $users): array
 {
     return $users;
 }
 ```
 
 For your parameter to be available, you need to register a new `Filter` field. It is required to set
-`autoApply=false` for this filter, because there's no "search" field on the Entity and we want to assemble this
+`autoApply: false` for this filter, because there's no "search" field on the Entity and we want to assemble this
 part of the query on our own.
 
-```
-//UserRepository.php
+```injectablephp
+// UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
 {
@@ -329,7 +338,7 @@ class UserRepository extends ApiToolkitRepository
 }
 ```
 
-`applyToQueryBuilder` will skip our `autoApply=false` field, so we can add it ourselves.
+`applyToQueryBuilder` will skip our `autoApply: false` field, so we can add it ourselves.
 
 Important: When using also the paginator, call the `$apiService->applyToQueryBuilder()` method AFTER your manual filtering, so the paginator can build the total count header on the filtered result. Otherwise you get incorrect values in your header.
 
@@ -337,21 +346,20 @@ Important: When using also the paginator, call the `$apiService->applyToQueryBui
 
 Same as with manual filter properties, you can implement manual sorting like shown above:
 
-```
-//UserController.php
-/**
- * @ApiTK\Sort(name="mySortProperty", autoApply=false)
- *
- * @ApiTK\Result("users", entity="App\Entity\User")
- */
-public function getUsers(array $users)
+```injectablephp
+// UserController.php
+use App\Entity\User;
+
+#[ApiTK\Sort(name="mySortProperty", autoApply: false)]
+#[ApiTK\Result("users", entity: User::class)]
+public function getUsers(array $users): array
 {
     return $users;
 }
 ```
 
-```
-//UserRepository.php
+```injectablephp
+// UserRepository.php
 use Shopping\ApiTKUrlBundle\Repository\ApiToolkitRepository;
 class UserRepository extends ApiToolkitRepository
 {

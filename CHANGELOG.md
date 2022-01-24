@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2022-01-24
+
+### Added
+- Support for Symfony 6.0
+- Support for OpenAPI
+- Attribute support
+
+### Changed
+- Use php8 syntax in project
+
+### Removed
+- Support for PHP 7.4
+- Support for nelmio/api-doc-bundle < 4.x
+- Support for zircote/swagger-php < 4.x
+
 ## [3.0.0] - 2021-10-13
 
 ### Removed
@@ -98,6 +113,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Last release without a changelog ;-)
 
+[Unreleased]: https://github.com/byWulf/apitk-url-bundle/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/byWulf/apitk-url-bundle/compare/3.0.0...4.0.0
+[3.0.0]: https://github.com/byWulf/apitk-url-bundle/compare/2.3.0...3.0.0
+[2.3.0]: https://github.com/byWulf/apitk-url-bundle/compare/2.2.0...2.3.0
+[2.2.0]: https://github.com/byWulf/apitk-url-bundle/compare/2.1.0...2.2.0
+[2.1.0]: https://github.com/byWulf/apitk-url-bundle/compare/2.0.6...2.1.0
+[2.0.6]: https://github.com/byWulf/apitk-url-bundle/compare/2.0.5...2.0.6
 [2.0.5]: https://github.com/byWulf/apitk-url-bundle/compare/2.0.4...2.0.5
 [2.0.4]: https://github.com/byWulf/apitk-url-bundle/compare/2.0.3...2.0.4
 [2.0.3]: https://github.com/byWulf/apitk-url-bundle/compare/2.0.2...2.0.3
