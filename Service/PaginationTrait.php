@@ -85,6 +85,7 @@ trait PaginationTrait
 
             $totalQueryBuilder = clone $queryBuilder;
             $totalQueryBuilder->select('COUNT(DISTINCT ' . $totalQueryBuilder->getRootAliases()[0] . ')');
+            $totalQueryBuilder->resetDQLPart('orderBy');
 
             try {
                 $this->setPaginationTotal((int) $totalQueryBuilder->getQuery()->getSingleScalarResult());
