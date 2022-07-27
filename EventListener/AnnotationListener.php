@@ -75,11 +75,15 @@ class AnnotationListener
 
         // Filters
         $filters = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Filter; });
-        $this->apiService->handleAllowedFilters($filters);
+        if (count($filters) > 0) {
+            $this->apiService->handleAllowedFilters($filters);
+        }
 
         // Sorts
         $sorts = array_filter($methodAnnotations, static function ($annotation) { return $annotation instanceof Api\Sort; });
-        $this->apiService->handleAllowedSorts($sorts);
+        if (count($sorts) > 0) {
+            $this->apiService->handleAllowedSorts($sorts);
+        }
 
         // Pagination
         /** @var Api\Pagination[] $paginations */
