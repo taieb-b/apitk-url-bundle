@@ -27,6 +27,11 @@
       "url": "https://github.com/byWulf/apitk-header-bundle.git"
     }
   ],
+  "config": {
+    "allow-plugins": {
+      "captainhook/plugin-composer": true
+    }
+  },
   "require": {
     "php": "^7.4 || ^8.0",
     "symfony/config": ">=5.3 <6.0",
